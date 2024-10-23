@@ -3,6 +3,9 @@ import { ClerkProvider } from "@clerk/nextjs";
 import ReactQueryProvider from "./ReactQueryProvider";
 import localFont from "next/font/local";
 import { NextUIProvider } from "@nextui-org/system";
+// import { ViewTransitions } from "next-view-transitions";
+import Header from "./_hardComponents/header";
+import Footer from "./_hardComponents/footer";
 const montserrat = localFont({
   src: [
     {
@@ -23,14 +26,22 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={`${montserrat.className} bg-white`}>
-        <NextUIProvider>
-          <ClerkProvider>
-            <ReactQueryProvider>{children}</ReactQueryProvider>
-          </ClerkProvider>
-        </NextUIProvider>
-      </body>
-    </html>
+    // <ViewTransitions>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`${montserrat.className} bg-white `}>
+          <NextUIProvider>
+            <ReactQueryProvider>
+              <div>
+                <Header />
+                <main>{children}</main>
+                <Footer />
+              </div>
+            </ReactQueryProvider>
+          </NextUIProvider>
+        </body>
+      </html>
+    </ClerkProvider>
+    // </ViewTransitions>
   );
 }

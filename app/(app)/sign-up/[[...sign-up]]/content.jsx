@@ -1,38 +1,84 @@
 "use client";
-import { useSignIn } from "@clerk/nextjs";
-// import logo from "../../img/logoLogin.png";
-import { useState } from "react";
-// import { toast } from "react-toastify";
-// import { StatusMobileNav } from "../../App";
-// import { useContext } from "react";
-// import { useSignIn } from "@clerk/clerk-react";
-import { BiArrowBack } from "react-icons/bi";
+import { useState, useEffect } from "react";
+import { useSignUp } from "@clerk/nextjs";
+// import { useNavigate } from "react-router";
 import { Spinner } from "@nextui-org/spinner";
-import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
+import { Input } from "@nextui-org/input";
+import ReactInputVerificationCode from "react-input-verification-code";
+import axios from "axios";
 
-const Content = () => {
-  // const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export default function Content() {
   const [progress, setProgress] = useState("");
+  const [codeProgress, setCodeProgress] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [password, setPassword] = useState("");
+  const [verifyCode, setVerifyCode] = useState("");
+  const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [forGotPass, setForGotPass] = useState(false);
 
-  // console.log(location.hash.substring(16, location.hash.length));
-  // console.log(
-  //   decodeURIComponent(location.hash.substring(16, location.hash.length))
-  // );
+  // console.log(ref)
 
-  const { isLoaded, signIn, setActive } = useSignIn();
+  // const {isSignedIn} = useAuth();
 
-  const forGot = () => {
-    setForGotPass(!forGotPass);
-    setProgress("");
-  };
+  // const navigate = useNavigate();
 
-  // var pattern = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-  // // console.log(email.match(pattern))
+  const { isLoaded, signUp, setActive } = useSignUp();
+
+  useEffect(() => {
+    async function verify() {
+      await signUp
+        .attemptEmailAddressVerification({ code: verifyCode })
+        .then(async (result) => {
+          if (result.status === "complete") {
+            await axios("/api/signUp", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              data: {
+                id: `${result.createdUserId}`,
+                magv: `${result.username.substring(
+                  0,
+                  result.username.length - 1
+                )}`,
+                fullname: name,
+              },
+            }).then((res) => {
+              if (res.status === 200) {
+                setActive({ session: result.createdSessionId });
+                window.location.href = "/";
+                // setCodeProgress("is incorrect");
+                // console.log(isSignedIn)
+              }
+            });
+          }
+        })
+        .catch(() => {
+          //   console.log("error", err.errors[0].message);
+          setCodeProgress("is incorrect");
+          setVerifyCode("");
+        });
+    }
+    if (verifyCode.length === 6) {
+      verify();
+    }
+  }, [verifyCode]);
+
+  //   const handleOncompleted = async () => {
+  //     console.log(verifyCode)
+  // if (verifyCode[4] !== ".") {
+  //     console.log(verifyCode)
+  //   await signUp
+  //     .attemptEmailAddressVerification({ code: verifyCode })
+  //     .then((result) => console.log(result))
+  //     .catch((err) => {
+  //     //   console.log("error", err.errors[0].message);
+  //       setCodeProgress("is incorrect")
+  //       setVerifyCode("");
+  //     });
+  // }
+  //   };
 
   if (!isLoaded) {
     // handle loading state
@@ -42,63 +88,139 @@ const Content = () => {
   async function submit(e) {
     e.preventDefault();
     setProgress("");
-    setLoading(true);
-    if (email === "") {
-      setProgress("blankEmail");
+    if (emailAddress === "" || password === "") {
+      setProgress("empty");
       setLoading(false);
-    } else if (email.includes("@hpu.edu.vn")) {
-      // var pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      // Check the sign in response to
+    } else {
+      // Check the sign up response to
       // decide what to do next.
-      await signIn
-        .create({
-          identifier: email,
-          password,
-        })
-        .then(async (result) => {
-          if (result.status === "complete")
-            setActive({ session: result.createdSessionId });
-        })
-        .catch((err) => {
-          if (email === "") setProgress("blankEmail");
-          else setProgress(err.errors[0].message);
-          setLoading(false);
-        });
-    } else {
-      setProgress("Couldn't find your account.");
-      setLoading(false);
+      setLoading(true);
+      if (emailAddress.includes("@hpu.edu.vn")) {
+        await fetch(`${progress.env.NEXT_PUBLIC_API_SIGN_UP}${emailAddress}`)
+          .then((res) => res.json())
+          .then(async (res) => {
+            if (res.result.length !== 0) {
+              setName(res.result[0].name);
+              await signUp
+                .create({
+                  emailAddress: emailAddress,
+                  password: password,
+                  username: res.result[0].magiaovien + "z",
+                })
+                .then(async (result) => {
+                  if (result.status === "missing_requirements") {
+                    setProgress(result.status);
+                  }
+                  await signUp.prepareEmailAddressVerification();
+                })
+                .catch((err) => {
+                  // console.log("error", err.errors[0].message);
+                  setProgress(err.errors[0].message);
+                  setLoading(false);
+                });
+              // setProgress('missing_requirements')
+            } else {
+              setProgress("none");
+              setLoading(false);
+            }
+          });
+      } else {
+        setProgress("invalid");
+        setLoading(false);
+      }
+      //   await fetch(`${process.env.REACT_APP_API_SIGN_UP}${emailAddress}`)
+      //     .then((res) => res.json())
+      //     .then(async (res) => {
+      //       if (res.verify.length === 0) setProgress("invalidCode");
+      //       else if (res.verify[0].email && res.verify[0].email !== emailAddress){
+      //         setProgress("unduplicated");
+      //         setVerifyEmail(res.verify[0].email);
+      //       }
+
+      //       else if (!res.verify[0].email) setProgress("emptyEmail");
+
+      //       if (res.verify.length !== 0 && res.verify[0].email === emailAddress) {
+      //         setName(res.verify[0].hoten);
+      //         await signUp
+      //           .create({
+      //             emailAddress: emailAddress,
+      //             password: password,
+      //             username: username + "z",
+      //           })
+      //           .then(async (result) => {
+      //             if (result.status === "missing_requirements") {
+      //               setProgress(result.status);
+      //             }
+      //             await signUp
+      //               .prepareEmailAddressVerification()
+      //               .then((result) => console.log(result))
+      //               .catch((err) => console.log("error", err.errors[0].message));
+      //           })
+      //           .catch((err) => {
+      //             // console.log("error", err.errors[0].message);
+      //             setProgress(err.errors[0].message);
+      //           });
+      //         // setProgress('missing_requirements')
+      //       }
+
+      //       // console.log(res)
+      //     })
+      //     // .catch((e)=>{
+      //     //   setLoading(false);
+      //     //   // console.log("1")
+      //     // })
+      //     .finally(() => {
+      //       setLoading(false);
+      //     });
+      // }
     }
   }
 
-  async function submit1(e) {
-    e.preventDefault();
-    // alert('clicked!')
-    // Prepare sign in with strategy and identifier
-    setLoading(true);
-    // console.log(email)
-    if (email.includes("@hpu.edu.vn")) {
-      await signIn
-        .create({
-          strategy: "email_link",
-          identifier: email,
-          redirectUrl: `${window.location.origin}/reset-password`,
-        })
-        .then((res) => {
-          if (res.status === "needs_first_factor")
-            setProgress("forGotPassSent");
-          setLoading(false);
-        })
-        .catch((err) => {
-          setProgress(err.errors[0].message);
-          setLoading(false);
-        });
-    } else {
-      setProgress("Couldn't find your account.");
-      setLoading(false);
-    }
-  }
-
-  return (
+  return progress === "missing_requirements" ? (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        height: "100vh",
+        flexDirection: "column",
+      }}
+    >
+      <div
+        className="w-full flex justify-center"
+        style={{ flexDirection: "column", display: "flex", gap: "10px" }}
+      >
+        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Xác thực</h2>
+        <p>
+          Một mã xác thực đã được gửi đến email bạn đăng ký. Vui lòng xác thực
+          để tiếp tục sử dụng.
+        </p>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            pointerEvents: verifyCode.length === 6 ? "none" : "unset",
+          }}
+        >
+          <ReactInputVerificationCode
+            placeholder=""
+            onChange={setVerifyCode}
+            value={verifyCode}
+            autoFocus={true}
+            length={6}
+          />
+        </div>
+        {codeProgress === "is incorrect" ? (
+          <p style={{ color: "red", fontSize: "12px" }}>
+            Mã xác thực sai. Vui lòng nhập lại!
+          </p>
+        ) : (
+          <></>
+        )}
+      </div>
+    </div>
+  ) : (
     <div
       style={{
         display: "flex",
@@ -108,160 +230,92 @@ const Content = () => {
         height: "100vh",
       }}
     >
-      {forGotPass ? (
-        <div className="flex flex-col border-[solid_1px_rgb(0_0_0_/_25%)] rounded-[35px] gap-[20px] p-[20px] shadow-[rgba(0,0,0,0.35)_0px_5px_15px]">
+      <div className="flex flex-col border-[solid_1px_rgb(0_0_0_/_25%)] rounded-[35px] gap-[20px] p-[20px] md:shadow-[rgba(0,0,0,0.35)_0px_5px_15px]">
+        <h3 style={{ color: "black", textAlign: "center" }}>Đăng ký</h3>
+        <form
+          className="flex flex-col gap-[20px] p-[10px] [&>div]:w-[280px] [&>div]:g-[5px] [&>div]:flex [&>div]:flex-col"
+          onSubmit={submit}
+        >
+          {/* <div>
+            <input
+              type="text"
+              value={username}
+              className={style.input}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Mã sinh viên"
+            />
+            {progress === "That username is taken. Please try another." ? (
+              <p style={{ color: "red", fontSize: "12px" }}>
+                Mã sinh viên đã được đăng ký! Liên hệ phòng quản trị mạng( Tầng
+                2 - Nhà G ) nếu có sai sót!
+              </p>
+            ) : (
+              <></>
+            )}
+          </div> */}
           <div>
-            <button
-              style={{
-                padding: "0",
-                backgroundColor: "unset",
-                border: "none",
-                cursor: "pointer",
-              }}
-              onClick={forGot}
-            >
-              <BiArrowBack style={{ fontSize: "35px" }} />
-            </button>
+            {/* <label htmlFor="email">Email</label> */}
+            <Input
+              variant="bordered"
+              value={emailAddress}
+              onChange={(e) => setEmailAddress(e.target.value)}
+              type="email"
+              label="Email"
+              placeholder="example@gmail.com"
+            />
+            {progress === "That email address is taken. Please try another." ? (
+              <p style={{ color: "red", fontSize: "12px" }}>
+                Email đã được đăng ký!
+              </p>
+            ) : (
+              <></>
+            )}
           </div>
-          <h3 style={{ color: "black", textAlign: "center" }}>Quên mật khẩu</h3>
-          <form
-            className="flex flex-col gap-[20px] p-[10px] [&>div]:w-[280px] [&>div]:g-[5px] [&>div]:flex [&>div]:flex-col"
-            onSubmit={submit1}
-          >
-            <div>
-              {/* <label>Email</label> */}
-              {/* <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="text-[15px] bg-[rgba(0,0,0,0.038)] px-3.5 p-2.5 rounded-[15px] border-[solid_1px_rgb(0_0_0_/_25%)] hover:border-[solid_1px_rgb(0_0_0)] focus:boder-[solid_1px_rbg(0_0_0)]"
-                placeholder="Email"
-              /> */}
-
-              <Input
-                variant="bordered"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                label="Email"
-                placeholder="example@gmail.com"
-              />
-
-              {progress === "Couldn't find your account." ? (
-                <p style={{ color: "red", fontSize: "14px" }}>
-                  Email không tồn tại trong hệ thống!
-                </p>
-              ) : (
-                <></>
-              )}
-            </div>
-            <div>
-              {loading ? (
-                <Spinner size="sm" color="primary" />
-              ) : progress === "forGotPassSent" ? (
-                <p style={{ color: "green", fontSize: "14px" }}>
-                  Một đường link đặt lại mật khẩu đã được gửi đến Email!
-                </p>
-              ) : (
-                <Button color="primary" size="sm" className="w-fit self-center">
-                  Xác nhận
-                </Button>
-              )}
-            </div>
-          </form>
-        </div>
-      ) : (
-        <div className="flex flex-col border-[solid_1px_rgb(0_0_0_/_25%)] rounded-[35px] gap-[20px] p-[20px] shadow-[rgba(0,0,0,0.35)_0px_5px_15px]">
-          <h3 style={{ color: "black", textAlign: "center" }}>Đăng nhập</h3>
-          <form
-            className="flex flex-col gap-[20px] p-[10px] [&>div]:w-[280px] [&>div]:g-[5px] [&>div]:flex [&>div]:flex-col"
-            onSubmit={submit}
-          >
-            <div>
-              {/* <label>Email hoặc mã sinh viên</label> */}
-              <Input
-                variant="bordered"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                label="Email"
-                placeholder="example@gmail.com"
-              />
-              {progress === "blankEmail" ? (
-                <p style={{ color: "red", fontSize: "14px" }}>
-                  Vui lòng nhập email hoặc mã giáo viên!
-                </p>
-              ) : progress === "Couldn't find your account." ? (
-                <p style={{ color: "red", fontSize: "14px" }}>
-                  Email hoặc mã giáo viên không tồn tại!
-                </p>
-              ) : (
-                <></>
-              )}
-            </div>
-            <div>
-              {/* <label htmlFor="password">Mật khẩu</label> */}
-
-              <Input
-                variant="bordered"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                label="Mật khẩu"
-              />
-              {progress === "Enter password." && email !== "" ? (
-                <p style={{ color: "red", fontSize: "14px" }}>
-                  Vui lòng nhập mật khẩu!
-                </p>
-              ) : progress ===
-                "Password is incorrect. Try again, or use another method." ? (
-                <p style={{ color: "red", fontSize: "14px" }}>
-                  Mật khẩu không chính xác!
-                </p>
-              ) : (
-                <></>
-              )}
-            </div>
-            <div>
-              {loading ? (
-                <Spinner size="sm" color="primary" />
-              ) : (
-                <Button color="primary" size="sm" className="w-fit self-center">
-                  Đăng nhập
-                </Button>
-              )}
-            </div>
-          </form>
-
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <button
-              style={{
-                background: "none",
-                border: "none",
-                padding: "0",
-                color: "#069",
-                cursor: "pointer",
-                fontSize: "14px",
-              }}
-              onClick={forGot}
-            >
-              Quên mật khẩu
-            </button>
-            <a
-              href="/sign-up"
-              style={{
-                fontSize: "14px",
-                textDecoration: "unset",
-                color: "#069",
-              }}
-            >
-              Đăng ký
-            </a>
+          <div>
+            {/* <label htmlFor="password">Mật khẩu</label> */}
+            <Input
+              variant="bordered"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              label="Mật khẩu"
+            />
+            {progress === "Passwords must be 8 characters or more." ? (
+              <p style={{ color: "red", fontSize: "12px" }}>
+                Mật khẩu phải dài hơn 8 ký tự!
+              </p>
+            ) : progress === "invalid" ? (
+              <p style={{ color: "red", fontSize: "12px" }}>
+                Vui lòng nhập email @hpu.edu.vn
+              </p>
+            ) : progress === "empty" ? (
+              <p style={{ color: "red", fontSize: "12px" }}>
+                Vui lòng nhập đủ thông tin!
+              </p>
+            ) : progress ===
+              "Password has been found in an online data breach.  For account safety, please use a different password." ? (
+              <p style={{ color: "red", fontSize: "12px" }}>
+                Mật khẩu yếu. Nhập mật khẩu mạnh hơn!
+              </p>
+            ) : progress === "none" ? (
+              <p style={{ color: "red", fontSize: "12px" }}>
+                Email không tồn tại trong hệ thống!
+              </p>
+            ) : (
+              <></>
+            )}
           </div>
-        </div>
-      )}
+          <div>
+            {loading ? (
+              <Spinner size="sm" color="primary" />
+            ) : (
+              <Button color="primary" size="sm" className="w-fit self-center">
+                Đăng ký
+              </Button>
+            )}
+          </div>
+        </form>
+      </div>
     </div>
   );
-};
-
-export default Content;
+}

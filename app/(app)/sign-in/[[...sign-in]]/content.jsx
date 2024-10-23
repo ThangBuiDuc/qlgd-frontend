@@ -10,6 +10,7 @@ import { BiArrowBack } from "react-icons/bi";
 import { Spinner } from "@nextui-org/spinner";
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
+import Link from "next/link";
 
 const Content = () => {
   // const navigate = useNavigate();
@@ -109,7 +110,7 @@ const Content = () => {
       }}
     >
       {forGotPass ? (
-        <div className="flex flex-col border-[solid_1px_rgb(0_0_0_/_25%)] rounded-[35px] gap-[20px] p-[20px] shadow-[rgba(0,0,0,0.35)_0px_5px_15px]">
+        <div className="flex flex-col border-[solid_1px_rgb(0_0_0_/_25%)] rounded-[35px] gap-[20px] p-[20px] md:shadow-[rgba(0,0,0,0.35)_0px_5px_15px]">
           <div>
             <button
               style={{
@@ -247,7 +248,7 @@ const Content = () => {
             >
               Quên mật khẩu
             </button>
-            <a
+            <Link
               href="/sign-up"
               style={{
                 fontSize: "14px",
@@ -256,7 +257,7 @@ const Content = () => {
               }}
             >
               Đăng ký
-            </a>
+            </Link>
           </div>
         </div>
       )}
