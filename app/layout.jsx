@@ -32,9 +32,11 @@ export default function RootLayout({ children }) {
         <body className={`${montserrat.className} bg-white `}>
           <NextUIProvider>
             <ReactQueryProvider>
-              <div>
+              <div className="flex flex-col gap-4">
                 <Header />
-                <main>{children}</main>
+                <main className="pr-[10vw] pl-[10vw] min-h-[80vh]">
+                  {children}
+                </main>
                 <Footer />
               </div>
             </ReactQueryProvider>

@@ -6,8 +6,8 @@ const navMenu = [
     title: "Trang Chủ",
   },
   {
-    path: null,
-    out_site: true,
+    path: "/huongdan.htm",
+    // out_site: true,
     title: "Hướng dẫn sử dụng",
   },
   {
@@ -26,20 +26,18 @@ const navMenu = [
 
 const Header = () => {
   return (
-    <header className="h-[10vh] bg-[#0083c2] pl-[10vw] pr-[10vw] sticky top-0">
+    <header className="h-[10vh]  pl-[10vw] pr-[10vw] sticky top-0 border-solid border-b-1 bg-gray-50 z-50">
       <div className="flex h-full justify-between">
-        <div className="flex h-full justify-center align-middle">
-          {navMenu.map((item, index) =>
-            item.out_site ? (
-              <Link key={index} href="#" className="text-xl">
-                {item.title}
-              </Link>
-            ) : (
-              <Link key={index} href={item.path}>
-                {item.title}
-              </Link>
-            )
-          )}
+        <div className="flex h-full justify-center align-middle gap-4">
+          {navMenu.map((item, index) => (
+            <Link
+              key={index}
+              href={item.path}
+              className="text-lg font-semibold hover:text-[#0083C2] self-center"
+            >
+              {item.title}
+            </Link>
+          ))}
         </div>
       </div>
     </header>
