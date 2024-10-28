@@ -11,9 +11,9 @@ const options = [
 
 const Search = () => {
   const [selected, setSelected] = useState(new Set(["0"]));
-  const [touched, setTouched] = useState(false);
+  // const [touched, setTouched] = useState(false);
   //   const isValid = value.has("cat");
-  console.log(selected);
+  // console.log(selected);
   const [query, setQuery] = useState("");
   return (
     <form className="flex gap-4">
@@ -25,7 +25,7 @@ const Search = () => {
         className="max-w-48"
         onSelectionChange={setSelected}
         color="primary"
-        onClose={() => setTouched(true)}
+        // onClose={() => setTouched(true)}
       >
         {options.map((item) => (
           <SelectItem key={item.key}>{item.label}</SelectItem>
