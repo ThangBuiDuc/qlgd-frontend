@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
             <ReactQueryProvider>
               <div className="flex flex-col gap-4">
                 <Header />
-                <main className="pr-[10vw] pl-[10vw] min-h-[80vh]">
+                <main className="pr-[10vw] pl-[10vw] min-h-[82vh]">
                   {children}
                 </main>
                 <Footer />

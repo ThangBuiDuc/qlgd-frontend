@@ -113,7 +113,7 @@ const NotSignedIn = ({ calendar }) => {
       <Table
         aria-label="Lich hoc trong ngay"
         isHeaderSticky
-        className="max-h-[500px]"
+        className="max-h-full"
         sortDescriptor={sortDescriptor}
         onSortChange={setSortDescriptor}
         classNames={{
