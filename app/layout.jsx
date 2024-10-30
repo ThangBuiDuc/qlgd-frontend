@@ -4,8 +4,6 @@ import ReactQueryProvider from "./ReactQueryProvider";
 import localFont from "next/font/local";
 import { NextUIProvider } from "@nextui-org/system";
 // import { ViewTransitions } from "next-view-transitions";
-import Header from "./_hardComponents/header";
-import Footer from "./_hardComponents/footer";
 const montserrat = localFont({
   src: [
     {
@@ -31,15 +29,7 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <body className={`${montserrat.className} bg-white `}>
           <NextUIProvider>
-            <ReactQueryProvider>
-              <div className="flex flex-col gap-4">
-                <Header />
-                <main className="pr-[10vw] pl-[10vw] min-h-[82vh]">
-                  {children}
-                </main>
-                <Footer />
-              </div>
-            </ReactQueryProvider>
+            <ReactQueryProvider>{children}</ReactQueryProvider>
           </NextUIProvider>
         </body>
       </html>

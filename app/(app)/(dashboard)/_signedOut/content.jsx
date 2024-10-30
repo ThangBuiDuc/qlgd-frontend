@@ -11,8 +11,8 @@ import { Pagination } from "@nextui-org/pagination";
 import moment from "moment";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { useAsyncList } from "@react-stately/data";
-import { Spinner } from "@nextui-org/spinner";
+// import { useAsyncList } from "@react-stately/data";
+// import { Spinner } from "@nextui-org/spinner";
 
 const header = [
   { key: "thoi_gian", label: "Thời gian" },
@@ -149,7 +149,7 @@ const NotSignedIn = ({ calendar }) => {
             <TableRow key={item.id}>
               <TableCell>
                 <Link
-                  href={"#"}
+                  href={`lich/${item.id}`}
                   className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {`${moment(item.thoi_gian).format("HH:mm DD/MM/yyyy")} ${

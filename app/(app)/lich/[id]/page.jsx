@@ -2,6 +2,7 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Student from "./_student/content";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { getCalendar } from "@/ultis/lich";
+import Search from "@/app/_hardComponents/search";
 
 const page = async ({ params }) => {
   const user = await currentUser();
@@ -14,14 +15,13 @@ const page = async ({ params }) => {
   }
 
   return (
-    <>
+    <div className="flex flex-col gap-3">
+      <Search />
       <SignedOut>
-        <Student />
-      </SignedOut>
-      <SignedIn>
         <Student calendar={calendar.data} />
-      </SignedIn>
-    </>
+      </SignedOut>
+      <SignedIn>{/* <Student  /> */}</SignedIn>
+    </div>
   );
 };
 
