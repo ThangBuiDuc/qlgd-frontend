@@ -4,6 +4,7 @@ import ReactQueryProvider from "./ReactQueryProvider";
 import localFont from "next/font/local";
 import { NextUIProvider } from "@nextui-org/system";
 // import { ViewTransitions } from "next-view-transitions";
+import "react-sweet-progress/lib/style.css";
 const montserrat = localFont({
   src: [
     {

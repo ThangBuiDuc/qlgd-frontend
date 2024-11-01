@@ -11,7 +11,7 @@ import {
 // import moment from "moment";
 import Link from "next/link";
 // import { useMemo, useState } from "react";
-import { Line } from "rc-progress";
+import { Progress } from "react-sweet-progress";
 
 const Student = ({ calendar }) => {
   // console.log(calendar);
@@ -122,17 +122,18 @@ const Student = ({ calendar }) => {
                 <TableCell>{item.code}</TableCell>
                 <TableCell>{item.ma_lop_hanh_chinh}</TableCell>
                 <TableCell className="flex">
-                  <>
-                    {/* Red Segment */}
-                    <Line
-                      percent={parseFloat(item.tinh_hinh_vang)}
-                      strokeWidth={15}
-                      strokeColor="#d9534f"
-                      trailColor="#5cb85c"
-                      trailWidth={15}
-                      strokeLinecap="square"
-                    />
-                  </>
+                  <Progress
+                    percent={item.tinhhinh}
+                    symbolClassName={"progresspercent"}
+                    status={"success"}
+                    theme={{
+                      success: {
+                        symbol: "",
+                        trailColor: "#5cb85c",
+                        color: "#d9534f",
+                      },
+                    }}
+                  />
                 </TableCell>
                 <TableCell>{item.so_tiet_vang}</TableCell>
                 <TableCell>{item.phep ? "Có phép" : "Không phép"}</TableCell>
