@@ -38,7 +38,7 @@ const Student = ({ lop }) => {
       label: `${lop.tinh_hinh_hoc_tap.headers[2].group_name} (${lop.tinh_hinh_hoc_tap.headers[2].weight}%)`,
     },
     {
-      key: "qua_trinh",
+      key: "diem_qua_trinh",
       label: "Điểm quá trình",
     },
   ];
@@ -67,6 +67,29 @@ const Student = ({ lop }) => {
               (item) => item === sortDescriptor.column
             )
           ) {
+            if (sortDescriptor.column === "chuyen_can") {
+              const first = parseFloat(a.group_submissions[0].grade);
+              const second = parseFloat(b.group_submissions[0].grade);
+              const cmp = first < second ? -1 : first > second ? 1 : 0;
+
+              return sortDescriptor.direction === "descending" ? -cmp : cmp;
+            }
+
+            if (sortDescriptor.column === "thuc_hanh") {
+              const first = parseFloat(a.group_submissions[1].grade);
+              const second = parseFloat(b.group_submissions[1].grade);
+              const cmp = first < second ? -1 : first > second ? 1 : 0;
+
+              return sortDescriptor.direction === "descending" ? -cmp : cmp;
+            }
+
+            if (sortDescriptor.column === "trung_binh") {
+              const first = parseFloat(a.group_submissions[2].grade);
+              const second = parseFloat(b.group_submissions[2].grade);
+              const cmp = first < second ? -1 : first > second ? 1 : 0;
+
+              return sortDescriptor.direction === "descending" ? -cmp : cmp;
+            }
           } else {
             const first = a[sortDescriptor.column];
             const second = b[sortDescriptor.column];
@@ -164,16 +187,16 @@ const Student = ({ lop }) => {
                     }}
                   />
                 </TableCell>
-                <TableCell>{item.tong_tiet_vang}</TableCell>
+                <TableCell>
+                  {item.tong_tiet_vang ? item.tong_tiet_vang : 0}
+                </TableCell>
                 {/* <TableCell>{item.ma_lop_hanh_chinh}</TableCell> */}
-                {item.group_submissions.map((item) => (
-                  <TableCell key={item.assignment_group_id}>
-                    {item.grade == 0 ? "" : item.grade}
+                {item.group_submissions.map((el) => (
+                  <TableCell key={el.assignment_group_id}>
+                    {parseFloat(el.grade)}
                   </TableCell>
                 ))}
-                <TableCell>
-                  {item.diem_qua_trinh == 0 ? "" : item.diem_qua_trinh}
-                </TableCell>
+                <TableCell>{parseFloat(item.diem_qua_trinh)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
