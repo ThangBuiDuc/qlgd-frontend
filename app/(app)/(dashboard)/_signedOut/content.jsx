@@ -150,7 +150,7 @@ const NotSignedIn = ({ calendar }) => {
               <TableCell>
                 <Link
                   href={`lich/${item.id}`}
-                  className="hover:underline text-[#0083C2] cursor-pointer"
+                  // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {`${moment(item.thoi_gian).format("HH:mm DD/MM/yyyy")} ${
                     item.state === "bosung" ? "BS" : ""
@@ -161,7 +161,7 @@ const NotSignedIn = ({ calendar }) => {
               <TableCell className="whitespace-nowrap">
                 <Link
                   href={"#"}
-                  className="hover:underline text-[#0083C2] cursor-pointer"
+                  // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {`${item.phong ? item.phong : ""}${
                     item.summary.length ? "*" : ""
@@ -174,7 +174,7 @@ const NotSignedIn = ({ calendar }) => {
               <TableCell>
                 <Link
                   href={"#"}
-                  className="hover:underline text-[#0083C2] cursor-pointer"
+                  // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {item.lop_mon_hoc.ma_lop}
                 </Link>
@@ -182,7 +182,7 @@ const NotSignedIn = ({ calendar }) => {
               <TableCell>
                 <Link
                   href={"#"}
-                  className="hover:underline text-[#0083C2] cursor-pointer"
+                  // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {item.lop_mon_hoc.ten_mon_hoc}
                 </Link>

@@ -39,7 +39,7 @@ const Student = ({ calendar }) => {
               <TableCell>
                 <Link
                   href={`/lop/${calendar.lop_mon_hoc.id}`}
-                  className="hover:underline text-[#0083C2] cursor-pointer"
+                  // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {calendar.lop_mon_hoc.ma_lop}
                 </Link>
@@ -77,7 +77,7 @@ const Student = ({ calendar }) => {
               <TableCell>
                 <Link
                   href={"#"}
-                  className="hover:underline text-[#0083C2] cursor-pointer"
+                  // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {calendar.gio_hoc.ho_ten}
                 </Link>

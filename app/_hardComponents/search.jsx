@@ -4,17 +4,20 @@ import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import { useState } from "react";
 const options = [
-  { key: 0, label: "Sinh viên" },
-  { key: 1, label: "Lớp môn học" },
-  { key: 2, label: "Lịch trình" },
+  { key: 1, label: "Sinh viên" },
+  { key: 2, label: "Lớp môn học" },
+  { key: 3, label: "Lịch trình" },
 ];
+import Link from "next/link";
 
-const Search = () => {
-  const [selected, setSelected] = useState(new Set(["0"]));
+const Search = ({ type, q }) => {
+  const [selected, setSelected] = useState(
+    new Set([`${type ? `${type}` : "0"}`])
+  );
   // const [touched, setTouched] = useState(false);
   //   const isValid = value.has("cat");
   // console.log(selected);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(q ? q.replace("+", " ") : "");
   return (
     <form className="flex gap-4">
       <Select
@@ -40,14 +43,22 @@ const Search = () => {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
-      <Button
-        className="w-fit"
-        color="primary"
-        // variant="bordered"
-        isDisabled={selected.size === 0}
+      <Link
+        href={`/search?${selected.size ? `type=${[...selected][0]}` : ""}${
+          selected.size && query
+            ? `&q=${query.replace(" ", "+")}`
+            : `q=${query.replace(" ", "+")}`
+        }`}
       >
-        Tra cứu
-      </Button>
+        <Button
+          className="w-fit"
+          color="primary"
+          // variant="bordered"
+          isDisabled={selected.size === 0}
+        >
+          Tra cứu
+        </Button>
+      </Link>
     </form>
   );
 };

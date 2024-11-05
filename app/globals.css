@@ -34,6 +34,10 @@ p {
   @apply font-normal text-black;
 }
 
+a {
+  @apply hover:underline text-[#0083C2] cursor-pointer;
+}
+
 .progresspercent {
   display: none !important;
 }
