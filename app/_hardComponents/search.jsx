@@ -12,7 +12,7 @@ import Link from "next/link";
 
 const Search = ({ type, q }) => {
   const [selected, setSelected] = useState(
-    new Set([`${type ? `${type}` : "0"}`])
+    new Set([`${type ? `${type}` : "1"}`])
   );
   // const [touched, setTouched] = useState(false);
   //   const isValid = value.has("cat");
@@ -47,7 +47,7 @@ const Search = ({ type, q }) => {
         href={`/search?${selected.size ? `type=${[...selected][0]}` : ""}${
           selected.size && query
             ? `&q=${query.replace(" ", "+")}`
-            : `q=${query.replace(" ", "+")}`
+            : `&q=${query.replace(" ", "+")}`
         }`}
       >
         <Button

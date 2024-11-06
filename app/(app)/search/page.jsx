@@ -1,6 +1,7 @@
 import Search from "@/app/_hardComponents/search";
-import Content from "./content";
+// import Content from "./content";
 import { search } from "@/ultis/search";
+import Student from "./_student";
 
 const Page = async ({ searchParams }) => {
   //   console.log(searchParams);
@@ -18,12 +19,10 @@ const Page = async ({ searchParams }) => {
     throw new Error();
   }
 
-  console.log(results.data);
-
   return (
     <div className="flex flex-col gap-3">
       <Search type={searchParams.type} q={searchParams.q} />
-      <Content />
+      {searchParams.type == 1 && <Student results={results.data} />}
     </div>
   );
 };
