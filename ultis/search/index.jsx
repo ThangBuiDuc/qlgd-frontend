@@ -15,5 +15,5 @@ export const search = async (data) => {
     },
   });
 
-  return res;
+  return res.data;
 };

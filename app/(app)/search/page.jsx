@@ -15,14 +15,14 @@ const Page = async ({ searchParams }) => {
     });
   }
 
-  if (results.status !== 200) {
-    throw new Error();
-  }
-
+  // if (results.status !== 200) {
+  //   throw new Error();
+  // }
+  // const data = results;
   return (
     <div className="flex flex-col gap-3">
       <Search type={searchParams.type} q={searchParams.q} />
-      {searchParams.type == 1 && <Student results={results.data} />}
+      {searchParams.type == 1 && <Student results={results} />}
     </div>
   );
 };
