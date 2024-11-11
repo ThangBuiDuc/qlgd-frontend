@@ -10,14 +10,14 @@ import {
 import { Pagination } from "@nextui-org/pagination";
 import Link from "next/link";
 import { useState } from "react";
-// import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { search } from "@/ultis/search";
 import { Spinner } from "@nextui-org/spinner";
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
 
-const Student = () => {
+const Class = () => {
   const searchParams = useSearchParams();
   const pageSearchParam = parseInt(searchParams.get("page"));
   const querySearchParam = searchParams.get("q");
@@ -50,7 +50,7 @@ const Student = () => {
   // });
   const { data, isLoading } = useSWR(
     [
-      `search_sv`,
+      `search_class`,
       { page: page ? page : 1, query: querySearchParam, type: typeSearchParam },
     ],
     () =>
@@ -73,7 +73,7 @@ const Student = () => {
   return (
     <>
       <Table
-        aria-label="Tim kiem sinh vien"
+        aria-label="Tim kiem lop mon hoc"
         classNames={{
           emptyWrapper: ["!text-black"],
           th: ["!bg-green-200", "text-black"],
@@ -100,14 +100,13 @@ const Student = () => {
       >
         <TableHeader>
           <TableColumn>STT</TableColumn>
-          <TableColumn>Họ và tên</TableColumn>
-          <TableColumn>Mã sinh viên</TableColumn>
-          <TableColumn>Lớp hành chính</TableColumn>
-          <TableColumn>Số lớp môn</TableColumn>
-          <TableColumn>Số tiết vắng</TableColumn>
+          <TableColumn>Mã lớp</TableColumn>
+          <TableColumn>Tên môn học</TableColumn>
+          <TableColumn>Giảng viên</TableColumn>
+          <TableColumn>Sĩ số</TableColumn>
         </TableHeader>
         <TableBody
-          emptyContent={"Không tìm thấy sinh viên!"}
+          emptyContent={"Không tìm thấy lớp môn học!"}
           loadingContent={
             <div className="!bg-[rgba(0,0,0,0.2)] z-10 h-full w-full flex justify-center items-center">
               <Spinner color="primary" />
@@ -115,25 +114,23 @@ const Student = () => {
           }
           isLoading={isLoading}
         >
-          {data?.sinh_viens.map((item, index) => (
+          {data?.lop_mon_hocs.map((item, index) => (
             <TableRow key={item.id}>
               <TableCell>
                 {index + (data?.page.current_page - 1) * 50 + 1}
               </TableCell>
-              <TableCell>{`${item.ho} ${item.dem} ${item.ten}`}</TableCell>
               <TableCell>
-                <Link href={"#"}>{item.code}</Link>
+                <Link href={`/lop/${item.id}`}>{item.ma_lop}</Link>
               </TableCell>
-              <TableCell>{item.ma_lop_hanh_chinh}</TableCell>
-              <TableCell>{item.so_lop_mon}</TableCell>
-              <TableCell>{item.so_tiet_vang}</TableCell>
+              <TableCell>{item.ten_mon_hoc}</TableCell>
+              <TableCell>{item.giang_vien}</TableCell>
+              <TableCell>{item.siso}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </>
-    // <p>fdsfd</p>
   );
 };
 
-export default Student;
+export default Class;

@@ -160,7 +160,7 @@ const NotSignedIn = ({ calendar }) => {
               <TableCell>{item.so_tiet}</TableCell>
               <TableCell className="whitespace-nowrap">
                 <Link
-                  href={"#"}
+                  href={`/search?type=3&q=${item.phong}`}
                   // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {`${item.phong ? item.phong : ""}${
@@ -173,7 +173,7 @@ const NotSignedIn = ({ calendar }) => {
               <TableCell className="whitespace-nowrap">{`${item.giang_vien.ho} ${item.giang_vien.dem} ${item.giang_vien.ten}`}</TableCell>
               <TableCell>
                 <Link
-                  href={"#"}
+                  href={`/lop/${item.lop_mon_hoc.id}`}
                   // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {item.lop_mon_hoc.ma_lop}

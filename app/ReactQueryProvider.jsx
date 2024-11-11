@@ -1,7 +1,7 @@
 "use client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
-import { useState } from "react";
+// import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
+// import { useState } from "react";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -13,13 +13,13 @@ const queryClient = new QueryClient({
 });
 
 const ReactQueryProvider = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
   return (
     <QueryClientProvider client={queryClient}>
-      <button onClick={() => setIsOpen(!isOpen)}>{`${
+      {/* <button onClick={() => setIsOpen(!isOpen)}>{`${
         isOpen ? "Close" : "Open"
       } the devtools panel`}</button>
-      {isOpen && <ReactQueryDevtoolsPanel onClose={() => setIsOpen(false)} />}
+      {isOpen && <ReactQueryDevtoolsPanel onClose={() => setIsOpen(false)} />} */}
       {children}
     </QueryClientProvider>
   );
