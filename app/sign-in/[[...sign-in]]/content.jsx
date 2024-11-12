@@ -11,14 +11,17 @@ import { Spinner } from "@nextui-org/spinner";
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Content = () => {
   // const navigate = useNavigate();
+  // console.log(decodeURI(window.location.hash));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [progress, setProgress] = useState("");
   const [loading, setLoading] = useState(false);
   const [forGotPass, setForGotPass] = useState(false);
+  const router = useRouter();
 
   // console.log(location.hash.substring(16, location.hash.length));
   // console.log(
@@ -57,8 +60,16 @@ const Content = () => {
           password,
         })
         .then(async (result) => {
-          if (result.status === "complete")
+          if (result.status === "complete") {
             setActive({ session: result.createdSessionId });
+            router.push(
+              location.hash
+                ? decodeURIComponent(
+                    location.hash.substring(16, location.hash.length)
+                  )
+                : "/"
+            );
+          }
         })
         .catch((err) => {
           if (email === "") setProgress("blankEmail");
@@ -227,7 +238,12 @@ const Content = () => {
               {loading ? (
                 <Spinner size="sm" color="primary" />
               ) : (
-                <Button color="primary" size="sm" className="w-fit self-center">
+                <Button
+                  type="submit"
+                  color="primary"
+                  size="sm"
+                  className="w-fit self-center"
+                >
                   Đăng nhập
                 </Button>
               )}

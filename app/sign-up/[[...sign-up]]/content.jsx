@@ -7,6 +7,7 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 import ReactInputVerificationCode from "react-input-verification-code";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function Content() {
   const [progress, setProgress] = useState("");
@@ -16,7 +17,7 @@ export default function Content() {
   const [verifyCode, setVerifyCode] = useState("");
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const router = useRouter();
   // console.log(ref)
 
   // const {isSignedIn} = useAuth();
@@ -47,7 +48,7 @@ export default function Content() {
             }).then((res) => {
               if (res.status === 200) {
                 setActive({ session: result.createdSessionId });
-                window.location.href = "/";
+                router.push("/");
                 // setCodeProgress("is incorrect");
                 // console.log(isSignedIn)
               }

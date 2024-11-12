@@ -1,4 +1,5 @@
 "use client";
+import { useUser, useClerk } from "@clerk/nextjs";
 import Link from "next/link";
 const navMenu = [
   {
@@ -25,6 +26,9 @@ const navMenu = [
 ];
 
 const Header = () => {
+  const clerk = useClerk();
+  const { isSignedIn } = useUser();
+
   return (
     <header className="h-[10vh]  pl-[10vw] pr-[10vw] sticky top-0 border-solid border-b-1 bg-gray-50 z-50">
       <div className="flex h-full justify-between">
@@ -39,6 +43,23 @@ const Header = () => {
             </Link>
           ))}
         </div>
+        {isSignedIn ? (
+          <button
+            onClick={() => {
+              clerk.signOut();
+            }}
+          >
+            Đăng xuất
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              clerk.redirectToSignIn();
+            }}
+          >
+            Đăng nhập
+          </button>
+        )}
       </div>
     </header>
   );
