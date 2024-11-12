@@ -1,7 +1,6 @@
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Student from "./_student/content";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import Search from "@/app/_hardComponents/search";
 import { getLop } from "@/ultis/lop";
 
 const page = async ({ params }) => {
@@ -15,13 +14,12 @@ const page = async ({ params }) => {
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      <Search />
+    <>
       <SignedOut>
         <Student lop={lop.data} />
       </SignedOut>
       <SignedIn>{/* <Student  /> */}</SignedIn>
-    </div>
+    </>
   );
 };
 

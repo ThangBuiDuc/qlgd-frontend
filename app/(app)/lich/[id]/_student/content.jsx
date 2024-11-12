@@ -76,7 +76,7 @@ const Student = ({ calendar }) => {
             <TableRow>
               <TableCell>
                 <Link
-                  href={"#"}
+                  href={`/giang_vien/${calendar.gio_hoc.giang_vien_id}`}
                   // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {calendar.gio_hoc.ho_ten}
@@ -119,14 +119,20 @@ const Student = ({ calendar }) => {
               <TableRow key={item.id}>
                 <TableCell>{++index}</TableCell>
                 <TableCell>{item.ho_ten}</TableCell>
-                <TableCell>{item.code}</TableCell>
+                <TableCell>
+                  <Link href={`/sinh_vien/${item.id}`}>{item.code}</Link>
+                </TableCell>
                 <TableCell>{item.ma_lop_hanh_chinh}</TableCell>
                 <TableCell className="flex">
                   <Progress
-                    percent={item.tinhhinh}
+                    percent={item.tinh_hinh_vang ? item.tinh_hinh_vang : 0}
                     symbolClassName={"progresspercent"}
                     status={"success"}
                     theme={{
+                      default: {
+                        // color: "#5cb85c",
+                        trailColor: "#5cb85c",
+                      },
                       success: {
                         symbol: "",
                         trailColor: "#5cb85c",

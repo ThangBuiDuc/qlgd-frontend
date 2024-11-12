@@ -7,6 +7,8 @@ const isPublicRoute = createRouteMatcher([
   "/lich(.*)",
   "/lop(.*)",
   "/search(.*)",
+  "/giang_vien(.*)",
+  "/sinh_vien(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, request) => {

@@ -21,12 +21,12 @@ const Page = async ({ searchParams }) => {
   // }
   // const data = results;
   return (
-    <div className="flex flex-col gap-3">
-      <Search type={searchParams.type} q={searchParams.q} />
+    <>
+      {/* <Search type={searchParams.type} q={searchParams.q} /> */}
       {searchParams.type == 1 && <Student />}
       {searchParams.type == 2 && <Class />}
       {searchParams.type == 3 && <Schedule />}
-    </div>
+    </>
   );
 };
 

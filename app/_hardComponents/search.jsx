@@ -9,15 +9,21 @@ const options = [
   { key: 3, label: "Lịch trình" },
 ];
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
-const Search = ({ type, q }) => {
+const Search = () => {
+  const searchParams = useSearchParams();
+  const querySearchParam = searchParams.get("q");
+  const typeSearchParam = parseInt(searchParams.get("type"));
   const [selected, setSelected] = useState(
-    new Set([`${type ? `${type}` : "1"}`])
+    new Set([`${typeSearchParam ? `${typeSearchParam}` : "1"}`])
   );
   // const [touched, setTouched] = useState(false);
   //   const isValid = value.has("cat");
   // console.log(selected);
-  const [query, setQuery] = useState(q ? q.replace("+", " ") : "");
+  const [query, setQuery] = useState(
+    querySearchParam ? querySearchParam.replace("+", " ") : ""
+  );
   return (
     <form className="flex gap-4">
       <Select

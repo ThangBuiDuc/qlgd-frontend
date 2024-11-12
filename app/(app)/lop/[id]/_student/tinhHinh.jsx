@@ -51,6 +51,8 @@ const TinhHinh = ({ tinh_hinh_hoc_tap }) => {
       .slice(start, end);
   }, [page, tinh_hinh_hoc_tap.body]);
 
+  // console.log(tinh_hinh_hoc_tap);
+
   const sortedItems = useMemo(() => {
     // console.log(Number(sortDescriptor?.column));
     return sortDescriptor === null
@@ -77,6 +79,8 @@ const TinhHinh = ({ tinh_hinh_hoc_tap }) => {
           }
         });
   }, [sortDescriptor, items]);
+
+  // console.log(sortedItems);
   return (
     <div className="flex flex-col gap-2">
       <h5>Tình hình học tập</h5>
@@ -115,15 +119,21 @@ const TinhHinh = ({ tinh_hinh_hoc_tap }) => {
               <TableCell>{item.stt}</TableCell>
               <TableCell className="whitespace-nowrap">{item.ho_ten}</TableCell>
               <TableCell>
-                <Link href={"#"}>{item.code}</Link>
+                <Link href={`/sinh_vien/${item.sinh_vien_id}`}>
+                  {item.code}
+                </Link>
               </TableCell>
               <TableCell>{item.ma_lop_hanh_chinh}</TableCell>
               <TableCell>
                 <Progress
-                  percent={item.tinhhinh}
+                  percent={item.tinhhinh ? item.tinhhinh : 0}
                   symbolClassName={"progresspercent"}
                   status={"success"}
                   theme={{
+                    default: {
+                      // color: "#5cb85c",
+                      trailColor: "#5cb85c",
+                    },
                     success: {
                       symbol: "",
                       trailColor: "#5cb85c",
