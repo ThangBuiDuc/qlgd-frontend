@@ -13,3 +13,17 @@ export const getGiangVien = async (id) => {
 
   return res;
 };
+
+//Get lich hoc trong ngay
+export const getLichTrinhGiangVien = async (token) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_GET_LICH_TRINH_GIANG_VIEN}`,
+    method: "get",
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res;
+};
