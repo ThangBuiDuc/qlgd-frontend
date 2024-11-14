@@ -19,7 +19,7 @@ import {
 import TinhHinh from "./tinhHinh";
 import BuoiHoc from "./buoiHoc";
 
-const Student = ({ lop }) => {
+const NotSignedIn = ({ lop }) => {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-2">
@@ -59,4 +59,4 @@ const Student = ({ lop }) => {
   );
 };
 
-export default Student;
+export default NotSignedIn;

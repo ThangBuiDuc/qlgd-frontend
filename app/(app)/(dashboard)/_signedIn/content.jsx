@@ -26,9 +26,6 @@ const NotSignedOut = () => {
         <Tab key="danhsach" title="Danh sách lớp">
           <Lop />
         </Tab>
-        <Tab key="luuy" title="Lưu ý">
-          <TKB />
-        </Tab>
       </Tabs>
     </div>
   );

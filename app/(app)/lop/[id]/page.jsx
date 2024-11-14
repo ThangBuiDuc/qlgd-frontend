@@ -1,5 +1,5 @@
 import { SignedIn, SignedOut } from "@clerk/nextjs";
-import Student from "./_student/content";
+import NotSignedIn from "./_signedOut/content";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { getLop } from "@/ultis/lop";
 
@@ -16,7 +16,7 @@ const page = async ({ params }) => {
   return (
     <>
       <SignedOut>
-        <Student lop={lop.data} />
+        <NotSignedIn lop={lop.data} />
       </SignedOut>
       <SignedIn>{/* <Student  /> */}</SignedIn>
     </>
