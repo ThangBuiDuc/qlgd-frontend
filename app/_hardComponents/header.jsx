@@ -1,6 +1,7 @@
 "use client";
 import { useUser, useClerk } from "@clerk/nextjs";
 import Link from "next/link";
+// import { useRouter } from "next/navigation";
 const navMenu = [
   {
     path: "/",
@@ -28,7 +29,7 @@ const navMenu = [
 const Header = () => {
   const clerk = useClerk();
   const { isSignedIn } = useUser();
-
+  // const router = useRouter();
   return (
     <header className="h-[10vh]  pl-[10vw] pr-[10vw] sticky top-0 border-solid border-b-1 bg-gray-50 z-50">
       <div className="flex h-full justify-between">
@@ -47,6 +48,7 @@ const Header = () => {
           <button
             onClick={() => {
               clerk.signOut();
+              // router.refresh();
             }}
           >
             Đăng xuất

@@ -5,11 +5,12 @@ import { auth } from "@clerk/nextjs/server";
 import NotSignedOut from "./_signedIn/content";
 
 export default async function Page() {
-  const { getToken } = await auth();
-  const calendar = await getCurrentCalendar(
-    await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV })
-  );
-
+  const { getToken, userId, sessionId } = await auth();
+  console.log(userId, sessionId);
+  const calendar = await getCurrentCalendar();
+  // await getToken({
+  //   template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
+  // })
   // console.log(calendar);
 
   if (calendar.status !== 200) {

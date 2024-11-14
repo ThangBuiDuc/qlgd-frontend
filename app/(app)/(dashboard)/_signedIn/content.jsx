@@ -1,36 +1,33 @@
 "use client";
 import { Tabs, Tab } from "@nextui-org/tabs";
-import { Card, CardBody } from "@nextui-org/card";
 import TKB from "./tkb";
+import Lop from "./lop";
+import { useAuth, useClerk } from "@clerk/clerk-react";
 
 const NotSignedOut = () => {
+  // const { isSignedIn } = useAuth();
+  // const clerk = useClerk();
+
+  // if (!isSignedIn) clerk.redirectToSignIn();
+
   return (
     <div className="flex w-full flex-col">
       <Tabs
         aria-label="Options"
         color="primary"
-        classNames={{ tabContent: "text-black" }}
+        classNames={{
+          tabContent: "text-black",
+          panel: "[&>div]:shadow-none",
+        }}
       >
         <Tab key="tkb" title="Thời khoá biểu">
-          <Card>
-            <CardBody>
-              <TKB />
-            </CardBody>
-          </Card>
+          <TKB />
         </Tab>
         <Tab key="danhsach" title="Danh sách lớp">
-          <Card>
-            <CardBody>
-              <TKB />
-            </CardBody>
-          </Card>
+          <Lop />
         </Tab>
         <Tab key="luuy" title="Lưu ý">
-          <Card>
-            <CardBody>
-              <TKB />
-            </CardBody>
-          </Card>
+          <TKB />
         </Tab>
       </Tabs>
     </div>

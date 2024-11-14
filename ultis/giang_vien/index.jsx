@@ -25,5 +25,19 @@ export const getLichTrinhGiangVien = async (token) => {
     },
   });
 
-  return res;
+  return token ? res.data : res;
+};
+
+//Get danh sach lop
+export const getLopGiangVien = async (token) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_GET_LOP_GIANG_VIEN}`,
+    method: "get",
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
 };
