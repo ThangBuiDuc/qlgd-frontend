@@ -2,14 +2,8 @@
 import { Tabs, Tab } from "@nextui-org/tabs";
 import TKB from "./tkb";
 import Lop from "./lop";
-import { useAuth, useClerk } from "@clerk/clerk-react";
 
 const NotSignedOut = () => {
-  // const { isSignedIn } = useAuth();
-  // const clerk = useClerk();
-
-  // if (!isSignedIn) clerk.redirectToSignIn();
-
   return (
     <div className="flex w-full flex-col">
       <Tabs
