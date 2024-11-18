@@ -123,23 +123,25 @@ const Student = ({ calendar }) => {
                   <Link href={`/sinh_vien/${item.id}`}>{item.code}</Link>
                 </TableCell>
                 <TableCell>{item.ma_lop_hanh_chinh}</TableCell>
-                <TableCell className="flex">
-                  <Progress
-                    percent={item.tinh_hinh_vang ? item.tinh_hinh_vang : 0}
-                    symbolClassName={"progresspercent"}
-                    status={"success"}
-                    theme={{
-                      default: {
-                        // color: "#5cb85c",
-                        trailColor: "#5cb85c",
-                      },
-                      success: {
-                        symbol: "",
-                        trailColor: "#5cb85c",
-                        color: "#d9534f",
-                      },
-                    }}
-                  />
+                <TableCell>
+                  <div className="h-[20px] flex">
+                    <div
+                      class="bg-red-500 overflow-hidden text-center text-white rounded-l-sm "
+                      style={{
+                        width: item.tinh_hinh_vang
+                          ? item.tinh_hinh_vang + "%"
+                          : 0,
+                      }}
+                    >
+                      {/* <span>{item.tinh_hinh_vang + "%"}</span> */}
+                    </div>
+                    <div
+                      class="bg-green-500 text-white text-center rounded-r-sm"
+                      style={{ width: 100 - item.tinh_hinh_vang + "%" }}
+                    >
+                      {/* <span>{100 - item.tinh_hinh_vang + "%"}</span> */}
+                    </div>
+                  </div>
                 </TableCell>
                 <TableCell>{item.so_tiet_vang}</TableCell>
                 <TableCell>{item.phep ? "Có phép" : "Không phép"}</TableCell>

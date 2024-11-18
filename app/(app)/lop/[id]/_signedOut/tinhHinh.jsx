@@ -125,22 +125,20 @@ const TinhHinh = ({ tinh_hinh_hoc_tap }) => {
               </TableCell>
               <TableCell>{item.ma_lop_hanh_chinh}</TableCell>
               <TableCell>
-                <Progress
-                  percent={item.tinhhinh ? item.tinhhinh : 0}
-                  symbolClassName={"progresspercent"}
-                  status={"success"}
-                  theme={{
-                    default: {
-                      // color: "#5cb85c",
-                      trailColor: "#5cb85c",
-                    },
-                    success: {
-                      symbol: "",
-                      trailColor: "#5cb85c",
-                      color: "#d9534f",
-                    },
-                  }}
-                />
+                <div className="h-[20px] flex">
+                  <div
+                    class="bg-red-500 overflow-hidden text-center text-white rounded-l-sm "
+                    style={{ width: item.tinhhinh ? item.tinhhinh + "%" : 0 }}
+                  >
+                    {/* <span>{item.tinhhinh + "%"}</span> */}
+                  </div>
+                  <div
+                    class="bg-green-500 text-white text-center rounded-r-sm"
+                    style={{ width: 100 - item.tinhhinh + "%" }}
+                  >
+                    {/* <span>{100 - item.tinhhinh + "%"}</span> */}
+                  </div>
+                </div>
               </TableCell>
               <TableCell>
                 {item.tong_tiet_vang ? item.tong_tiet_vang : 0}

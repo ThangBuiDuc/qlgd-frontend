@@ -14,3 +14,17 @@ export const getLop = async (token, id) => {
 
   return res;
 };
+
+//Get chi tiet lop giang vien
+export const getChiTietLopGiangVien = async (token, lop_id) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_GET_CHI_TIET_LOP_GIANG_VIEN}/${lop_id}/group_submissions`,
+    method: "get",
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};

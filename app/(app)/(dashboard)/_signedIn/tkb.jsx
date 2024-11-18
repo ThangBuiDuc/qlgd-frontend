@@ -13,6 +13,7 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import Link from "next/link";
+import { Chip } from "@nextui-org/chip";
 
 const TKB = () => {
   const { userId, getToken } = useAuth();
@@ -24,7 +25,7 @@ const TKB = () => {
       ),
   });
 
-  // console.log(data);
+  console.log(data);
 
   if (isLoading) {
     return <Spinner size="md" color="primary" />;
@@ -64,7 +65,7 @@ const TKB = () => {
                 <TableBody>
                   {item.data.map((el) => (
                     <TableRow key={el.id}>
-                      <TableCell className="whitespace-nowrap">
+                      <TableCell className="whitespace-nowrap ">
                         {el.thu}
                       </TableCell>
                       <TableCell>
@@ -77,7 +78,17 @@ const TKB = () => {
                       <TableCell>{el.ma_lop}</TableCell>
                       <TableCell>{el.ten_mon_hoc}</TableCell>
                       <TableCell>{el.alias_state}</TableCell>
-                      <TableCell>{el.alias_status}</TableCell>
+                      <TableCell>
+                        <Chip
+                          radius="sm"
+                          color={`${
+                            el.color_status.split(" ")[1].split("-")[1]
+                          }`}
+                          classNames={{ content: "font-semibold" }}
+                        >
+                          {el.alias_status}
+                        </Chip>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

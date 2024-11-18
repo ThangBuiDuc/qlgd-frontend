@@ -1,6 +1,7 @@
 "use client";
 import { Tabs, Tab } from "@nextui-org/tabs";
-import ThongTin from "./thongtin";
+import ThongTin from "./_thongtin/thongtin";
+import ThongTinLop from "./_thongtin/thongtinlop";
 const NotSignedOut = ({ lop }) => {
   return (
     <div className="flex w-full flex-col">
@@ -13,7 +14,10 @@ const NotSignedOut = ({ lop }) => {
         }}
       >
         <Tab key="main" title="Thông tin chung">
-          <ThongTin lop={lop} />
+          <div className="flex flex-col gap-5">
+            <ThongTin lop={lop} />
+            <ThongTinLop />
+          </div>
         </Tab>
         <Tab key="setting" title="Thiết lập thông số">
           {/* <Lop /> */}
