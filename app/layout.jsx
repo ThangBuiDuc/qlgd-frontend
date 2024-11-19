@@ -3,6 +3,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import ReactQueryProvider from "./ReactQueryProvider";
 import localFont from "next/font/local";
 import { NextUIProvider } from "@nextui-org/system";
+import { Toaster } from "sonner";
+
 // import { ViewTransitions } from "next-view-transitions";
 import "react-sweet-progress/lib/style.css";
 const montserrat = localFont({
@@ -32,6 +34,7 @@ export default function RootLayout({ children }) {
           <NextUIProvider>
             <ReactQueryProvider>{children}</ReactQueryProvider>
           </NextUIProvider>
+          <Toaster richColors />
         </body>
       </html>
     </ClerkProvider>

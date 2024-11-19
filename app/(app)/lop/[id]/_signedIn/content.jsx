@@ -1,6 +1,8 @@
 "use client";
 import { Tabs, Tab } from "@nextui-org/tabs";
 import ThongTin from "./_thongtin/thongtin";
+
+import ThietLapNhomDiem from "./_thietlapnhomdiem/thietlapnhomdiem";
 import ThongTinLop from "./_thongtin/thongtinlop";
 const NotSignedOut = ({ lop }) => {
   return (
@@ -23,7 +25,7 @@ const NotSignedOut = ({ lop }) => {
           {/* <Lop /> */}
         </Tab>
         <Tab key="scoresetting" title="Thiết lập nhóm điểm">
-          {/* <Lop /> */}
+          <ThietLapNhomDiem />
         </Tab>
         <Tab key="score" title="Điểm">
           {/* <Lop /> */}
