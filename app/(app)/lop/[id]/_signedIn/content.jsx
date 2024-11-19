@@ -1,6 +1,8 @@
 "use client";
 import { Tabs, Tab } from "@nextui-org/tabs";
 import ThongTin from "./thongtin";
+
+import ThietLapNhomDiem from "./_thietlapnhomdiem/thietlapnhomdiem";
 const NotSignedOut = ({ lop }) => {
   return (
     <div className="flex w-full flex-col">
@@ -19,7 +21,7 @@ const NotSignedOut = ({ lop }) => {
           {/* <Lop /> */}
         </Tab>
         <Tab key="scoresetting" title="Thiết lập nhóm điểm">
-          {/* <Lop /> */}
+          <ThietLapNhomDiem />
         </Tab>
         <Tab key="score" title="Điểm">
           {/* <Lop /> */}
