@@ -132,13 +132,18 @@ const ThietLapNhomDiem = () => {
       <AddModal isOpen={addModal} onChange={setAddModal} params={params} />
       <div className="flex flex-col gap-3 divide-y-1">
         {data.map((item) => (
-          <div key={item.assignment_group_id} className="pt-1">
+          <div
+            key={item.assignment_group_id}
+            className="pt-1 flex flex-col gap-3"
+          >
             <NhomDiem data={item} params={params} />
-            {item.assignments.map((el) => (
-              <Fragment key={el.assignment_id}>
-                <Diem data={el} />
-              </Fragment>
-            ))}
+            <div className="flex flex-col gap-1">
+              {item.assignments.map((el) => (
+                <Fragment key={el.assignment_id}>
+                  <Diem data={el} params={params} />
+                </Fragment>
+              ))}
+            </div>
           </div>
         ))}
       </div>

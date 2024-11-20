@@ -4,7 +4,8 @@ import ThongTin from "./_thongtin/thongtin";
 
 import ThietLapNhomDiem from "./_thietlapnhomdiem/thietlapnhomdiem";
 import ThongTinLop from "./_thongtin/thongtinlop";
-const NotSignedOut = ({ lop }) => {
+import Diem from "./_diem/diem";
+const NotSignedOut = ({ lop, chi_tiet_lop }) => {
   return (
     <div className="flex w-full flex-col">
       <Tabs
@@ -18,7 +19,7 @@ const NotSignedOut = ({ lop }) => {
         <Tab key="main" title="Thông tin chung">
           <div className="flex flex-col gap-5">
             <ThongTin lop={lop} />
-            <ThongTinLop />
+            <ThongTinLop data={chi_tiet_lop} />
           </div>
         </Tab>
         <Tab key="setting" title="Thiết lập thông số">
@@ -28,7 +29,7 @@ const NotSignedOut = ({ lop }) => {
           <ThietLapNhomDiem />
         </Tab>
         <Tab key="score" title="Điểm">
-          {/* <Lop /> */}
+          <Diem />
         </Tab>
         <Tab key="signmore" title="Đăng ký bổ sung">
           {/* <Lop /> */}

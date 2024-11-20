@@ -126,7 +126,7 @@ const Student = ({ calendar }) => {
                 <TableCell>
                   <div className="h-[20px] flex">
                     <div
-                      class="bg-red-500 overflow-hidden text-center text-white rounded-l-sm "
+                      className="bg-red-500 overflow-hidden text-center text-white rounded-l-sm "
                       style={{
                         width: item.tinh_hinh_vang
                           ? item.tinh_hinh_vang + "%"
@@ -136,7 +136,7 @@ const Student = ({ calendar }) => {
                       {/* <span>{item.tinh_hinh_vang + "%"}</span> */}
                     </div>
                     <div
-                      class="bg-green-500 text-white text-center rounded-r-sm"
+                      className="bg-green-500 text-white text-center rounded-r-sm"
                       style={{ width: 100 - item.tinh_hinh_vang + "%" }}
                     >
                       {/* <span>{100 - item.tinh_hinh_vang + "%"}</span> */}

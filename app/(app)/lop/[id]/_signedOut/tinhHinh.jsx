@@ -127,13 +127,13 @@ const TinhHinh = ({ tinh_hinh_hoc_tap }) => {
               <TableCell>
                 <div className="h-[20px] flex">
                   <div
-                    class="bg-red-500 overflow-hidden text-center text-white rounded-l-sm "
+                    className="bg-red-500 overflow-hidden text-center text-white rounded-l-sm "
                     style={{ width: item.tinhhinh ? item.tinhhinh + "%" : 0 }}
                   >
                     {/* <span>{item.tinhhinh + "%"}</span> */}
                   </div>
                   <div
-                    class="bg-green-500 text-white text-center rounded-r-sm"
+                    className="bg-green-500 text-white text-center rounded-r-sm"
                     style={{ width: 100 - item.tinhhinh + "%" }}
                   >
                     {/* <span>{100 - item.tinhhinh + "%"}</span> */}

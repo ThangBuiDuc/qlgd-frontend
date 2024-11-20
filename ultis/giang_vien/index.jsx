@@ -29,9 +29,9 @@ export const getLichTrinhGiangVien = async (token) => {
 };
 
 //Get danh sach lop
-export const getLopGiangVien = async (token) => {
+export const getDanhSachLopGiangVien = async (token) => {
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}`,
+    url: `${process.env.NEXT_PUBLIC_API_GET_DANH_SACH_LOP_GIANG_VIEN}`,
     method: "get",
     headers: {
       "content-type": "Application/json",
@@ -57,6 +57,21 @@ export const themNhomDiemLopGiangVien = async (token, data, id) => {
   return res.data;
 };
 
+//Cap nhat nhom diem cho lop
+export const capNhatNhomDiemLopGiangVien = async (token, data, id) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${id}/assignment_groups`,
+    method: "put",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
 //Xoa nhom diem cho lop
 export const xoaNhomDiemLopGiangVien = async (token, data, id) => {
   const res = await axios({
@@ -70,4 +85,77 @@ export const xoaNhomDiemLopGiangVien = async (token, data, id) => {
   });
 
   return res.data;
+};
+
+//Them dau diem cho nhom diem cua lop
+export const themDauDiemNhomDiemGiangVien = async (token, data, id) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${id}/assignments`,
+    method: "post",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+//Cap nhat dau diem cho nhom diem cua lop
+export const capNhatDauDiemNhomDiemGiangVien = async (token, data, id) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${id}/assignments`,
+    method: "put",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+//Xoa dau diem cho nhom diem cua lop
+export const xoaDauDiemNhomDiemGiangVien = async (token, data, id) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${id}/assignments`,
+    method: "delete",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+//Get chi tiet lop giang vien
+export const getChiTietLopGiangVien = async (token, lop_id) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/group_submissions`,
+    method: "get",
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res;
+};
+
+//Get chi tiet lop giang vien
+export const getChiTietLopGiangVien2 = async (token, lop_id) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/submissions2`,
+    method: "get",
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
 };

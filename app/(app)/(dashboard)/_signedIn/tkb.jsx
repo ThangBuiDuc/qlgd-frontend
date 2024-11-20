@@ -25,7 +25,7 @@ const TKB = () => {
       ),
   });
 
-  console.log(data);
+  // console.log(data);
 
   if (isLoading) {
     return <Spinner size="md" color="primary" />;

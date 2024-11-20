@@ -1,5 +1,5 @@
 "use client";
-import { getLopGiangVien } from "@/ultis/giang_vien";
+import { getDanhSachLopGiangVien } from "@/ultis/giang_vien";
 import { useAuth } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query";
 import { Spinner } from "@nextui-org/spinner";
@@ -18,12 +18,12 @@ const TKB = () => {
   const { data, isLoading } = useQuery({
     queryKey: [`lop_${userId}`],
     queryFn: async () =>
-      getLopGiangVien(
+      getDanhSachLopGiangVien(
         await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV })
       ),
   });
 
-  //   console.log(data);
+  // console.log(data);
 
   if (isLoading) {
     return <Spinner size="md" color="primary" />;
@@ -56,7 +56,7 @@ const TKB = () => {
             <TableCell>{el.khoi_luong_thuc_hien}</TableCell>
             <TableCell>{el.si_so}</TableCell>
             <TableCell>
-              {el.completed === false ? "Chưa kết thúc" : "Đã hoàn thành"}
+              {el.updated === false ? "Chưa cấu hình" : "Đã cấu hình"}
             </TableCell>
           </TableRow>
         ))}

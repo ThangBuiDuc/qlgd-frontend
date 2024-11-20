@@ -1,8 +1,4 @@
 "use client";
-
-import { getChiTietLopGiangVien } from "@/ultis/lop";
-import { useAuth } from "@clerk/nextjs";
-import { Spinner } from "@nextui-org/spinner";
 import {
   Table,
   TableHeader,
@@ -11,23 +7,22 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/table";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
 
-const ThongTinLop = () => {
-  const { getToken } = useAuth();
-  const params = useParams();
-  const { data, isLoading } = useQuery({
-    queryKey: ["lop_chi_tiet_gv", params.id],
-    queryFn: async () =>
-      getChiTietLopGiangVien(
-        await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
-        params.id
-      ),
-  });
+const ThongTinLop = ({ data }) => {
+  // const { getToken } = useAuth();
+  // const params = useParams();
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ["lop_chi_tiet_gv", params.id],
+  //   queryFn: async () =>
+  //     getChiTietLopGiangVien(
+  //       await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
+  //       params.id
+  //     ),
+  // });
 
-  console.log(data);
-  if (isLoading) return <Spinner color="primary" />;
+  // // console.log(data);
+  // if (isLoading) return <Spinner color="primary" />;
+
   return (
     <Table
       aria-label="Danh sach lop"
@@ -40,7 +35,7 @@ const ThongTinLop = () => {
       <TableHeader>
         <TableColumn>Họ và tên</TableColumn>
         <TableColumn>Tình hình đi học</TableColumn>
-        {data?.headers.map((item) => (
+        {data?.headers?.map((item) => (
           <TableColumn
             key={item.assignment_group_id}
           >{`${item.group_name} (${item.weight}%)`}</TableColumn>
@@ -60,13 +55,13 @@ const ThongTinLop = () => {
             <TableCell>
               <div className="h-[20px] flex">
                 <div
-                  class="bg-green-500 text-white text-center rounded-l-sm"
+                  className="bg-green-500 text-white text-center rounded-l-sm"
                   style={{ width: 100 - item.tinhhinh + "%" }}
                 >
                   <span>{100 - item.tinhhinh + "%"}</span>
                 </div>
                 <div
-                  class="bg-red-500 overflow-hidden text-center text-white rounded-r-sm"
+                  className="bg-red-500 overflow-hidden text-center text-white rounded-r-sm"
                   style={{ width: item.tinhhinh ? item.tinhhinh + "%" : 0 }}
                 >
                   <span>{item.tinhhinh + "%"}</span>

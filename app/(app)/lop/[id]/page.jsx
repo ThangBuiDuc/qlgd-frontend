@@ -3,6 +3,7 @@ import NotSignedIn from "./_signedOut/content";
 import { auth } from "@clerk/nextjs/server";
 import { getLop } from "@/ultis/lop";
 import NotSignedOut from "./_signedIn/content";
+import { getChiTietLopGiangVien } from "@/ultis/giang_vien";
 
 const page = async ({ params }) => {
   const { getToken } = await auth();
@@ -15,9 +16,18 @@ const page = async ({ params }) => {
     token = null;
   }
 
-  const lop = await getLop(token, params.id);
+  // const lop = await getLop(token, params.id);
+  // getChiTietLopGiangVien(
+  //       await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
+  //       params.id
+  //     ),
 
-  if (lop.status !== 200) {
+  const [lop, chi_tiet_lop] = await Promise.all([
+    getLop(token, params.id),
+    getChiTietLopGiangVien(token, params.id),
+  ]);
+
+  if (lop.status !== 200 || chi_tiet_lop.status !== 200) {
     throw new Error();
   }
 
@@ -28,7 +38,7 @@ const page = async ({ params }) => {
       </SignedOut>
       <SignedIn>
         {lop.data.authorized ? (
-          <NotSignedOut lop={lop.data.lop} />
+          <NotSignedOut lop={lop.data.lop} chi_tiet_lop={chi_tiet_lop.data} />
         ) : (
           <NotSignedIn lop={lop.data.lop} />
         )}
