@@ -77,6 +77,7 @@ const BuoiHoc = ({ cac_buoi_hoc }) => {
   //           //   }
   //         });
   //   }, [sortDescriptor, items]);
+
   return (
     <div className="flex flex-col gap-2">
       <h5>Các buổi học đã hoàn thành</h5>
@@ -112,32 +113,34 @@ const BuoiHoc = ({ cac_buoi_hoc }) => {
             <TableRow key={item.id}>
               <TableCell>{item.stt}</TableCell>
               <TableCell>
-                <Link href={"#"}>
+                <Link href={`/lich/${item.id}`}>
                   {moment(item.thoi_gian).format("HH:mm DD/MM/yyyy")}
                 </Link>
               </TableCell>
               <TableCell>{item.phong}</TableCell>
               <TableCell>{item.so_tiet}</TableCell>
               <TableCell>
-                <Link href={"#"}>{item.lop.ma_lop}</Link>
+                <Link href={`/lop/${item.lop.id}`}>{item.lop.ma_lop}</Link>
                 <br />
                 {item.lop.ten_mon_hoc}
               </TableCell>
               <TableCell>
-                <Link href={"#"}>{item.giang_vien.hovaten}</Link>
+                <Link href={`/giang_vien/${item.giang_vien.id}`}>
+                  {item.giang_vien.hovaten}
+                </Link>
               </TableCell>
               <TableCell>
                 <div dangerouslySetInnerHTML={{ __html: item.noi_dung }} />
               </TableCell>
               <TableCell>
                 {item.danh_sach_vang.map((el) => (
-                  <>
-                    <Link href={"#"}>
+                  <div key={el.id}>
+                    <Link href={`/sinh_vien/${el.id}`}>
                       {el.hovaten}{" "}
                       {`(${el.so_tiet_vang}t${el.phep ? ", phép" : ""})`}
                     </Link>
                     <br />
-                  </>
+                  </div>
                 ))}
               </TableCell>
             </TableRow>

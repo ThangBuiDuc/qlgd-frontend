@@ -172,7 +172,7 @@ const Diem = ({ data, params }) => {
                   cancelButtonText: "Huỷ",
                   showLoaderOnConfirm: true,
                   allowOutsideClick: () => !Swal.isLoading(),
-                  preConfirm: () => deleteMutation.mutate(),
+                  preConfirm: async () => await deleteMutation.mutateAsync(),
                 });
               }}
             />

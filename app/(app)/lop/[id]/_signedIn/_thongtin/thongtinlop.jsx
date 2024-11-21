@@ -1,4 +1,6 @@
 "use client";
+import { getChiTietLopGiangVien } from "@/ultis/giang_vien";
+import { useAuth } from "@clerk/nextjs";
 import {
   Table,
   TableHeader,
@@ -7,21 +9,24 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/table";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 
-const ThongTinLop = ({ data }) => {
-  // const { getToken } = useAuth();
-  // const params = useParams();
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ["lop_chi_tiet_gv", params.id],
-  //   queryFn: async () =>
-  //     getChiTietLopGiangVien(
-  //       await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
-  //       params.id
-  //     ),
-  // });
+const ThongTinLop = ({ chi_tiet_lop }) => {
+  const { getToken } = useAuth();
+  const params = useParams();
+  const { data, isLoading } = useQuery({
+    queryKey: ["lop_chi_tiet_gv", params.id],
+    queryFn: async () =>
+      getChiTietLopGiangVien(
+        await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
+        params.id
+      ),
+    initialData: chi_tiet_lop,
+  });
 
-  // // console.log(data);
-  // if (isLoading) return <Spinner color="primary" />;
+  // console.log(data);
+  if (isLoading) return <Spinner color="primary" />;
 
   return (
     <Table

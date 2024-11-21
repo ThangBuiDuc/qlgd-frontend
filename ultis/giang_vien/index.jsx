@@ -143,14 +143,86 @@ export const getChiTietLopGiangVien = async (token, lop_id) => {
     },
   });
 
-  return res;
+  return res.data;
 };
 
-//Get chi tiet lop giang vien
+//Get chi tiet lop giang vien 2
 export const getChiTietLopGiangVien2 = async (token, lop_id) => {
   const res = await axios({
     url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/submissions2`,
     method: "get",
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
+
+//Cap nhat diem cho sinh vien
+export const capNhatDiemSinhVien = async (token, lop_id, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/submissions2`,
+    method: "post",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
+
+//Tinh diem chuyen can
+export const tinhDiemChuyenCanSinhVien = async (token, lop_id) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/submissions/diem_chuyen_can`,
+    method: "post",
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
+
+//Tinh diem chuyen can
+export const hoanThanhLopHoc = async (token, lop_id) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/finish`,
+    method: "post",
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
+
+//Get lich day bo sung
+export const getLichBoSungLop = async (token, lop_id) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days/bosung`,
+    method: "get",
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
+
+//Dang ky lich day bo sung
+export const dangKyLichBoSung = async (token, lop_id, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days/create_bosung`,
+    method: "post",
+    data,
     headers: {
       "content-type": "Application/json",
       jwt: `Bearer ${token}`,

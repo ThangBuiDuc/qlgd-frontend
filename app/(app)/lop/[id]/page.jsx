@@ -27,7 +27,7 @@ const page = async ({ params }) => {
     getChiTietLopGiangVien(token, params.id),
   ]);
 
-  if (lop.status !== 200 || chi_tiet_lop.status !== 200) {
+  if (lop.status !== 200) {
     throw new Error();
   }
 
@@ -38,7 +38,7 @@ const page = async ({ params }) => {
       </SignedOut>
       <SignedIn>
         {lop.data.authorized ? (
-          <NotSignedOut lop={lop.data.lop} chi_tiet_lop={chi_tiet_lop.data} />
+          <NotSignedOut lop={lop.data.lop} chi_tiet_lop={chi_tiet_lop} />
         ) : (
           <NotSignedIn lop={lop.data.lop} />
         )}

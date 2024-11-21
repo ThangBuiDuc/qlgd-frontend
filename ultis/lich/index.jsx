@@ -7,7 +7,7 @@ export const getCalendar = async (token, id) => {
     method: "get",
     headers: {
       "content-type": "Application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(token ? { jwt: `Bearer ${token}` } : {}),
       //   authorization: `Bearer ${token}`,
     },
   });

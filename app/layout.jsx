@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en">
         <body className={`${montserrat.className} bg-white `}>
-          <NextUIProvider>
+          <NextUIProvider locale="vi-VN">
             <ReactQueryProvider>{children}</ReactQueryProvider>
           </NextUIProvider>
           <Toaster richColors />
