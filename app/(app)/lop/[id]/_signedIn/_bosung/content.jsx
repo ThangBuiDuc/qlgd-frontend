@@ -458,10 +458,10 @@ const RenderCell = ({ data, params }) => {
   );
 };
 
-const BoSung = () => {
+const BoSung = ({ params }) => {
   const [addModal, setAddModal] = useState(false);
   const { getToken } = useAuth();
-  const params = useParams();
+  // const params = useParams();
   const { data, isLoading } = useQuery({
     queryKey: ["lich_bo_sung", params.id],
     queryFn: async () =>

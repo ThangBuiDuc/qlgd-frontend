@@ -7,7 +7,7 @@ import ThongTinLop from "./_thongtin/thongtinlop";
 import Diem from "./_diem/diem";
 import BoSung from "./_bosung/content";
 import TKB from "./_tkb/content";
-const NotSignedOut = ({ lop, chi_tiet_lop }) => {
+const NotSignedOut = ({ lop, chi_tiet_lop, lich }) => {
   return (
     <div className="flex w-full flex-col">
       <Tabs
@@ -21,23 +21,25 @@ const NotSignedOut = ({ lop, chi_tiet_lop }) => {
         <Tab key="main" title="Thông tin chung">
           <div className="flex flex-col gap-5">
             <ThongTin lop={lop} />
-            <ThongTinLop chi_tiet_lop={chi_tiet_lop} />
+            {chi_tiet_lop && <ThongTinLop chi_tiet_lop={chi_tiet_lop} />}
           </div>
         </Tab>
         <Tab key="setting" title="Thiết lập thông số">
           {/* <Lop /> */}
         </Tab>
         <Tab key="scoresetting" title="Thiết lập nhóm điểm">
-          <ThietLapNhomDiem />
+          <ThietLapNhomDiem params={{ id: lop.id }} />
         </Tab>
-        <Tab key="score" title="Điểm">
-          <Diem />
-        </Tab>
+        {!lich && (
+          <Tab key="score" title="Điểm">
+            <Diem params={{ id: lop.id }} />
+          </Tab>
+        )}
         <Tab key="signmore" title="Đăng ký bổ sung">
-          <BoSung />
+          <BoSung params={{ id: lop.id }} />
         </Tab>
         <Tab key="tkb" title="Thời khoá biểu">
-          <TKB />
+          <TKB params={{ id: lop.id }} />
         </Tab>
       </Tabs>
     </div>

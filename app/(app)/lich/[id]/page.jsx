@@ -2,13 +2,12 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { getCalendar } from "@/ultis/lich";
 import NotSignedIn from "./_signedOut/content";
-import { getLop } from "@/ultis/lop";
 import NotSignedOut from "./_signedIn/content";
 
 const page = async ({ params }) => {
   const { getToken } = await auth();
   var token;
-  var show;
+  var calendar;
   try {
     token = await getToken({
       template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
@@ -16,25 +15,22 @@ const page = async ({ params }) => {
   } catch (_) {
     token = null;
   }
-  if (token) show = await getLop(token, params.id);
-  else show = await getCalendar(params.id);
+  calendar = await getCalendar(token, params.id);
 
-  if (show.status !== 200) {
+  if (calendar.status !== 200) {
     throw new Error();
   }
-
-  console.log(show.data);
 
   return (
     <>
       <SignedOut>
-        <NotSignedIn calendar={show.data} />
+        <NotSignedIn calendar={calendar.data} />
       </SignedOut>
       <SignedIn>
-        {show.data.authorized ? (
-          <NotSignedOut lop={show.data.lop} />
+        {calendar.data.authorized ? (
+          <NotSignedOut lop={calendar.data.lop} />
         ) : (
-          <NotSignedIn calendar={show.data} />
+          <NotSignedIn calendar={calendar.data} />
         )}
       </SignedIn>
     </>

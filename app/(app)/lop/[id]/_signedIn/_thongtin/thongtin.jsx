@@ -38,7 +38,7 @@ const ThongTin = ({ lop }) => {
               <TableCell>{lop.settings.so_tiet_thuc_hanh}</TableCell>
               <TableCell>{lop.settings.language}</TableCell>
               <TableCell>
-                {lop.completed === false ? "Chưa kết thúc" : "Đã hoàn thành"}
+                {lop.updated === false ? "Chưa cấu hình" : "Đã cấu hình"}
               </TableCell>
             </TableRow>
           </TableBody>

@@ -109,10 +109,10 @@ const AddModal = ({ isOpen, onChange, params }) => {
   );
 };
 
-const ThietLapNhomDiem = () => {
+const ThietLapNhomDiem = ({ params }) => {
   const [addModal, setAddModal] = useState(false);
 
-  const params = useParams();
+  // const params = useParams();
   const { data, isLoading } = useQuery({
     queryKey: ["nhom_diem_lop", params.id],
     queryFn: async () => getNhomDiemLop(params.id),

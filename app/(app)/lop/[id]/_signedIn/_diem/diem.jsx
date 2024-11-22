@@ -148,11 +148,11 @@ const UpdateModal = ({ data, isOpen, onChange, params }) => {
   );
 };
 
-const Diem = () => {
+const Diem = ({ params }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { getToken } = useAuth();
-  const params = useParams();
+  // const params = useParams();
   const { data, isLoading } = useQuery({
     queryKey: ["lop_chi_tiet_gv2", params.id],
     queryFn: async () =>

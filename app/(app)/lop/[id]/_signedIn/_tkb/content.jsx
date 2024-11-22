@@ -29,9 +29,9 @@ const RenderCell = ({ data, params }) => {
   return <Row data={data} params={params} />;
 };
 
-const TKB = () => {
+const TKB = ({ params }) => {
   const { getToken } = useAuth();
-  const params = useParams();
+  // const params = useParams();
   const { data, isLoading } = useQuery({
     queryKey: ["lich_trinh_lop", params.id],
     queryFn: async () =>
@@ -42,8 +42,6 @@ const TKB = () => {
         params.id
       ),
   });
-
-  console.log(data);
 
   if (isLoading) return <Loading />;
 
