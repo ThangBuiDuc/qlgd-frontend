@@ -13,7 +13,7 @@ import Link from "next/link";
 // import { useMemo, useState } from "react";
 import { Progress } from "react-sweet-progress";
 
-const Student = ({ calendar }) => {
+const NotSignedIn = ({ calendar }) => {
   // console.log(calendar);
   return (
     <div className="flex flex-col gap-3">
@@ -163,4 +163,4 @@ const Student = ({ calendar }) => {
   );
 };
 
-export default Student;
+export default NotSignedIn;

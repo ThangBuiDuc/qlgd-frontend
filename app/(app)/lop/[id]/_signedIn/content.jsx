@@ -6,6 +6,7 @@ import ThietLapNhomDiem from "./_thietlapnhomdiem/thietlapnhomdiem";
 import ThongTinLop from "./_thongtin/thongtinlop";
 import Diem from "./_diem/diem";
 import BoSung from "./_bosung/content";
+import TKB from "./_tkb/content";
 const NotSignedOut = ({ lop, chi_tiet_lop }) => {
   return (
     <div className="flex w-full flex-col">
@@ -36,7 +37,7 @@ const NotSignedOut = ({ lop, chi_tiet_lop }) => {
           <BoSung />
         </Tab>
         <Tab key="tkb" title="Thời khoá biểu">
-          {/* <Lop /> */}
+          <TKB />
         </Tab>
       </Tabs>
     </div>

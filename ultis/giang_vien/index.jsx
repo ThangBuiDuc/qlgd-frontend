@@ -231,3 +231,62 @@ export const dangKyLichBoSung = async (token, lop_id, data) => {
 
   return token ? res.data : res;
 };
+
+//cap nhat lich day bo sung
+export const capNhatLichBoSung = async (token, lop_id, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days/update_bosung`,
+    method: "put",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
+
+//Xoa lich day bo sung
+export const xoaLichBoSung = async (token, lop_id, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days/remove_bosung`,
+    method: "delete",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
+
+//Phuc hoi lich day bo sung
+export const phucHoiLichBoSung = async (token, lop_id, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days/restore_bosung`,
+    method: "post",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
+
+//Lay chi tiet lich trinh giang day cua lop
+export const getLichTrinhLop = async (token, lop_id) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days`,
+    method: "get",
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
