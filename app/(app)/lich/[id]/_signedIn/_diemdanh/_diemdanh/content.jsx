@@ -20,14 +20,12 @@ const DiemDanhTab = ({ params }) => {
       ),
   });
 
-  //   console.log(data);
-
   if (isLoading) return <Loading />;
 
   return (
     <div className="flex flex-col gap-5">
       <ThongTin data={data.info.lich} />
-      <DiemDanh data={data.enrollments} />
+      <DiemDanh data={data.enrollments} state={data.info.lich.updated} />
     </div>
   );
 };

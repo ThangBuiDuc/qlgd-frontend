@@ -304,3 +304,17 @@ export const getDiemDanhLop = async (token, lich_id) => {
 
   return token ? res.data : res;
 };
+
+//Lay lich trinh thuc hien cho lich
+export const getLichTrinhThucHien = async (token, lop_id) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days/content`,
+    method: "get",
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
