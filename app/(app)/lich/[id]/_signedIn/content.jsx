@@ -2,6 +2,7 @@
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import { default as NotSignedOutLop } from "@/app/(app)/lop/[id]/_signedIn/content";
 import DiemDanh from "./_diemdanh/content";
+import Diem from "./_diem/content";
 
 const NotSignedOut = ({ lop }) => {
   // console.log(lop);
@@ -17,7 +18,9 @@ const NotSignedOut = ({ lop }) => {
       <AccordionItem key={"1"} aria-label={"diem danh"} title={`Điểm danh`}>
         <DiemDanh />
       </AccordionItem>
-      <AccordionItem key="2" aria-label={"diem"} title={`Điểm`}></AccordionItem>
+      <AccordionItem key="2" aria-label={"diem"} title={`Điểm`}>
+        <Diem lop={lop} />
+      </AccordionItem>
     </Accordion>
   );
 };
