@@ -7,7 +7,9 @@ import ThongTinLop from "./_thongtin/thongtinlop";
 import Diem from "./_diem/diem";
 import BoSung from "./_bosung/content";
 import TKB from "./_tkb/content";
+import { useParams } from "next/navigation";
 const NotSignedOut = ({ lop, chi_tiet_lop, lich }) => {
+  const params = useParams();
   return (
     <div className="flex w-full flex-col">
       <Tabs
@@ -21,7 +23,9 @@ const NotSignedOut = ({ lop, chi_tiet_lop, lich }) => {
         <Tab key="main" title="Thông tin chung">
           <div className="flex flex-col gap-5">
             <ThongTin lop={lop} />
-            {chi_tiet_lop && <ThongTinLop chi_tiet_lop={chi_tiet_lop} />}
+            {chi_tiet_lop && (
+              <ThongTinLop chi_tiet_lop={chi_tiet_lop} params={params} />
+            )}
           </div>
         </Tab>
         <Tab key="setting" title="Thiết lập thông số">

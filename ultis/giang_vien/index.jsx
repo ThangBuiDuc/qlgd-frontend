@@ -318,3 +318,33 @@ export const getLichTrinhThucHien = async (token, lop_id) => {
 
   return token ? res.data : res;
 };
+
+//Lay lich trinh thuc hien cho lich
+export const capNhatDiemDanhHocSinh = async (token, lich_id, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LICH_GIANG_VIEN}/${lich_id}/attendances`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
+
+//Hoan thanh buoi hoc
+export const hoanThanhBuoiHoc = async (token, lop_id, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days/complete`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};

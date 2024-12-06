@@ -22,10 +22,16 @@ const DiemDanhTab = ({ params }) => {
 
   if (isLoading) return <Loading />;
 
+  // console.log(data);
+
   return (
     <div className="flex flex-col gap-5">
-      <ThongTin data={data.info.lich} />
-      <DiemDanh data={data.enrollments} state={data.info.lich.updated} />
+      <ThongTin data={data.info.lich} lop_id={data.info.lop.id} />
+      <DiemDanh
+        data={data.enrollments}
+        state={data.info.lich.updated}
+        so_tiet={data.info.lich.so_tiet}
+      />
     </div>
   );
 };

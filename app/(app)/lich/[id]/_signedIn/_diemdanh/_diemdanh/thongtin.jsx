@@ -1,4 +1,7 @@
 "use client";
+import Loading from "@/app/_hardComponents/loading";
+import { hoanThanhBuoiHoc } from "@/ultis/giang_vien";
+import { useAuth } from "@clerk/clerk-react";
 import {
   Table,
   TableHeader,
@@ -8,9 +11,34 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import { Tooltip } from "@nextui-org/tooltip";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CircleCheckBig } from "lucide-react";
+import { useParams } from "next/navigation";
+import { useState } from "react";
 
-const ThongTin = ({ data }) => {
+const ThongTin = ({ data, lop_id }) => {
+  const params = useParams();
+  const [isMutation, setIsMutaion] = useState(false);
+  const { getToken } = useAuth();
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: async () =>
+      hoanThanhBuoiHoc(
+        await getToken({
+          template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
+        }),
+        lop_id,
+        { ...data, lop_id }
+      ),
+    onSuccess: (data) => {
+      setIsMutaion(false);
+      // queryClient.invalidateQueries(["diem_danh_lich", params.id]);
+      queryClient.setQueryData(["diem_danh_lich", params.id], data);
+    },
+    onError: () => {
+      setIsMutaion(false);
+    },
+  });
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-2">
@@ -42,17 +70,24 @@ const ThongTin = ({ data }) => {
               <TableCell>{data.alias_state}</TableCell>
               <TableCell>{data.alias_status}</TableCell>
               <TableCell>
-                {data.updated && (
-                  <Tooltip
-                    content="Hoàn thành buổi học"
-                    color="primary"
-                    closeDelay={0}
-                  >
-                    <CircleCheckBig
-                      className="cursor-pointer"
-                      //   onClick={() => setUpdateModal(true)}
-                    />
-                  </Tooltip>
+                {isMutation ? (
+                  <Loading size={"sm"} />
+                ) : (
+                  data.updated && (
+                    <Tooltip
+                      content="Hoàn thành buổi học"
+                      color="primary"
+                      closeDelay={0}
+                    >
+                      <CircleCheckBig
+                        className="cursor-pointer"
+                        onClick={() => {
+                          setIsMutaion(true);
+                          mutation.mutate();
+                        }}
+                      />
+                    </Tooltip>
+                  )
                 )}
               </TableCell>
             </TableRow>

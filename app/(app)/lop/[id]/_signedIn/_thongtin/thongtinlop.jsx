@@ -1,4 +1,5 @@
 "use client";
+import Loading from "@/app/_hardComponents/loading";
 import { getChiTietLopGiangVien } from "@/ultis/giang_vien";
 import { useAuth } from "@clerk/nextjs";
 import {
@@ -10,11 +11,11 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+// import { useParams } from "next/navigation";
 
-const ThongTinLop = ({ chi_tiet_lop }) => {
+const ThongTinLop = ({ chi_tiet_lop, is_lich, params }) => {
   const { getToken } = useAuth();
-  const params = useParams();
+  // const params = useParams();
   const { data, isLoading } = useQuery({
     queryKey: ["lop_chi_tiet_gv", params.id],
     queryFn: async () =>
@@ -22,11 +23,11 @@ const ThongTinLop = ({ chi_tiet_lop }) => {
         await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
         params.id
       ),
-    initialData: chi_tiet_lop,
+    ...(is_lich ? {} : { initialData: chi_tiet_lop }),
   });
 
   // console.log(data);
-  if (isLoading) return <Spinner color="primary" />;
+  if (isLoading) return <Loading />;
 
   return (
     <Table
