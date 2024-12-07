@@ -15,6 +15,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CircleCheckBig } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const ThongTin = ({ data, lop_id }) => {
   const params = useParams();
@@ -31,12 +32,18 @@ const ThongTin = ({ data, lop_id }) => {
         { ...data, lop_id }
       ),
     onSuccess: (data) => {
+      toast.success("Hoàn thành buổi học thành công!", {
+        position: "top-center",
+      });
       setIsMutaion(false);
       // queryClient.invalidateQueries(["diem_danh_lich", params.id]);
       queryClient.setQueryData(["diem_danh_lich", params.id], data);
     },
     onError: () => {
       setIsMutaion(false);
+      toast.error("Hoàn thành buổi học không thành công!", {
+        position: "top-center",
+      });
     },
   });
   return (

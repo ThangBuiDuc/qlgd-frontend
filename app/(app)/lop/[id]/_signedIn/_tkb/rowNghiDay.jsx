@@ -2,12 +2,12 @@
 import { Tooltip } from "@nextui-org/tooltip";
 import { CircleX, ArchiveRestore, PenOff } from "lucide-react";
 
-const RowNghiDay = () => {
+const RowNghiDay = ({ data, params }) => {
   return (
-    <>
+    <div className="flex gap-2">
       {data.can_unnghiday && (
         <Tooltip content="Huỷ đăng ký" color="primary" closeDelay={0}>
-          <CircleX
+          <PenOff
             className="cursor-pointer"
             onClick={() => setUpdateModal(true)}
           />
@@ -29,7 +29,7 @@ const RowNghiDay = () => {
           />
         </Tooltip>
       )}
-    </>
+    </div>
   );
 };
 

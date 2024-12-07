@@ -45,6 +45,8 @@ const TKB = ({ params }) => {
 
   if (isLoading) return <Loading />;
 
+  // console.log(data);
+
   return (
     <Table
       aria-label="Danh sach lich trinh lop"

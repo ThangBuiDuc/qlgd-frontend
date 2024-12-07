@@ -24,6 +24,15 @@ import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import Loading from "@/app/_hardComponents/loading";
 import { useParams } from "next/navigation";
+import {
+  capNhatLichDay,
+  dangKyNghiLichDay,
+  huyHoanHanhLichDay,
+  phucHoiLichDay,
+  xoaLichDay,
+} from "@/ultis/giang_vien";
+import { toast } from "sonner";
+import Swal from "sweetalert2";
 
 const starts = [
   { key: "1", label: "1 (7h00)" },
@@ -51,37 +60,39 @@ const types = [
   { key: "baitap", label: "Bài tập" },
 ];
 
-const SettingModal = ({ settingModal, setSettingModal, data }) => {
+const UpdateModal = ({ updateModal, setUpdateModal, data, params }) => {
   const queryClient = useQueryClient();
   const [date, setDate] = useState(
     parseDate(data.thoi_gian.split("/").reverse().join("-"))
   );
   const [start, setStart] = useState(new Set([`${data.tiet_bat_dau}`]));
+  // const [note, setNote] = useState(data.note);
   const [type, setType] = useState(new Set([`lythuyet`]));
   const [quantity, setQuantity] = useState(data.so_tiet);
   const [room, setRoom] = useState(data.phong);
   const [isMutating, setIsMutating] = useState(false);
   const { getToken } = useAuth();
-  const params = useParams();
+  // const params = useParams();
 
   const mutation = useMutation({
     mutationFn: async () =>
-      capNhatLichBoSung(
+      capNhatLichDay(
         await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
         params.id,
         {
+          // note,
           id: data.id,
-          tiet_bat_dau: [...start][0],
-          thoi_gian: date.toString().split("-").reverse().join("/"),
           phong: room,
           so_tiet: quantity,
           ltype: [...type][0],
         }
       ),
-    onSuccess: () => {
-      onChange(false);
+    onSuccess: (data) => {
+      // console.log(`respone: ${data}`);
+      setUpdateModal(false);
       setIsMutating(false);
-      queryClient.invalidateQueries(["lich_trinh_lop", params.id]);
+      // queryClient.invalidateQueries(["lich_trinh_lop", params.id]);
+      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
       // queryClient.invalidateQueries(["lop_chi_tiet_gv", params.id]);
       toast.success("Cập nhật lịch thành công!", {
         position: "top-center",
@@ -97,8 +108,8 @@ const SettingModal = ({ settingModal, setSettingModal, data }) => {
 
   return (
     <Modal
-      isOpen={settingModal}
-      onOpenChange={setSettingModal}
+      isOpen={updateModal}
+      onOpenChange={setUpdateModal}
       isDismissable={false}
     >
       <ModalContent>
@@ -109,6 +120,7 @@ const SettingModal = ({ settingModal, setSettingModal, data }) => {
             </ModalHeader>
             <ModalBody>
               <DatePicker
+                isReadOnly
                 label="Thời gian"
                 // className="max-w-xs"
                 variant="bordered"
@@ -119,6 +131,7 @@ const SettingModal = ({ settingModal, setSettingModal, data }) => {
                 classNames={{ calendar: "w-fit", calendarContent: "w-fit" }}
               />
               <Select
+                isDisabled
                 label="Tiết bắt đầu"
                 // className="max-w-xs"
                 variant="bordered"
@@ -158,6 +171,15 @@ const SettingModal = ({ settingModal, setSettingModal, data }) => {
                   <SelectItem key={item.key}>{item.label}</SelectItem>
                 ))}
               </Select>
+              {/* <Input
+                // className="max-w-xs"
+                variant="bordered"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                type="text"
+                label={`Ghi chú buổi dạy`}
+                placeholder={`Ghi chú buổi dạy`}
+              /> */}
             </ModalBody>
             <ModalFooter>
               {isMutating ? (
@@ -193,32 +215,210 @@ const SettingModal = ({ settingModal, setSettingModal, data }) => {
   );
 };
 
+const NghiDayModal = ({ nghiDayModal, setNghiDayModal, data, params }) => {
+  const queryClient = useQueryClient();
+  const [note, setNote] = useState(data.note);
+  const [isMutating, setIsMutating] = useState(false);
+  const { getToken } = useAuth();
+  // const params = useParams();
+
+  const mutation = useMutation({
+    mutationFn: async () =>
+      dangKyNghiLichDay(
+        await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
+        params.id,
+        {
+          note,
+          id: data.id,
+          lop_id: params.id,
+        }
+      ),
+    onSuccess: (data) => {
+      // console.log(`respone: ${data}`);
+      setNghiDayModal(false);
+      setIsMutating(false);
+      // queryClient.invalidateQueries(["lich_trinh_lop", params.id]);
+      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
+      // queryClient.invalidateQueries(["lop_chi_tiet_gv", params.id]);
+      toast.success("Đăng ký nghỉ lịch dạy thành công!", {
+        position: "top-center",
+      });
+    },
+    onError: () => {
+      setIsMutating(false);
+      toast.error("Đăng ký nghỉ lịch dạy không thành công!", {
+        position: "top-center",
+      });
+    },
+  });
+
+  return (
+    <Modal
+      isOpen={nghiDayModal}
+      onOpenChange={setNghiDayModal}
+      isDismissable={false}
+    >
+      <ModalContent>
+        {(onClose) => (
+          <div className="flex flex-col justify-center">
+            <ModalHeader className="flex flex-col gap-1">
+              Đăng ký nghỉ dạy
+            </ModalHeader>
+            <ModalBody>
+              <Input
+                // className="max-w-xs"
+                variant="bordered"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                type="text"
+                label={`Lý do nghỉ dạy`}
+                placeholder={`Lý do nghỉ dạy`}
+              />
+            </ModalBody>
+            <ModalFooter>
+              {isMutating ? (
+                <Loading size={"sm"} />
+              ) : (
+                <>
+                  <Button
+                    color="primary"
+                    onClick={() => {
+                      setIsMutating(true);
+                      mutation.mutate();
+                    }}
+                  >
+                    Đăng ký
+                  </Button>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Huỷ
+                  </Button>
+                </>
+              )}
+            </ModalFooter>
+          </div>
+        )}
+      </ModalContent>
+    </Modal>
+  );
+};
+
 const Row = ({ data, params }) => {
-  const [settingModal, setSettingModal] = useState(false);
-  console.log(data);
+  const [updateModal, setUpdateModal] = useState(false);
+  const [nghiDayModal, setNghiDayModal] = useState(false);
+  const queryClient = useQueryClient();
+  const { getToken } = useAuth();
+  // console.log(data);
+  const uncompleteMutation = useMutation({
+    mutationFn: async () =>
+      huyHoanHanhLichDay(
+        await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
+        params.id,
+        { id: data.id, lop_id: params.id }
+      ),
+    onSuccess: (data) => {
+      // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
+      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
+      Swal.fire({
+        title: "Huỷ hoàn thành lịch dạy thành công!",
+        icon: "success",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+    onError: () => {
+      Swal.fire({
+        title: "Huỷ hoàn thành lịch dạy không thành công!",
+        icon: "error",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+  });
+
+  const removeMutation = useMutation({
+    mutationFn: async () =>
+      xoaLichDay(
+        await getToken({
+          template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
+        }),
+        params.id,
+        { id: data.id, lop_id: params.id }
+      ),
+    onSuccess: (data) => {
+      // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
+      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
+      Swal.fire({
+        title: "Xoá lịch dạy thành công!",
+        icon: "success",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+    onError: () => {
+      Swal.fire({
+        title: "Xoá lịch dạy không thành công!",
+        icon: "error",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+  });
+
+  const restoreMutation = useMutation({
+    mutationFn: async () =>
+      phucHoiLichDay(
+        await getToken({
+          template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
+        }),
+        params.id,
+        { id: data.id, lop_id: params.id }
+      ),
+    onSuccess: (data) => {
+      // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
+      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
+      Swal.fire({
+        title: "Phục hồi lịch dạy thành công!",
+        icon: "success",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+    onError: () => {
+      Swal.fire({
+        title: "Phục hồi lịch dạy không thành công!",
+        icon: "error",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+  });
+
   return (
     <>
       <div className="flex gap-2">
         {data.can_nghiday && (
-          <Tooltip content="Đăng ký nghỉ" color="warning" closeDelay={0}>
-            <SquarePen
-              className="cursor-pointer"
-              onClick={() => setUpdateModal(true)}
+          <>
+            <Tooltip content="Đăng ký nghỉ" color="warning" closeDelay={0}>
+              <SquarePen
+                className="cursor-pointer"
+                onClick={() => setNghiDayModal(true)}
+              />
+            </Tooltip>
+            <NghiDayModal
+              nghiDayModal={nghiDayModal}
+              setNghiDayModal={setNghiDayModal}
+              data={data}
+              params={params}
             />
-          </Tooltip>
+          </>
         )}
         {data.can_edit && (
           <>
             <Tooltip content="Sửa" color="success" closeDelay={0}>
               <Settings
                 className="cursor-pointer"
-                onClick={() => setSettingModal(true)}
+                onClick={() => setUpdateModal(true)}
               />
             </Tooltip>
-            <SettingModal
-              settingModal={settingModal}
-              setSettingModal={setSettingModal}
+            <UpdateModal
+              updateModal={updateModal}
+              setUpdateModal={setUpdateModal}
               data={data}
+              params={params}
             />
           </>
         )}
@@ -226,7 +426,20 @@ const Row = ({ data, params }) => {
           <Tooltip content="Xoá" color="danger" closeDelay={0}>
             <CircleX
               className="cursor-pointer"
-              onClick={() => setUpdateModal(true)}
+              onClick={() =>
+                Swal.fire({
+                  title: "Thầy/Cô có chắc chắn muốn xoá lịch dạy?",
+                  icon: "warning",
+                  confirmButtonColor: "#F31260",
+                  showConfirmButton: true,
+                  showCancelButton: true,
+                  confirmButtonText: "Xoá",
+                  cancelButtonText: "Huỷ",
+                  showLoaderOnConfirm: true,
+                  allowOutsideClick: () => !Swal.isLoading(),
+                  preConfirm: async () => await removeMutation.mutateAsync(),
+                })
+              }
             />
           </Tooltip>
         )}
@@ -234,17 +447,52 @@ const Row = ({ data, params }) => {
           <Tooltip content="Phục hồi" closeDelay={0}>
             <ArchiveRestore
               className="cursor-pointer"
-              onClick={() => setUpdateModal(true)}
+              onClick={() =>
+                Swal.fire({
+                  title: "Thầy/Cô có chắc chắn muốn phục hồi lịch dạy?",
+                  icon: "warning",
+                  confirmButtonColor: "#F31260",
+                  showConfirmButton: true,
+                  showCancelButton: true,
+                  confirmButtonText: "Phục hồi",
+                  cancelButtonText: "Huỷ",
+                  showLoaderOnConfirm: true,
+                  allowOutsideClick: () => !Swal.isLoading(),
+                  preConfirm: async () => await restoreMutation.mutateAsync(),
+                })
+              }
             />
           </Tooltip>
         )}
         {data.can_uncomplete && (
-          <Tooltip content="Huỷ hoàn thành" color="primary" closeDelay={0}>
-            <Undo2
-              className="cursor-pointer"
-              onClick={() => setUpdateModal(true)}
-            />
-          </Tooltip>
+          <>
+            <Tooltip content="Huỷ hoàn thành" color="primary" closeDelay={0}>
+              <Undo2
+                className="cursor-pointer"
+                onClick={() =>
+                  Swal.fire({
+                    title: "Thầy/Cô có chắc chắn muốn huỷ hoàn thành lịch dạy?",
+                    icon: "warning",
+                    confirmButtonColor: "#F31260",
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Huỷ hoàn thành",
+                    cancelButtonText: "Huỷ",
+                    showLoaderOnConfirm: true,
+                    allowOutsideClick: () => !Swal.isLoading(),
+                    preConfirm: async () =>
+                      await uncompleteMutation.mutateAsync(),
+                  })
+                }
+              />
+            </Tooltip>
+            {/* <UncompleteModal
+              uncompleteModal={uncompleteModal}
+              setUncompleteModal={setUncompleteModal}
+              data={data}
+              params={params}
+            /> */}
+          </>
         )}
       </div>
     </>

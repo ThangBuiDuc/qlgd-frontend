@@ -27,6 +27,7 @@ import {
   ModalFooter,
 } from "@nextui-org/modal";
 import { NotebookPen } from "lucide-react";
+import { toast } from "sonner";
 const DisableTable = ({ data }) => {
   // console.log(data);
   return (
@@ -119,12 +120,18 @@ const NoteModal = ({
     onSuccess: (data) => {
       setIsMutaion(false);
       setNoteModal(false);
+      toast.success("Cập nhật ghi chú thành công!", {
+        position: "top-center",
+      });
       // queryClient.invalidateQueries(["diem_danh_lich", params.id]);
       queryClient.setQueryData(["diem_danh_lich", params.id], data);
     },
     onError: () => {
       setIsMutaion(false);
       setNoteModal(false);
+      toast.success("Cập nhật ghi chú không thành công!", {
+        position: "top-center",
+      });
     },
   });
   return (

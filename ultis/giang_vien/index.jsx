@@ -348,3 +348,78 @@ export const hoanThanhBuoiHoc = async (token, lop_id, data) => {
 
   return token ? res.data : res;
 };
+
+//Sua lich day
+export const capNhatLichDay = async (token, lop_id, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days/update`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
+
+//Huy hoan thanh lich day
+export const huyHoanHanhLichDay = async (token, lop_id, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days/uncomplete`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
+
+//Dang ky nghi lich day
+export const dangKyNghiLichDay = async (token, lop_id, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days/nghiday`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
+
+//Xoá lich day
+export const xoaLichDay = async (token, lop_id, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days/remove`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
+
+//Phuc hoi lich day
+export const phucHoiLichDay = async (token, lop_id, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days/restore`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
