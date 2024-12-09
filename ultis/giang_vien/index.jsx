@@ -423,3 +423,18 @@ export const phucHoiLichDay = async (token, lop_id, data) => {
 
   return token ? res.data : res;
 };
+
+//Huy dang ky nghi lich day
+export const huyDangKyNghiLichDay = async (token, lop_id, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days/unnghiday`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};

@@ -74,6 +74,8 @@ const AddModal = ({ isOpen, onChange, params }) => {
   const [isMutating, setIsMutating] = useState(false);
   const { getToken } = useAuth();
 
+  // console.log(date.toString());
+
   const mutation = useMutation({
     mutationFn: async () =>
       dangKyLichBoSung(
@@ -82,7 +84,7 @@ const AddModal = ({ isOpen, onChange, params }) => {
         {
           id: params.id,
           tiet_bat_dau: [...start][0],
-          thoi_gian: moment(date).format("DD/MM/yyyy"),
+          thoi_gian: date.toString().split("-").reverse().join("/"),
           phong: room,
           so_tiet: quantity,
           ltype: [...type][0],

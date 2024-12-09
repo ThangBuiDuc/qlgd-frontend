@@ -8,6 +8,7 @@ import Diem from "./_diem/diem";
 import BoSung from "./_bosung/content";
 import TKB from "./_tkb/content";
 import { useParams } from "next/navigation";
+import ThietLap from "./_thietlap/content";
 const NotSignedOut = ({ lop, chi_tiet_lop, lich }) => {
   const params = useParams();
   return (
@@ -29,7 +30,7 @@ const NotSignedOut = ({ lop, chi_tiet_lop, lich }) => {
           </div>
         </Tab>
         <Tab key="setting" title="Thiết lập thông số">
-          {/* <Lop /> */}
+          <ThietLap lop={lop} params={params} />
         </Tab>
         <Tab key="scoresetting" title="Thiết lập nhóm điểm">
           <ThietLapNhomDiem params={{ id: lop.id }} />

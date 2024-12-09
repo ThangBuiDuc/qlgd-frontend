@@ -1,8 +1,13 @@
 "use client";
 import Loading from "@/app/_hardComponents/loading";
-import { getLichTrinhLop } from "@/ultis/giang_vien";
+import {
+  getLichTrinhLop,
+  huyHoanHanhLichDay,
+  phucHoiLichDay,
+  xoaLichDay,
+} from "@/ultis/giang_vien";
 import { useAuth } from "@clerk/nextjs";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import {
   Table,
@@ -18,15 +23,121 @@ import { Chip } from "@nextui-org/chip";
 import Row from "./row";
 import RowNghiDay from "./rowNghiDay";
 import RowBoSung from "./rowBoSung";
+import Swal from "sweetalert2";
 
 const RenderCell = ({ data, params }) => {
+  const { getToken } = useAuth();
+  const queryClient = useQueryClient();
+
+  const uncompleteMutation = useMutation({
+    mutationFn: async (data) =>
+      huyHoanHanhLichDay(
+        await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
+        params.id,
+        { id: data.id, lop_id: params.id }
+      ),
+    onSuccess: (data) => {
+      // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
+      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
+      Swal.fire({
+        title: "Huỷ hoàn thành lịch dạy thành công!",
+        icon: "success",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+    onError: () => {
+      Swal.fire({
+        title: "Huỷ hoàn thành lịch dạy không thành công!",
+        icon: "error",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+  });
+
+  const removeMutation = useMutation({
+    mutationFn: async (data) =>
+      xoaLichDay(
+        await getToken({
+          template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
+        }),
+        params.id,
+        { id: data.id, lop_id: params.id }
+      ),
+    onSuccess: (data) => {
+      // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
+      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
+      Swal.fire({
+        title: "Xoá lịch dạy thành công!",
+        icon: "success",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+    onError: () => {
+      Swal.fire({
+        title: "Xoá lịch dạy không thành công!",
+        icon: "error",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+  });
+
+  const restoreMutation = useMutation({
+    mutationFn: async (data) =>
+      phucHoiLichDay(
+        await getToken({
+          template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
+        }),
+        params.id,
+        { id: data.id, lop_id: params.id }
+      ),
+    onSuccess: (data) => {
+      // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
+      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
+      Swal.fire({
+        title: "Phục hồi lịch dạy thành công!",
+        icon: "success",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+    onError: () => {
+      Swal.fire({
+        title: "Phục hồi lịch dạy không thành công!",
+        icon: "error",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+  });
+
   if (data.alias_state === "Bổ sung")
-    return <RowBoSung data={data} params={params} />;
+    return (
+      <RowBoSung
+        data={data}
+        params={params}
+        uncompleteMutation={uncompleteMutation}
+        removeMutation={removeMutation}
+        restoreMutation={restoreMutation}
+      />
+    );
 
   if (data.alias_state === "Nghỉ dạy")
-    return <RowNghiDay data={data} params={params} />;
+    return (
+      <RowNghiDay
+        data={data}
+        params={params}
+        removeMutation={removeMutation}
+        restoreMutation={restoreMutation}
+      />
+    );
 
-  return <Row data={data} params={params} />;
+  return (
+    <Row
+      data={data}
+      params={params}
+      uncompleteMutation={uncompleteMutation}
+      removeMutation={removeMutation}
+      restoreMutation={restoreMutation}
+    />
+  );
 };
 
 const TKB = ({ params }) => {

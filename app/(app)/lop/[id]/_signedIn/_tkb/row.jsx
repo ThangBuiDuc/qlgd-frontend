@@ -23,13 +23,13 @@ import { Select, SelectItem } from "@nextui-org/select";
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import Loading from "@/app/_hardComponents/loading";
-import { useParams } from "next/navigation";
+// import { useParams } from "next/navigation";
 import {
   capNhatLichDay,
   dangKyNghiLichDay,
-  huyHoanHanhLichDay,
-  phucHoiLichDay,
-  xoaLichDay,
+  // huyHoanHanhLichDay,
+  // phucHoiLichDay,
+  // xoaLichDay,
 } from "@/ultis/giang_vien";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
@@ -302,90 +302,18 @@ const NghiDayModal = ({ nghiDayModal, setNghiDayModal, data, params }) => {
   );
 };
 
-const Row = ({ data, params }) => {
+const Row = ({
+  data,
+  params,
+  uncompleteMutation,
+  removeMutation,
+  restoreMutation,
+}) => {
   const [updateModal, setUpdateModal] = useState(false);
   const [nghiDayModal, setNghiDayModal] = useState(false);
-  const queryClient = useQueryClient();
-  const { getToken } = useAuth();
+  // const queryClient = useQueryClient();
+  // const { getToken } = useAuth();
   // console.log(data);
-  const uncompleteMutation = useMutation({
-    mutationFn: async () =>
-      huyHoanHanhLichDay(
-        await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
-        params.id,
-        { id: data.id, lop_id: params.id }
-      ),
-    onSuccess: (data) => {
-      // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
-      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
-      Swal.fire({
-        title: "Huỷ hoàn thành lịch dạy thành công!",
-        icon: "success",
-        confirmButtonColor: "#006FEE",
-      });
-    },
-    onError: () => {
-      Swal.fire({
-        title: "Huỷ hoàn thành lịch dạy không thành công!",
-        icon: "error",
-        confirmButtonColor: "#006FEE",
-      });
-    },
-  });
-
-  const removeMutation = useMutation({
-    mutationFn: async () =>
-      xoaLichDay(
-        await getToken({
-          template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
-        }),
-        params.id,
-        { id: data.id, lop_id: params.id }
-      ),
-    onSuccess: (data) => {
-      // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
-      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
-      Swal.fire({
-        title: "Xoá lịch dạy thành công!",
-        icon: "success",
-        confirmButtonColor: "#006FEE",
-      });
-    },
-    onError: () => {
-      Swal.fire({
-        title: "Xoá lịch dạy không thành công!",
-        icon: "error",
-        confirmButtonColor: "#006FEE",
-      });
-    },
-  });
-
-  const restoreMutation = useMutation({
-    mutationFn: async () =>
-      phucHoiLichDay(
-        await getToken({
-          template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
-        }),
-        params.id,
-        { id: data.id, lop_id: params.id }
-      ),
-    onSuccess: (data) => {
-      // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
-      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
-      Swal.fire({
-        title: "Phục hồi lịch dạy thành công!",
-        icon: "success",
-        confirmButtonColor: "#006FEE",
-      });
-    },
-    onError: () => {
-      Swal.fire({
-        title: "Phục hồi lịch dạy không thành công!",
-        icon: "error",
-        confirmButtonColor: "#006FEE",
-      });
-    },
-  });
 
   return (
     <>
@@ -437,7 +365,8 @@ const Row = ({ data, params }) => {
                   cancelButtonText: "Huỷ",
                   showLoaderOnConfirm: true,
                   allowOutsideClick: () => !Swal.isLoading(),
-                  preConfirm: async () => await removeMutation.mutateAsync(),
+                  preConfirm: async () =>
+                    await removeMutation.mutateAsync(data),
                 })
               }
             />
@@ -458,7 +387,8 @@ const Row = ({ data, params }) => {
                   cancelButtonText: "Huỷ",
                   showLoaderOnConfirm: true,
                   allowOutsideClick: () => !Swal.isLoading(),
-                  preConfirm: async () => await restoreMutation.mutateAsync(),
+                  preConfirm: async () =>
+                    await restoreMutation.mutateAsync(data),
                 })
               }
             />
@@ -481,7 +411,7 @@ const Row = ({ data, params }) => {
                     showLoaderOnConfirm: true,
                     allowOutsideClick: () => !Swal.isLoading(),
                     preConfirm: async () =>
-                      await uncompleteMutation.mutateAsync(),
+                      await uncompleteMutation.mutateAsync(data),
                   })
                 }
               />
