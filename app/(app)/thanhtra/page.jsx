@@ -1,5 +1,7 @@
+import Content from "./content";
+
 const Page = async () => {
-  return <div>1</div>;
+  return <Content />;
 };
 
 export default Page;

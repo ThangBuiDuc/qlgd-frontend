@@ -16,7 +16,7 @@ const RowNghiDay = ({ data, params, removeMutation, restoreMutation }) => {
           template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
         }),
         params.id,
-        { id: data.id, lop_id: params.id }
+        { id: data.id, lop_id: params.id, note: "" }
       ),
     onSuccess: (data) => {
       // queryClient.invalidateQueries(["lich_bo_sung", params.id]);

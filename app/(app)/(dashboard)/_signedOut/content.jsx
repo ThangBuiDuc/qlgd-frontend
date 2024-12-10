@@ -142,8 +142,9 @@ const NotSignedIn = ({ calendar }) => {
           ))}
         </TableHeader>
         <TableBody
-        // isLoading={isLoading}
-        // loadingContent={<Spinner />}
+          // isLoading={isLoading}
+          // loadingContent={<Spinner />}
+          emptyContent={"Hiện chưa có lịch học cho ngày hôm nay!"}
         >
           {sortedItems.map((item) => (
             <TableRow key={item.id}>
