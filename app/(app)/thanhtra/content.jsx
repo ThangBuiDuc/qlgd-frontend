@@ -1,7 +1,7 @@
 "use client";
 import { DatePicker } from "@nextui-org/date-picker";
 import { parseDate } from "@internationalized/date";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -16,7 +16,12 @@ import {
   boTiet,
   diMuon,
   getLichTrinhGiangDay,
+  ghiChu,
+  huyBaoCao,
+  phucHoi,
   veSom,
+  xacNhan,
+  xoa,
 } from "@/ultis/thanhtra";
 import Loading from "@/app/_hardComponents/loading";
 import { Button } from "@nextui-org/button";
@@ -33,13 +38,408 @@ import {
 } from "lucide-react";
 import { useAuth } from "@clerk/clerk-react";
 import Swal from "sweetalert2";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "@nextui-org/modal";
+import { toast } from "sonner";
+
+const EditModal = ({ editModal, setEditModal, data, date }) => {
+  const queryClient = useQueryClient();
+  const [isMutating, setIsMutating] = useState(false);
+  const { getToken } = useAuth();
+  // const params = useParams();
+  const [note1, setNote1] = useState(data.note1);
+  const [note3, setNote3] = useState(data.note3);
+  const mutation = useMutation({
+    mutationFn: async () =>
+      ghiChu(
+        await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
+        {
+          lich_id: data.id,
+          date: date.toString().split("-").reverse().join("/"),
+          note1,
+          note3,
+        }
+      ),
+    onSuccess: (data) => {
+      // console.log(`respone: ${data}`);
+      setEditModal(false);
+      setIsMutating(false);
+      // queryClient.invalidateQueries(["lich_trinh_lop", params.id]);
+      queryClient.setQueryData(["thanh_tra_lich_trinh", date], data);
+      // queryClient.invalidateQueries(["lop_chi_tiet_gv", params.id]);
+      toast.success("Cập nhật ghi chú lịch thành công!", {
+        position: "top-center",
+      });
+    },
+    onError: () => {
+      setIsMutating(false);
+      toast.error("Cập nhật ghi chú lịch không thành công!", {
+        position: "top-center",
+      });
+    },
+  });
+
+  return (
+    <Modal isOpen={editModal} onOpenChange={setEditModal} isDismissable={false}>
+      <ModalContent>
+        {(onClose) => (
+          <div className="flex flex-col justify-center">
+            <ModalHeader className="flex flex-col gap-1">
+              Cập nhật ghi chú
+            </ModalHeader>
+            <ModalBody>
+              <Textarea
+                value={note1}
+                onValueChange={setNote1}
+                variant="flat"
+                minRows={3}
+                maxRows={3}
+                placeholder="Nhập ghi chú của thanh tra!"
+                label="Note 1"
+                // classNames={{ inputWrapper: "border border-black" }}
+              />
+              <Textarea
+                value={note3}
+                onValueChange={setNote3}
+                variant="flat"
+                minRows={3}
+                maxRows={3}
+                placeholder="Kết luận!"
+                label="Note 3"
+                // classNames={{ inputWrapper: "border border-black" }}
+              />
+            </ModalBody>
+            <ModalFooter>
+              {isMutating ? (
+                <Loading size={"sm"} />
+              ) : (
+                <>
+                  <Button
+                    color="primary"
+                    onClick={() => {
+                      setIsMutating(true);
+                      mutation.mutate();
+                    }}
+                  >
+                    Cập nhật
+                  </Button>
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    Huỷ
+                  </Button>
+                </>
+              )}
+            </ModalFooter>
+          </div>
+        )}
+      </ModalContent>
+    </Modal>
+  );
+};
+
+const RenderCell = ({ item, date, isMutating, setIsMutating }) => {
+  const [editModal, setEditModal] = useState(false);
+  const { getToken } = useAuth();
+  const queryClient = useQueryClient();
+  const reportMutation = useMutation({
+    mutationFn: async (data) =>
+      baoCao(
+        await getToken({
+          template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
+        }),
+        {
+          lich_id: data.id,
+          date: data.date,
+        }
+      ),
+    onSuccess: (data) => {
+      // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
+      queryClient.setQueryData(["thanh_tra_lich_trinh", date], data);
+      Swal.fire({
+        title: "Báo cáo thành công!",
+        icon: "success",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+    onError: () => {
+      Swal.fire({
+        title: "Báo cáo không thành công!",
+        icon: "error",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+  });
+
+  const unreportMutation = useMutation({
+    mutationFn: async (data) =>
+      huyBaoCao(
+        await getToken({
+          template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
+        }),
+        {
+          lich_id: data.id,
+          date: data.date,
+        }
+      ),
+    onSuccess: (data) => {
+      // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
+      queryClient.setQueryData(["thanh_tra_lich_trinh", date], data);
+      Swal.fire({
+        title: "Huỷ báo cáo thành công!",
+        icon: "success",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+    onError: () => {
+      Swal.fire({
+        title: "Huỷ báo cáo không thành công!",
+        icon: "error",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+  });
+  const removeMutation = useMutation({
+    mutationFn: async (data) =>
+      xoa(
+        await getToken({
+          template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
+        }),
+        {
+          lich_id: data.id,
+          date: data.date,
+        }
+      ),
+    onSuccess: (data) => {
+      // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
+      queryClient.setQueryData(["thanh_tra_lich_trinh", date], data);
+      Swal.fire({
+        title: "Xoá lịch học thành công!",
+        icon: "success",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+    onError: () => {
+      Swal.fire({
+        title: "Xoá lịch học không thành công!",
+        icon: "error",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+  });
+
+  const restoreMutation = useMutation({
+    mutationFn: async (data) =>
+      phucHoi(
+        await getToken({
+          template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
+        }),
+        {
+          lich_id: data.id,
+          date: data.date,
+        }
+      ),
+    onSuccess: (data) => {
+      // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
+      queryClient.setQueryData(["thanh_tra_lich_trinh", date], data);
+      Swal.fire({
+        title: "Phục hồi lịch học thành công!",
+        icon: "success",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+    onError: () => {
+      Swal.fire({
+        title: "Phục hồi lịch học không thành công!",
+        icon: "error",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+  });
+
+  const confirmMutation = useMutation({
+    mutationFn: async (data) =>
+      xacNhan(
+        await getToken({
+          template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
+        }),
+        {
+          lich_id: data.id,
+          date: data.date,
+        }
+      ),
+    onSuccess: (data) => {
+      // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
+      queryClient.setQueryData(["thanh_tra_lich_trinh", date], data);
+      Swal.fire({
+        title: "Xác nhận lịch học thành công!",
+        icon: "success",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+    onError: () => {
+      Swal.fire({
+        title: "Xác nhận lịch học không thành công!",
+        icon: "error",
+        confirmButtonColor: "#006FEE",
+      });
+    },
+  });
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex gap-2">
+        {item.can_thanh_tra_edit && (
+          <div>
+            <Tooltip content="Sửa" color="success" closeDelay={0}>
+              <Settings
+                className="cursor-pointer"
+                onClick={() => setEditModal(true)}
+              />
+            </Tooltip>
+            <EditModal
+              data={item}
+              date={date}
+              setEditModal={setEditModal}
+              editModal={editModal}
+            />
+          </div>
+        )}
+        {item.can_report && (
+          <Tooltip content="Báo cáo" color="danger" closeDelay={0}>
+            <MessageCircleWarning
+              className="cursor-pointer"
+              onClick={() => {
+                Swal.fire({
+                  title: "Thầy/Cô có chắc chắn muốn báo cáo cho lịch học?",
+                  icon: "warning",
+                  confirmButtonColor: "#006FEE",
+                  showConfirmButton: true,
+                  showCancelButton: true,
+                  confirmButtonText: "Xác nhận",
+                  cancelButtonText: "Huỷ",
+                  showLoaderOnConfirm: true,
+                  allowOutsideClick: () => !Swal.isLoading(),
+                  preConfirm: async () =>
+                    await reportMutation.mutateAsync({
+                      id: item.id,
+                      date: date.toString().split("-").reverse().join("/"),
+                    }),
+                });
+              }}
+            />
+          </Tooltip>
+        )}
+        {item.can_unreport && (
+          <Tooltip content="Huỷ báo cáo" color="danger" closeDelay={0}>
+            <Undo2
+              className="cursor-pointer"
+              onClick={() => {
+                Swal.fire({
+                  title: "Thầy/Cô có chắc chắn muốn huỷ báo cáo cho lịch học?",
+                  icon: "warning",
+                  confirmButtonColor: "#006FEE",
+                  showConfirmButton: true,
+                  showCancelButton: true,
+                  confirmButtonText: "Xác nhận",
+                  cancelButtonText: "Huỷ",
+                  showLoaderOnConfirm: true,
+                  allowOutsideClick: () => !Swal.isLoading(),
+                  preConfirm: async () =>
+                    await unreportMutation.mutateAsync({
+                      id: item.id,
+                      date: date.toString().split("-").reverse().join("/"),
+                    }),
+                });
+              }}
+            />
+          </Tooltip>
+        )}
+        {item.can_remove && (
+          <Tooltip content="Xoá" color="warning" closeDelay={0}>
+            <CircleX
+              className="cursor-pointer"
+              onClick={() => {
+                Swal.fire({
+                  title: "Thầy/Cô có chắc chắn xoá lịch học?",
+                  icon: "warning",
+                  confirmButtonColor: "#006FEE",
+                  showConfirmButton: true,
+                  showCancelButton: true,
+                  confirmButtonText: "Xác nhận",
+                  cancelButtonText: "Huỷ",
+                  showLoaderOnConfirm: true,
+                  allowOutsideClick: () => !Swal.isLoading(),
+                  preConfirm: async () =>
+                    await removeMutation.mutateAsync({
+                      id: item.id,
+                      date: date.toString().split("-").reverse().join("/"),
+                    }),
+                });
+              }}
+            />
+          </Tooltip>
+        )}
+        {item.can_restore && (
+          <Tooltip content="Phục hồi" color="warning" closeDelay={0}>
+            <ArchiveRestore
+              className="cursor-pointer"
+              onClick={() => {
+                Swal.fire({
+                  title: "Thầy/Cô có chắc chắn muốn phục hồi cho lịch học?",
+                  icon: "warning",
+                  confirmButtonColor: "#006FEE",
+                  showConfirmButton: true,
+                  showCancelButton: true,
+                  confirmButtonText: "Xác nhận",
+                  cancelButtonText: "Huỷ",
+                  showLoaderOnConfirm: true,
+                  allowOutsideClick: () => !Swal.isLoading(),
+                  preConfirm: async () =>
+                    await restoreMutation.mutateAsync({
+                      id: item.id,
+                      date: date.toString().split("-").reverse().join("/"),
+                    }),
+                });
+              }}
+            />
+          </Tooltip>
+        )}
+        {item.can_confirm && (
+          <Tooltip content="Xác nhận" color="primary" closeDelay={0}>
+            <CircleCheckBig
+              className="cursor-pointer"
+              onClick={() => {
+                Swal.fire({
+                  title: "Thầy/Cô có chắc chắn xác nhận cho lịch học?",
+                  icon: "warning",
+                  confirmButtonColor: "#006FEE",
+                  showConfirmButton: true,
+                  showCancelButton: true,
+                  confirmButtonText: "Xác nhận",
+                  cancelButtonText: "Huỷ",
+                  showLoaderOnConfirm: true,
+                  allowOutsideClick: () => !Swal.isLoading(),
+                  preConfirm: async () =>
+                    await confirmMutation.mutateAsync({
+                      id: item.id,
+                      date: date.toString().split("-").reverse().join("/"),
+                    }),
+                });
+              }}
+            />
+          </Tooltip>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const TableContent = ({ data, isLoading, date }) => {
-  const [note1, setNote1] = useState(data?.note1);
-  const [note3, setNote3] = useState(data?.note3);
-  const [isEdit, setIsEdit] = useState(false);
   const [isMutating, setIsMutating] = useState(false);
-  //   console.log(data);
   const { getToken } = useAuth();
   const queryClient = useQueryClient();
 
@@ -115,35 +515,6 @@ const TableContent = ({ data, isLoading, date }) => {
     onError: () => {
       Swal.fire({
         title: "Đánh dấu Bỏ Tiết/Không Bỏ Tiết không thành công!",
-        icon: "error",
-        confirmButtonColor: "#006FEE",
-      });
-    },
-  });
-
-  const reportMutation = useMutation({
-    mutationFn: async (data) =>
-      baoCao(
-        await getToken({
-          template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
-        }),
-        {
-          lich_id: data.id,
-          date: data.date,
-        }
-      ),
-    onSuccess: (data) => {
-      // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
-      queryClient.setQueryData(["thanh_tra_lich_trinh", date], data);
-      Swal.fire({
-        title: "Báo cáo thành công!",
-        icon: "success",
-        confirmButtonColor: "#006FEE",
-      });
-    },
-    onError: () => {
-      Swal.fire({
-        title: "Báo cáo không thành công!",
         icon: "error",
         confirmButtonColor: "#006FEE",
       });
@@ -285,161 +656,65 @@ const TableContent = ({ data, isLoading, date }) => {
               </div>
             </TableCell>
             <TableCell>
-              <Textarea
+              {item.note1}
+              {/* <Textarea
                 isDisabled={!isEdit}
-                value={note1}
-                onValueChange={setNote1}
+                value={item.note1}
+                onChange={(e) => {
+                  e.preventDefault();
+                  setRawData((pre) =>
+                    pre?.map((el) =>
+                      el.id === item.id
+                        ? { ...el, note1: e.target.value.trim() }
+                        : el
+                    )
+                  );
+                }}
                 variant="flat"
                 minRows={5}
                 maxRows={5}
                 placeholder="Nhập ghi chú của thanh tra!"
                 // classNames={{ inputWrapper: "border border-black" }}
-              />
+              /> */}
             </TableCell>
             <TableCell>
-              <Textarea
-                value={data.note2}
+              {item.note2}
+              {/* <Textarea
+                value={item.note2}
                 isDisabled
                 variant="flat"
                 minRows={5}
                 maxRows={5}
                 placeholder="Ghi chú của giảng viên!"
                 // classNames={{ inputWrapper: "border border-black" }}
-              />
+              /> */}
             </TableCell>
             <TableCell>
-              <Textarea
+              {item.note3}
+              {/* <Textarea
                 isDisabled={!isEdit}
-                value={note3}
-                onValueChange={setNote3}
+                value={item.note3}
+                onValueChange={(e) =>
+                  setRawData((pre) =>
+                    pre?.map((el) =>
+                      el.id === item.id ? { ...el, note3: e.trim() } : el
+                    )
+                  )
+                }
                 variant="flat"
                 minRows={5}
                 maxRows={5}
                 placeholder="Kết luận!"
                 // classNames={{ inputWrapper: "border border-black" }}
-              />
+              /> */}
             </TableCell>
             <TableCell>
-              <div className="flex flex-col gap-2">
-                {isEdit && (
-                  <div className="flex gap-2">
-                    <Tooltip content="Cập nhật" color="success" closeDelay={0}>
-                      <Save className="cursor-pointer" />
-                    </Tooltip>
-                    <Tooltip
-                      content="Huỷ chỉnh sửa"
-                      color="danger"
-                      closeDelay={0}
-                    >
-                      <CircleX
-                        className="cursor-pointer"
-                        onClick={() => setIsEdit(false)}
-                      />
-                    </Tooltip>
-                  </div>
-                )}
-
-                <div className="flex gap-2">
-                  {isEdit ? (
-                    <></>
-                  ) : (
-                    item.can_thanh_tra_edit && (
-                      <Tooltip content="Sửa" color="success" closeDelay={0}>
-                        <Settings
-                          className="cursor-pointer"
-                          onClick={() => setIsEdit(true)}
-                        />
-                      </Tooltip>
-                    )
-                  )}
-                  {item.can_report && (
-                    <Tooltip content="Báo cáo" color="danger" closeDelay={0}>
-                      <MessageCircleWarning
-                        className="cursor-pointer"
-                        onClick={() => {
-                          Swal.fire({
-                            title:
-                              "Thầy/Cô có chắc chắn muốn báo cáo cho lịch học?",
-                            icon: "warning",
-                            confirmButtonColor: "#006FEE",
-                            showConfirmButton: true,
-                            showCancelButton: true,
-                            confirmButtonText: "Xác nhận",
-                            cancelButtonText: "Huỷ",
-                            showLoaderOnConfirm: true,
-                            allowOutsideClick: () => !Swal.isLoading(),
-                            preConfirm: async () =>
-                              await reportMutation.mutateAsync({
-                                id: item.id,
-                                date: date
-                                  .toString()
-                                  .split("-")
-                                  .reverse()
-                                  .join("/"),
-                              }),
-                          });
-                        }}
-                      />
-                    </Tooltip>
-                  )}
-                  {item.can_unreport && (
-                    <Tooltip
-                      content="Huỷ báo cáo"
-                      color="danger"
-                      closeDelay={0}
-                    >
-                      <Undo2
-                        className="cursor-pointer"
-                        //   onClick={() => setIsEdit(true)}
-                      />
-                    </Tooltip>
-                  )}
-                  {item.can_remove && (
-                    <Tooltip content="Huỷ " color="warning" closeDelay={0}>
-                      <CircleX
-                        className="cursor-pointer"
-                        //   onClick={() => setIsEdit(true)}
-                      />
-                    </Tooltip>
-                  )}
-                  {item.can_restore && (
-                    <Tooltip content="Phục hồi" color="warning" closeDelay={0}>
-                      <ArchiveRestore
-                        className="cursor-pointer"
-                        //   onClick={() => setIsEdit(true)}
-                      />
-                    </Tooltip>
-                  )}
-                  {item.can_confirm && (
-                    <Tooltip content="Xác nhận" color="primary" closeDelay={0}>
-                      <CircleCheckBig
-                        className="cursor-pointer"
-                        //   onClick={() => setIsEdit(true)}
-                      />
-                    </Tooltip>
-                  )}
-                </div>
-              </div>
-              {/* {isEdit ? (
-                <div className="flex gap-2">
-                  <Tooltip content="Cập nhật" color="success" closeDelay={0}>
-                    <Save className="cursor-pointer" />
-                  </Tooltip>
-                  <Tooltip content="Huỷ" color="danger" closeDelay={0}>
-                    <CircleX
-                      className="cursor-pointer"
-                      onClick={() => setIsEdit(false)}
-                    />
-                  </Tooltip>
-                </div>
-              ) : (
-                <Tooltip content="Sửa" color="success" closeDelay={0}>
-                  <Settings
-                    className="cursor-pointer"
-                    onClick={() => setIsEdit(true)}
-                  />
-                </Tooltip>
-              )} */}
+              <RenderCell
+                item={item}
+                date={date}
+                isMutating={isMutating}
+                setIsMutating={setIsMutating}
+              />
             </TableCell>
           </TableRow>
         ))}

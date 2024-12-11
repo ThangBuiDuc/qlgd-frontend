@@ -78,3 +78,83 @@ export const baoCao = async (token, data) => {
 
   return res.data;
 };
+
+//Xu ly huy bao cao
+export const huyBaoCao = async (token, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_THANH_TRA}/lich_trinh_giang_days/unreport`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      //   authorization: `Bearer ${token}`,
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+//Cap nhat ghi chu
+export const ghiChu = async (token, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_THANH_TRA}/lich_trinh_giang_days/update`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      //   authorization: `Bearer ${token}`,
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+//Xoá lịch học
+export const xoa = async (token, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_THANH_TRA}/lich_trinh_giang_days/remove`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      //   authorization: `Bearer ${token}`,
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+//Phục hồi
+export const phucHoi = async (token, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_THANH_TRA}/lich_trinh_giang_days/restore`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      //   authorization: `Bearer ${token}`,
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+//Phục hồi
+export const xacNhan = async (token, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_THANH_TRA}/lich_trinh_giang_days/confirm`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      //   authorization: `Bearer ${token}`,
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
