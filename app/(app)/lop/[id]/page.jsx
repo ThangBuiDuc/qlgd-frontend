@@ -31,13 +31,17 @@ const page = async ({ params }) => {
     throw new Error();
   }
 
+  // console.log(lop.data);
+
   return (
     <>
       <SignedOut>
         <NotSignedIn lop={lop.data.lop} />
       </SignedOut>
       <SignedIn>
-        {lop.data.authorized ? (
+        {lop.data.truongkhoa ? (
+          <NotSignedOut truongkhoa />
+        ) : lop.data.authorized ? (
           <NotSignedOut lop={lop.data.lop} chi_tiet_lop={chi_tiet_lop} />
         ) : (
           <NotSignedIn lop={lop.data.lop} />

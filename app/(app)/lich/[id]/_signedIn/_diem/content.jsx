@@ -1,8 +1,8 @@
 "use client";
 import { Tabs, Tab } from "@nextui-org/tabs";
 // import { useParams } from "next/navigation";
-import { default as DiemLop } from "@/app/(app)/lop/[id]/_signedIn/_diem/diem";
-import ThongTinLop from "@/app/(app)/lop/[id]/_signedIn/_thongtin/thongtinlop";
+import { default as DiemLop } from "@/app/(app)/lop/[id]/_signedIn/_giangvien/_diem/diem";
+import ThongTinLop from "@/app/(app)/lop/[id]/_signedIn/_giangvien/_thongtin/thongtinlop";
 
 const Diem = ({ lop }) => {
   //   const params = useParams();

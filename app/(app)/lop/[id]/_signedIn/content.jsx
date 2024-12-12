@@ -1,17 +1,105 @@
 "use client";
 import { Tabs, Tab } from "@nextui-org/tabs";
-import ThongTin from "./_thongtin/thongtin";
+import ThongTin from "./_giangvien/_thongtin/thongtin";
 
-import ThietLapNhomDiem from "./_thietlapnhomdiem/thietlapnhomdiem";
-import ThongTinLop from "./_thongtin/thongtinlop";
-import Diem from "./_diem/diem";
-import BoSung from "./_bosung/content";
-import TKB from "./_tkb/content";
+import ThietLapNhomDiem from "./_giangvien/_thietlapnhomdiem/thietlapnhomdiem";
+import ThongTinLop from "./_giangvien/_thongtin/thongtinlop";
+import Diem from "./_giangvien/_diem/diem";
+import BoSung from "./_giangvien/_bosung/content";
+import TKB from "./_giangvien/_tkb/content";
 import { useParams } from "next/navigation";
-import ThietLap from "./_thietlap/content";
-const NotSignedOut = ({ lop, chi_tiet_lop, lich }) => {
+import ThietLap from "./_giangvien/_thietlap/content";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { duyetTruongKhoa, getLopTruongKhoa } from "@/ultis/truongkhoa";
+import { useAuth } from "@clerk/clerk-react";
+import { default as ThongTinLopTruongKhoa } from "./_truongkhoa/thongtin";
+import Loading from "@/app/_hardComponents/loading";
+import DeCuongTruongKhoa from "./_truongkhoa/decuong";
+import { Accordion, AccordionItem } from "@nextui-org/accordion";
+import LichTrinhTruongKhoa from "./_truongkhoa/lichtrinh";
+import TinhHinhTruongKhoa from "./_truongkhoa/tinhhinh";
+import { useState } from "react";
+import { toast } from "sonner";
+const NotSignedOut = ({ lop, chi_tiet_lop, lich, truongkhoa }) => {
+  const queryClient = useQueryClient();
+  const { getToken } = useAuth();
   const params = useParams();
-  return (
+  const [isMutating, setIsMutating] = useState(false);
+  const { data, isLoading } = useQuery({
+    queryKey: ["truong_khoa_lop", params.id],
+    queryFn: async () =>
+      getLopTruongKhoa(
+        await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
+        params.id
+      ),
+    enabled: !!truongkhoa,
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async (data) =>
+      duyetTruongKhoa(
+        await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
+        { ...data, lop_id: params.id }
+      ),
+    onSuccess: (data) => {
+      setIsMutating(false);
+      queryClient.setQueryData(["truong_khoa_lop", params.id], data);
+      // queryClient.invalidateQueries(["lop_chi_tiet_gv", params.id]);
+      toast.success("Thao tác thành công!", {
+        position: "top-center",
+      });
+    },
+    onError: () => {
+      setIsMutating(false);
+      toast.error("Thao tác không thành công!", {
+        position: "top-center",
+      });
+    },
+  });
+
+  return truongkhoa ? (
+    isLoading ? (
+      <Loading />
+    ) : (
+      <div className="flex w-full flex-col gap-4">
+        <ThongTinLopTruongKhoa lop={data} />
+        <Accordion variant="bordered">
+          <AccordionItem aria-label="De cuong" title={`Đề cương chi tiết`}>
+            <DeCuongTruongKhoa
+              lop={data}
+              isMutating={isMutating}
+              setIsMutating={setIsMutating}
+              updateMutation={updateMutation}
+            />
+          </AccordionItem>
+          <AccordionItem
+            aria-label="Lich trinh thuc hien"
+            title={`Lịch trình thực hiện`}
+          >
+            <LichTrinhTruongKhoa lop={data} />
+          </AccordionItem>
+          <AccordionItem
+            aria-label="Tinh hinh hoc tap"
+            title={`Tình hình học tập`}
+          >
+            <TinhHinhTruongKhoa lop={data} />
+          </AccordionItem>
+        </Accordion>
+        {/* <Tabs
+          aria-label="Options"
+          color="primary"
+          classNames={{
+            tabContent: "text-black",
+            panel: "[&>div]:shadow-none",
+          }}
+        >
+          <Tab key="decuong" title="Đề cương chi tiết">
+            <DeCuong />
+          </Tab>
+        </Tabs> */}
+      </div>
+    )
+  ) : (
     <div className="flex w-full flex-col">
       <Tabs
         aria-label="Options"
