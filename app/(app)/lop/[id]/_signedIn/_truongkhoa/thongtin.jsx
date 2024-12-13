@@ -9,7 +9,7 @@ import {
 } from "@nextui-org/table";
 
 const ThongTin = ({ lop }) => {
-  console.log(lop);
+  // console.log(lop);
   return (
     <div className="flex flex-col gap-3">
       <Table

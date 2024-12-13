@@ -12,7 +12,9 @@ const DeCuongTruongKhoa = ({
   return (
     <div className="flex flex-col gap-2">
       {isMutating ? (
-        <Loading size={"sm"} />
+        <div className="w-fit">
+          <Loading size={"sm"} />
+        </div>
       ) : (
         <>
           {lop.can_approve_thong_so && (
@@ -28,7 +30,14 @@ const DeCuongTruongKhoa = ({
             </Button>
           )}
           {lop.can_reject_thong_so && (
-            <Button color="warning" className="w-fit">
+            <Button
+              color="warning"
+              className="w-fit"
+              onClick={() => {
+                setIsMutating(true);
+                updateMutation.mutate({ type: 1, maction: 0 });
+              }}
+            >
               Không duyệt
             </Button>
           )}

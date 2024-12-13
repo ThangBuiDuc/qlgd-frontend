@@ -76,13 +76,25 @@ const NotSignedOut = ({ lop, chi_tiet_lop, lich, truongkhoa }) => {
             aria-label="Lich trinh thuc hien"
             title={`Lịch trình thực hiện`}
           >
-            <LichTrinhTruongKhoa lop={data} />
+            <LichTrinhTruongKhoa
+              lop={data}
+              params={params}
+              isMutating={isMutating}
+              setIsMutating={setIsMutating}
+              updateMutation={updateMutation}
+            />
           </AccordionItem>
           <AccordionItem
             aria-label="Tinh hinh hoc tap"
             title={`Tình hình học tập`}
           >
-            <TinhHinhTruongKhoa lop={data} />
+            <TinhHinhTruongKhoa
+              lop={data}
+              params={params}
+              isMutating={isMutating}
+              setIsMutating={setIsMutating}
+              updateMutation={updateMutation}
+            />
           </AccordionItem>
         </Accordion>
         {/* <Tabs

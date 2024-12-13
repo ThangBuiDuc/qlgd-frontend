@@ -1,10 +1,38 @@
 import axios from "axios";
 import FormData from "form-data";
 
-//Get lich trinh giang day
+//Get thong tin lop
 export const getLopTruongKhoa = async (token, id) => {
   const res = await axios({
     url: `${process.env.NEXT_PUBLIC_API_LOP_TRUONG_KHOA}/lop/${id}`,
+    method: "GET",
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+//Get lich trinh lop
+export const getLichTrinhLopTruongKhoa = async (token, id) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_TRUONG_KHOA}/lop/${id}/lichtrinh`,
+    method: "GET",
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+//Get lich hinh lop
+export const getTinhHinhLopTruongKhoa = async (token, id) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_TRUONG_KHOA}/lop/${id}/tinhhinh`,
     method: "GET",
     headers: {
       "content-type": "Application/json",
