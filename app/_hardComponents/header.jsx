@@ -17,7 +17,7 @@ const navMenu = [
     title: "Đào tạo",
   },
   {
-    path: "/khoa-bomon",
+    path: "/khoa",
     title: "Khoa/Bộ môn",
   },
   {
