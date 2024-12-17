@@ -25,13 +25,13 @@ const Search = () => {
     querySearchParam ? querySearchParam.replace("+", " ") : ""
   );
   return (
-    <form className="flex gap-4">
+    <form className="flex gap-2 lg:gap-4">
       <Select
         errorMessage={selected.size > 0 ? "" : "Bạn cần chọn hình thức!"}
         isInvalid={selected.size > 0 ? false : true}
         variant="bordered"
         selectedKeys={selected}
-        className="max-w-48"
+        className=" lg:max-w-48"
         onSelectionChange={setSelected}
         color="primary"
         // onClose={() => setTouched(true)}

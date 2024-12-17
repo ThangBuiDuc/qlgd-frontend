@@ -9,6 +9,11 @@ module.exports = {
     // "./node_modules/@nextui-org/theme/dist/components/select.js",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
-  theme: {},
+  theme: {
+    screen: {
+      md: { min: "768px", max: "1024px" },
+      lg: { min: "1025px" },
+    },
+  },
   plugins: [nextui()],
 };

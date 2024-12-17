@@ -31,14 +31,14 @@ const Header = () => {
   const { isSignedIn } = useUser();
   // const router = useRouter();
   return (
-    <header className="h-[10vh]  pl-[10vw] pr-[10vw] sticky top-0 border-solid border-b-1 bg-gray-50 z-50">
-      <div className="flex h-full justify-between">
-        <div className="flex h-full justify-center align-middle gap-4">
+    <header className="pl-[2vw] pr-[2vw] h-fit lg:h-[10vh]  lg:pl-[10vw] lg:pr-[10vw] sticky top-0 border-solid border-b-1 bg-gray-50 z-50">
+      <div className=" flex-col lg:flex-row p-2 lg:p-0 flex h-full justify-between gap-4 lg:gap-0">
+        <div className="flex-col lg:flex-row flex h-full lg:justify-center lalign-middle gap-2 lg:gap-4">
           {navMenu.map((item, index) => (
             <Link
               key={index}
               href={item.path}
-              className="text-lg font-semibold hover:text-[#0083C2] self-center"
+              className="text-lg font-semibold hover:text-[#0083C2] self-start lg:self-center"
             >
               {item.title}
             </Link>
@@ -46,6 +46,7 @@ const Header = () => {
         </div>
         {isSignedIn ? (
           <button
+            className="lg:self-center self-start font-semibold"
             onClick={() => {
               clerk.signOut();
               // router.refresh();
@@ -55,6 +56,7 @@ const Header = () => {
           </button>
         ) : (
           <button
+            className="lg:self-center self-start font-semibold"
             onClick={() => {
               clerk.redirectToSignIn();
             }}

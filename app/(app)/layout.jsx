@@ -26,7 +26,7 @@ const Layout = async ({ children }) => {
   return (
     <div className="flex flex-col gap-4">
       <Header />
-      <main className="pr-[10vw] pl-[10vw] min-h-[82vh]">
+      <main className="pr-[2vw] pl-[2vw] lg:pr-[10vw] lg:pl-[10vw] min-h-[82vh]">
         <div className="flex flex-col gap-3">
           <Search />
           {user ? <p>Chào bạn {user.emailAddresses[0].emailAddress}</p> : <></>}
