@@ -72,7 +72,6 @@ const Content = ({ value }) => {
     label: data?.giang_viens[0]?.text,
   });
 
-  console.log(data);
   useEffect(() => {
     setGiangVien({
       value: data?.giang_viens[0]?.id,

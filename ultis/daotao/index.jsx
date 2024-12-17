@@ -237,3 +237,33 @@ export const getDaoTaoLichTrinhGiangDay = async () => {
 
   return res.data;
 };
+
+//Chap nhan lich dang ky
+export const chapNhanLichDangKy = async (data, token) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lich_trinh_giang_days/accept`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+//Khong chap nhan lich dang ky
+export const khongChapNhanLichDangKy = async (data, token) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lich_trinh_giang_days/drop`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
