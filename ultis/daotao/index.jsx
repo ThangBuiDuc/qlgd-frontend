@@ -267,3 +267,31 @@ export const khongChapNhanLichDangKy = async (data, token) => {
 
   return res.data;
 };
+
+//Lay danh sach lich da duyet
+export const getDaoTaoLichTrinhGiangDayDaDuyet = async () => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lich_trinh_giang_days/daduyet`,
+    method: "GET",
+    headers: {
+      "content-type": "Application/json",
+    },
+  });
+
+  return res.data;
+};
+
+//Kiem tra lich dang ky trung
+export const getKiemTraLichDangKyTrung = async (data, token) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lich_trinh_giang_days/check`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};

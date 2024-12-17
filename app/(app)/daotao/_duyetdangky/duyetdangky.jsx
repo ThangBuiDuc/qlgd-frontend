@@ -1,20 +1,29 @@
 "use client";
 import Loading from "@/app/_hardComponents/loading";
-import { getDaoTaoLichTrinhGiangDay } from "@/ultis/daotao";
+import {
+  getDaoTaoLichTrinhGiangDay,
+  getDaoTaoLichTrinhGiangDayDaDuyet,
+} from "@/ultis/daotao";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import LichDangKy from "./lichdangky";
+import LichDaDuyet from "./lichdaduyet";
 
 const DuyetDangKy = () => {
-  const { data, isLoading } = useQuery({
+  const { data: danhSachChuaDuyet, isLoading: isLoading } = useQuery({
     queryKey: ["dao_tao_lich_trinh_giang_day"],
     queryFn: async () => getDaoTaoLichTrinhGiangDay(),
   });
 
-  if (isLoading) return <Loading />;
+  const { data: danhSachDaDuyet, isLoading: isLoading1 } = useQuery({
+    queryKey: ["dao_tao_lich_trinh_giang_day_da_duyet"],
+    queryFn: async () => getDaoTaoLichTrinhGiangDayDaDuyet(),
+  });
+
+  if (isLoading || isLoading1) return <Loading />;
   return (
     <div className="flex flex-col gap-4 w-full">
-      <LichDangKy data={data} />
+      <LichDangKy data={danhSachChuaDuyet} />
+      <LichDaDuyet data={danhSachDaDuyet} />
     </div>
   );
 };
