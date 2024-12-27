@@ -1,7 +1,11 @@
+import dynamic from "next/dynamic";
 import Footer from "../_hardComponents/footer";
-import Header from "../_hardComponents/header";
+// import Header from "../_hardComponents/header";
 import Search from "../_hardComponents/search";
 import { currentUser } from "@clerk/nextjs/server";
+const Header = dynamic(() => import("../_hardComponents/header"), {
+  ssr: false,
+});
 
 const Layout = async ({ children }) => {
   const user = await currentUser();

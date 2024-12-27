@@ -36,10 +36,12 @@ const Header = () => {
   const [widthView, setWidthView] = useState(document.body.clientWidth);
 
   useEffect(() => {
-    const onresize = function () {
-      setWidthView(document.body.clientWidth);
-    };
-    window.addEventListener("resize", onresize);
+    if (window !== undefined) {
+      const onresize = function () {
+        setWidthView(document.body.clientWidth);
+      };
+      window.addEventListener("resize", onresize);
+    }
 
     return () => {
       window.removeEventListener("resize", onresize);
