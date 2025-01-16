@@ -92,7 +92,8 @@ const UpdateModal = ({ data, isOpen, onChange, params }) => {
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              Cập nhật điểm "{data.name}" sinh viên "{data.hovaten}"
+              Cập nhật điểm &quot;{data.name}&quot; sinh viên &quot;
+              {data.hovaten}&quot;
             </ModalHeader>
             <ModalBody>
               <Input

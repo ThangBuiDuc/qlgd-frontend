@@ -41,21 +41,9 @@ const TKB = () => {
       ),
   });
 
-  console.log(data);
-
   if (isLoading) {
     return <Spinner size="md" color="primary" />;
   }
-
-  // console.log(
-  //   data.find((item) =>
-  //     isDateInRange(
-  //       moment().format("DD/MM/yyyy"),
-  //       item.tuan.tu_ngay2,
-  //       item.tuan.den_ngay2
-  //     )
-  //   )
-  // );
 
   return (
     <Accordion
