@@ -24,7 +24,7 @@ export default async function Page() {
   // console.log(await getToken({ template: "qlgd-gv" }));
 
   // throw new Error();
-  // console.log(calendar.data);
+  // console.log(calendar);
   return (
     <>
       <SignedIn>

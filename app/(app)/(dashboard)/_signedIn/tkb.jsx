@@ -14,6 +14,22 @@ import {
 } from "@nextui-org/table";
 import Link from "next/link";
 import { Chip } from "@nextui-org/chip";
+import moment from "moment";
+
+function isDateInRange(dateStr, startStr, endStr) {
+  // Parse the dates in DD-MM-yyyy format
+  const parseDate = (str) => {
+    const [day, month, year] = str.split("/").map(Number);
+    return new Date(year, month - 1, day); // Month is zero-based
+  };
+
+  const date = parseDate(dateStr);
+  const startDate = parseDate(startStr);
+  const endDate = parseDate(endStr);
+
+  // Check if the date is within the range (inclusive)
+  return date >= startDate && date <= endDate;
+}
 
 const TKB = () => {
   const { userId, getToken } = useAuth();
@@ -25,14 +41,27 @@ const TKB = () => {
       ),
   });
 
-  // console.log(data);
+  console.log(data);
 
   if (isLoading) {
     return <Spinner size="md" color="primary" />;
   }
 
+  // console.log(
+  //   data.find((item) =>
+  //     isDateInRange(
+  //       moment().format("DD/MM/yyyy"),
+  //       item.tuan.tu_ngay2,
+  //       item.tuan.den_ngay2
+  //     )
+  //   )
+  // );
+
   return (
-    <Accordion variant="bordered">
+    <Accordion
+      variant="bordered"
+      defaultExpandedKeys={[`${data.find((item) => item.active).tuan.id}`]}
+    >
       {data
         ?.sort((a, b) => a.tuan.stt - b.tuan.stt)
         .map((item) => {
