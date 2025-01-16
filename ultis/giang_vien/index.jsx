@@ -438,3 +438,18 @@ export const huyDangKyNghiLichDay = async (token, lop_id, data) => {
 
   return token ? res.data : res;
 };
+
+//Thiet lap thong so lop
+export const thietLapThongSoLop = async (token, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/settinglop`,
+    method: "POST",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};
