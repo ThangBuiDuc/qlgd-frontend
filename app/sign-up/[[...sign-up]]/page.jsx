@@ -1,9 +1,9 @@
-import { useAuth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import Content from "./content";
 import { redirect } from "next/navigation";
-const Page = () => {
-  const { isSignedIn } = useAuth();
-  if (isSignedIn) redirect("/");
+const Page = async () => {
+  const { userId } = await auth();
+  if (userId) redirect("/");
   return <Content />;
 };
 
