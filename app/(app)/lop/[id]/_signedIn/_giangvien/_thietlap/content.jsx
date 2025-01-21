@@ -65,7 +65,7 @@ const ThietLap = ({ lop }) => {
   );
 
   const [isMutating, setIsMutating] = useState(false);
-  // console.log(lop);
+  console.log(lop);
 
   const mutation = useMutation({
     mutationFn: async () =>
@@ -267,7 +267,11 @@ const ThietLap = ({ lop }) => {
             <TableCell>Lịch trình dự kiến:</TableCell>
             <TableCell>
               {!edit ? (
-                lop.settings.lich_trinh_du_kien
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: lop.settings.lich_trinh_du_kien,
+                  }}
+                />
               ) : (
                 <ReactQuill
                   theme="snow"
@@ -281,7 +285,11 @@ const ThietLap = ({ lop }) => {
             <TableCell>Đề cương chi tiết:</TableCell>
             <TableCell>
               {!edit ? (
-                lop.settings.lich_trinh_du_kien
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: lop.settings.de_cuong_chi_tiet,
+                  }}
+                />
               ) : (
                 <ReactQuill
                   theme="snow"
