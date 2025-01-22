@@ -152,7 +152,11 @@ const NoiDungTab = ({ params }) => {
       <div className="divide-y-1 pl-2">
         {lichtrinh?.map((item) =>
           item.updated ? (
-            <EditableRow data={item} lop_id={thongtin.info.lop.id} />
+            <EditableRow
+              data={item}
+              lop_id={thongtin.info.lop.id}
+              key={item.id}
+            />
           ) : (
             <div key={item.id} className="pt-2 pb-2">
               <Link href={`/lich/${item.id}`}>
