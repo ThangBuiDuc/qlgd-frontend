@@ -48,7 +48,7 @@ const TKB = () => {
   return (
     <Accordion
       variant="bordered"
-      defaultExpandedKeys={[`${data.find((item) => item.active).tuan.id}`]}
+      defaultExpandedKeys={[`${data.find((item) => item.active)?.tuan.id}`]}
     >
       {data
         ?.sort((a, b) => a.tuan.stt - b.tuan.stt)

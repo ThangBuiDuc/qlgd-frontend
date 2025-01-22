@@ -453,3 +453,18 @@ export const thietLapThongSoLop = async (token, data) => {
 
   return token ? res.data : res;
 };
+
+//Sua noi dung lich trinh thuc hien
+export const suaNoiDungLichTrinhThucHien = async (token, lop_id, data) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days/content`,
+    method: "post",
+    data,
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return token ? res.data : res;
+};

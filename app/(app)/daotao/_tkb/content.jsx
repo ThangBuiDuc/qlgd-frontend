@@ -61,7 +61,10 @@ const Content = ({ value }) => {
     queryKey: ["dao_tao_lop_mon_hoc", value.value],
     queryFn: async () => getDaoTaoLichLopMonHoc(value.value),
   });
-  const [tuanBatDau, setTuanBatDau] = useState({ value: 1, label: 1 });
+  const [tuanBatDau, setTuanBatDau] = useState({
+    value: data?.headers[0],
+    label: data?.headers[0],
+  });
   const [soTuan, setSoTuan] = useState({ value: 1, label: 1 });
   const [thu, setThu] = useState({ value: 2, label: "Thứ 2" });
   const [tiet, setTiet] = useState({ value: "1", label: "1 (7h00)" });
@@ -76,6 +79,10 @@ const Content = ({ value }) => {
     setGiangVien({
       value: data?.giang_viens[0]?.id,
       label: data?.giang_viens[0]?.text,
+    });
+    setTuanBatDau({
+      value: data?.headers[0],
+      label: data?.headers[0],
     });
   }, [data]);
 
@@ -257,16 +264,16 @@ const Content = ({ value }) => {
           <Select
             value={tuanBatDau}
             onChange={setTuanBatDau}
-            options={[...new Array(20).keys()].map((item) => ({
-              value: item + 1,
-              label: item + 1,
+            options={data?.headers.map((item) => ({
+              value: item,
+              label: item,
             }))}
             placeholder="Tuần học bắt đầu"
           />
           <Select
             value={soTuan}
             onChange={setSoTuan}
-            options={[...new Array(20).keys()].map((item) => ({
+            options={[...new Array(25).keys()].map((item) => ({
               value: item + 1,
               label: item + 1,
             }))}
