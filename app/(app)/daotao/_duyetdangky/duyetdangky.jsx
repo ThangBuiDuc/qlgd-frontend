@@ -23,7 +23,7 @@ const DuyetDangKy = () => {
   return (
     <div className="flex flex-col gap-4 w-full">
       <LichDangKy data={danhSachChuaDuyet} />
-      <LichDaDuyet data={danhSachDaDuyet} />
+      <LichDaDuyet data={danhSachDaDuyet} isLoading={isLoading1} />
     </div>
   );
 };

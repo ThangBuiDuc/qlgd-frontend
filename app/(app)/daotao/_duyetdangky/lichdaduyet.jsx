@@ -1,4 +1,5 @@
 "use client";
+import Loading from "@/app/_hardComponents/loading";
 import {
   Table,
   TableHeader,
@@ -8,7 +9,7 @@ import {
   TableCell,
 } from "@nextui-org/table";
 
-const LichDaDuyet = ({ data }) => {
+const LichDaDuyet = ({ data, isLoading }) => {
   return (
     <div className="flex flex-col gap-2">
       <h5>Danh sách lịch đã duyệt</h5>
@@ -32,7 +33,7 @@ const LichDaDuyet = ({ data }) => {
           <TableColumn>Trạng thái</TableColumn>
           <TableColumn>Ngày duyệt</TableColumn>
         </TableHeader>
-        <TableBody>
+        <TableBody isLoading={isLoading} loadingContent={<Loading />}>
           {data?.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.tuan}</TableCell>

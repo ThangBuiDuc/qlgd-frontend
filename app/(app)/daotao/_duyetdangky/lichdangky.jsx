@@ -219,6 +219,7 @@ const LichDangKy = ({ data }) => {
       ),
     onSuccess: (data) => {
       queryClient.setQueryData(["dao_tao_lich_trinh_giang_day"], data);
+      queryClient.invalidateQueries(["dao_tao_lich_trinh_giang_day_da_duyet"]);
       Swal.fire({
         title: "Chấp nhận lịch đăng ký thành công!",
         icon: "success",
