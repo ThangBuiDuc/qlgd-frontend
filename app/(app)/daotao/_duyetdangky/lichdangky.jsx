@@ -139,7 +139,7 @@ const CheckModal = ({ modalIsOpen, setModalIsOpen, item }) => {
   );
 };
 
-const RenderCell = ({ item }) => {
+const RenderCell = ({ item, acceptMutation, denyMutation }) => {
   const [modalIsOpen, setModalIsOpen] = useState();
   return (
     <div className="flex gap-2">
