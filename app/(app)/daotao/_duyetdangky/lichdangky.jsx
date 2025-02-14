@@ -40,9 +40,8 @@ const CheckModal = ({ modalIsOpen, setModalIsOpen, item }) => {
           template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
         })
       ),
+    enabled: !!modalIsOpen,
   });
-
-  console.log(data);
 
   return (
     <Modal
