@@ -175,7 +175,12 @@ const Content = () => {
                   Một đường link đặt lại mật khẩu đã được gửi đến Email!
                 </p>
               ) : (
-                <Button color="primary" size="sm" className="w-fit self-center">
+                <Button
+                  color="primary"
+                  size="sm"
+                  className="w-fit self-center"
+                  onClick={submit1}
+                >
                   Xác nhận
                 </Button>
               )}
@@ -243,6 +248,7 @@ const Content = () => {
                   color="primary"
                   size="sm"
                   className="w-fit self-center"
+                  onClick={submit}
                 >
                   Đăng nhập
                 </Button>

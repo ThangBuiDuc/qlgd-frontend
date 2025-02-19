@@ -310,7 +310,12 @@ export default function Content() {
             {loading ? (
               <Spinner size="sm" color="primary" />
             ) : (
-              <Button color="primary" size="sm" className="w-fit self-center">
+              <Button
+                color="primary"
+                size="sm"
+                className="w-fit self-center"
+                onClick={submit}
+              >
                 Đăng ký
               </Button>
             )}
