@@ -1,9 +1,14 @@
 import axios from "axios";
 
 //get role truong khoa
-export const daoTaoRole = async (token) => {
+export const daoTaoRole = async (token, tenant) => {
+  const link = new URL(process.env.NEXT_PUBLIC_API_DAO_TAO);
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "GET",
     headers: {
       "content-type": "Application/json",
@@ -15,10 +20,13 @@ export const daoTaoRole = async (token) => {
 };
 
 //Tim lop hanh chinh
-export const timLopHanhChinh = async (q, loadedOptions, { page }) => {
+export const timLopHanhChinh = async (q, _, { page, hocky, namhoc }) => {
+  const link = new URL(process.env.NEXT_PUBLIC_API_DAO_TAO);
   const res = await axios({
-    url: `${
-      process.env.NEXT_PUBLIC_API_DAO_TAO
+    url: `${link.origin}${
+      hocky && namhoc ? `/hocky/${hocky}/namhoc/${namhoc}` : ""
+    }${
+      link.pathname
     }/lop_hanh_chinhs?q=${q.toUpperCase()}&page_limit=30&page=${page}`,
     method: "GET",
     headers: {
@@ -35,15 +43,20 @@ export const timLopHanhChinh = async (q, loadedOptions, { page }) => {
     hasMore: res.data.nextPage ? true : false,
     additional: {
       page: res.data.nextPage,
+      hocky,
+      namhoc,
     },
   };
 };
 
 //Tim lop hanh chinh
-export const timLopMonHoc = async (q, loadedOptions, { page }) => {
+export const timLopMonHoc = async (q, _, { page, hocky, namhoc }) => {
+  const link = new URL(process.env.NEXT_PUBLIC_API_DAO_TAO);
   const res = await axios({
-    url: `${
-      process.env.NEXT_PUBLIC_API_DAO_TAO
+    url: `${link.origin}${
+      hocky && namhoc ? `/hocky/${hocky}/namhoc/${namhoc}` : ""
+    }${
+      link.pathname
     }/lop_mon_hocs?q=${q.toUpperCase()}&page_limit=30&page=${page}`,
     method: "GET",
     headers: {
@@ -60,14 +73,23 @@ export const timLopMonHoc = async (q, loadedOptions, { page }) => {
     hasMore: res.data.nextPage ? true : false,
     additional: {
       page: res.data.nextPage,
+      hocky,
+      namhoc,
     },
   };
 };
 
 //Get sinh vien lop hanh chinh
-export const getSinhVienLopHanhChinh = async (data) => {
+export const getSinhVienLopHanhChinh = async (data, tenant) => {
+  const link = new URL(
+    `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lop_hanh_chinhs`
+  );
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lop_hanh_chinhs`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "POST",
     data,
     headers: {
@@ -80,9 +102,14 @@ export const getSinhVienLopHanhChinh = async (data) => {
 };
 
 //Get sinh vien lop hanh chinh
-export const getSinhVienLopMonHoc = async (data, token) => {
+export const getSinhVienLopMonHoc = async (data, token, tenant) => {
+  const link = new URL(`${process.env.NEXT_PUBLIC_API_DAO_TAO}/lop_mon_hocs`);
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lop_mon_hocs`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "POST",
     data,
     headers: {
@@ -95,9 +122,14 @@ export const getSinhVienLopMonHoc = async (data, token) => {
 };
 
 //Ghep sinh vien vao lop
-export const ghepLop = async (data, token) => {
+export const ghepLop = async (data, token, tenant) => {
+  const link = new URL(`${process.env.NEXT_PUBLIC_API_DAO_TAO}/move`);
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}/move`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "POST",
     data,
     headers: {
@@ -110,9 +142,15 @@ export const ghepLop = async (data, token) => {
 };
 
 //Xoa sinh vien khoi lop
-export const xoaSinhVien = async (token, data) => {
+export const xoaSinhVien = async (token, data, tenant) => {
+  const link = new URL(`${process.env.NEXT_PUBLIC_API_DAO_TAO}/lop_mon_hocs`);
+
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lop_mon_hocs`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "DELETE",
     data,
     headers: {

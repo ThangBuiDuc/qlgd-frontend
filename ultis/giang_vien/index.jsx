@@ -15,9 +15,14 @@ export const getGiangVien = async (id) => {
 };
 
 //Get lich hoc trong ngay
-export const getLichTrinhGiangVien = async (token) => {
+export const getLichTrinhGiangVien = async (token, tenant) => {
+  const link = new URL(process.env.NEXT_PUBLIC_API_GET_LICH_TRINH_GIANG_VIEN);
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_GET_LICH_TRINH_GIANG_VIEN}`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "get",
     headers: {
       "content-type": "Application/json",
@@ -29,9 +34,16 @@ export const getLichTrinhGiangVien = async (token) => {
 };
 
 //Get danh sach lop
-export const getDanhSachLopGiangVien = async (token) => {
+export const getDanhSachLopGiangVien = async (token, tenant) => {
+  const link = new URL(
+    process.env.NEXT_PUBLIC_API_GET_DANH_SACH_LOP_GIANG_VIEN
+  );
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_GET_DANH_SACH_LOP_GIANG_VIEN}`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "get",
     headers: {
       "content-type": "Application/json",

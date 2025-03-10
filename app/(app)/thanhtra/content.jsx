@@ -1,7 +1,7 @@
 "use client";
 import { DatePicker } from "@nextui-org/date-picker";
-import { parseDate } from "@internationalized/date";
-import { useEffect, useState } from "react";
+import { today, getLocalTimeZone } from "@internationalized/date";
+import { useState } from "react";
 import {
   Table,
   TableHeader,
@@ -526,8 +526,8 @@ const TableContent = ({ data, isLoading, date }) => {
       aria-label="Danh sach lich day"
       isStriped
       classNames={{
-        th: ["!bg-green-200", "text-black"],
-        tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
+        th: ["!bg-[#006FEE]", "text-white"],
+        //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
       }}
     >
       <TableHeader>
@@ -724,7 +724,7 @@ const TableContent = ({ data, isLoading, date }) => {
 };
 
 const Content = () => {
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState(today(getLocalTimeZone()));
   const { data, isLoading } = useQuery({
     queryKey: ["thanh_tra_lich_trinh", date],
     queryFn: () =>

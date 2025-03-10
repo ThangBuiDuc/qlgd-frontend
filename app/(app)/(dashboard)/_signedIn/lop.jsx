@@ -12,14 +12,21 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 const TKB = () => {
+  const searchParams = useSearchParams();
   const { userId, getToken } = useAuth();
   const { data, isLoading } = useQuery({
-    queryKey: [`lop_${userId}`],
+    queryKey: [
+      `lop_${userId}`,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () =>
       getDanhSachLopGiangVien(
-        await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV })
+        await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
       ),
   });
 
@@ -31,10 +38,11 @@ const TKB = () => {
 
   return (
     <Table
+      isStriped
       aria-label="Danh sach lop"
       classNames={{
-        th: ["!bg-green-200", "text-black"],
-        tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
+        th: ["!bg-[#006FEE]", "text-white"],
+        //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
       }}
     >
       <TableHeader>
@@ -49,7 +57,17 @@ const TKB = () => {
         {data?.map((el) => (
           <TableRow key={el.id}>
             <TableCell>
-              <Link href={`/lop/${el.id}`}>{el.ma_lop}</Link>
+              <Link
+                href={`/lop/${el.id}${
+                  searchParams.get("hocky") && searchParams.get("namhoc")
+                    ? `?hocky=${searchParams.get(
+                        "hocky"
+                      )}&namhoc=${searchParams.get("namhoc")}`
+                    : ""
+                }`}
+              >
+                {el.ma_lop}
+              </Link>
             </TableCell>
             <TableCell>{el.ten_mon_hoc}</TableCell>
             <TableCell>{el.khoi_luong_du_kien}</TableCell>

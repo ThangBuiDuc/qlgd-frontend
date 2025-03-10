@@ -14,30 +14,37 @@ import {
 } from "@nextui-org/table";
 import Link from "next/link";
 import { Chip } from "@nextui-org/chip";
-import moment from "moment";
+import { useSearchParams } from "next/navigation";
+// import moment from "moment";
 
-function isDateInRange(dateStr, startStr, endStr) {
-  // Parse the dates in DD-MM-yyyy format
-  const parseDate = (str) => {
-    const [day, month, year] = str.split("/").map(Number);
-    return new Date(year, month - 1, day); // Month is zero-based
-  };
+// function isDateInRange(dateStr, startStr, endStr) {
+//   // Parse the dates in DD-MM-yyyy format
+//   const parseDate = (str) => {
+//     const [day, month, year] = str.split("/").map(Number);
+//     return new Date(year, month - 1, day); // Month is zero-based
+//   };
 
-  const date = parseDate(dateStr);
-  const startDate = parseDate(startStr);
-  const endDate = parseDate(endStr);
+//   const date = parseDate(dateStr);
+//   const startDate = parseDate(startStr);
+//   const endDate = parseDate(endStr);
 
-  // Check if the date is within the range (inclusive)
-  return date >= startDate && date <= endDate;
-}
+//   // Check if the date is within the range (inclusive)
+//   return date >= startDate && date <= endDate;
+// }
 
 const TKB = () => {
+  const searchParams = useSearchParams();
   const { userId, getToken } = useAuth();
   const { data, isLoading } = useQuery({
-    queryKey: [`lich_trinh_${userId}`],
+    queryKey: [
+      `lich_trinh_${userId}`,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () =>
       getLichTrinhGiangVien(
-        await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV })
+        await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
       ),
   });
 
@@ -61,10 +68,11 @@ const TKB = () => {
               title={`Tuần ${tuan.stt} (${tuan.tu_ngay2} - ${tuan.den_ngay2})`}
             >
               <Table
+                isStriped
                 aria-label="Lich day trong tuan"
                 classNames={{
-                  th: ["!bg-green-200", "text-black"],
-                  tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
+                  th: ["!bg-[#006FEE]", "text-white"],
+                  //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
                 }}
               >
                 <TableHeader>
@@ -86,7 +94,18 @@ const TKB = () => {
                         {el.thu}
                       </TableCell>
                       <TableCell>
-                        <Link href={`/lich/${el.id}`}>{el.thoi_gian}</Link>
+                        <Link
+                          href={`/lich/${el.id}${
+                            searchParams.get("hocky") &&
+                            searchParams.get("namhoc")
+                              ? `?hocky=${searchParams.get(
+                                  "hocky"
+                                )}&namhoc=${searchParams.get("namhoc")}`
+                              : ""
+                          }`}
+                        >
+                          {el.thoi_gian}
+                        </Link>
                       </TableCell>
                       <TableCell>{el.tiet_bat_dau}</TableCell>
                       <TableCell>{el.so_tiet}</TableCell>

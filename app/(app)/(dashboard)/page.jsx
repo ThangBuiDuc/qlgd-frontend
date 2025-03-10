@@ -4,7 +4,8 @@ import { getCurrentCalendar } from "@/ultis/dashboard";
 import { auth } from "@clerk/nextjs/server";
 import NotSignedOut from "./_signedIn/content";
 
-export default async function Page() {
+export default async function Page({ searchParams }) {
+  // console.log(searchParams);
   const { getToken } = await auth();
   var token;
   try {
@@ -15,7 +16,9 @@ export default async function Page() {
     token = null;
   }
 
-  const calendar = await getCurrentCalendar(token);
+  const calendar = await getCurrentCalendar(token, searchParams);
+
+  // console.log(calendar.data);
 
   if (calendar.status !== 200) {
     throw new Error();

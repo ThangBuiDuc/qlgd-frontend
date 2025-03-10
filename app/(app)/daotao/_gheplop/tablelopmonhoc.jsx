@@ -15,17 +15,23 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CircleX } from "lucide-react";
 import Swal from "sweetalert2";
 
-const TableLopMonHoc = ({ selectedLopMonHoc }) => {
+const TableLopMonHoc = ({ selectedLopMonHoc, searchParams }) => {
   const queryClient = useQueryClient();
   const { getToken } = useAuth();
   const { data, isLoading } = useQuery({
-    queryKey: ["sinh_vien_lop_mon_hoc", selectedLopMonHoc?.value],
+    queryKey: [
+      "sinh_vien_lop_mon_hoc",
+      selectedLopMonHoc?.value,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () =>
       getSinhVienLopMonHoc(
         {
           lop_id: selectedLopMonHoc?.value,
         },
-        await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV })
+        await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
       ),
     enabled: !!selectedLopMonHoc?.value,
   });
@@ -39,12 +45,18 @@ const TableLopMonHoc = ({ selectedLopMonHoc }) => {
         {
           lop_id: selectedLopMonHoc?.value,
           enrollment_id: data.id,
-        }
+        },
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
       ),
     onSuccess: (data) => {
       // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
       queryClient.setQueryData(
-        ["sinh_vien_lop_mon_hoc", selectedLopMonHoc?.value],
+        [
+          "sinh_vien_lop_mon_hoc",
+          selectedLopMonHoc?.value,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
         data
       );
       Swal.fire({
@@ -66,10 +78,11 @@ const TableLopMonHoc = ({ selectedLopMonHoc }) => {
 
   return (
     <Table
+      isStriped
       aria-label="Sinh vien lop mon hoc"
       classNames={{
-        th: ["!bg-green-200", "text-black"],
-        tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
+        th: ["!bg-[#006FEE]", "text-white"],
+        //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
       }}
     >
       <TableHeader>

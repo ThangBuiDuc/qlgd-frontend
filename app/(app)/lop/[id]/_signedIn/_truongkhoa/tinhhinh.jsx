@@ -74,7 +74,7 @@ const TinhHinhTruongKhoa = ({
         aria-label="Thong tin lich trinh lop truong khoa"
         classNames={{
           th: ["!bg-green-200"],
-          tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
+          //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
         }}
       >
         <TableHeader>

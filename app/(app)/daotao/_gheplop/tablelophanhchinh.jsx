@@ -15,13 +15,22 @@ const TableLopHanhChinh = ({
   selectedLopHanhChinh,
   selectedKeys,
   setSelectedKeys,
+  searchParams,
 }) => {
   const { data, isLoading } = useQuery({
-    queryKey: ["sinh_vien_lop_hanh_chinh", selectedLopHanhChinh?.value],
+    queryKey: [
+      "sinh_vien_lop_hanh_chinh",
+      selectedLopHanhChinh?.value,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () =>
-      getSinhVienLopHanhChinh({
-        ma_lop_hanh_chinh: selectedLopHanhChinh?.value,
-      }),
+      getSinhVienLopHanhChinh(
+        {
+          ma_lop_hanh_chinh: selectedLopHanhChinh?.value,
+        },
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
+      ),
     enabled: !!selectedLopHanhChinh?.value,
   });
 
@@ -29,13 +38,14 @@ const TableLopHanhChinh = ({
 
   return (
     <Table
+      isStriped
       selectionMode="multiple"
       aria-label="Sinh vien lop hanh chinh"
       selectedKeys={selectedKeys}
       onSelectionChange={setSelectedKeys}
       classNames={{
-        th: ["!bg-green-200", "text-black"],
-        tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
+        th: ["!bg-[#006FEE]", "text-white"],
+        //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
       }}
     >
       <TableHeader>

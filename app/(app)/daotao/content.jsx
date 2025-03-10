@@ -1,9 +1,9 @@
 "use client";
 import { Tabs, Tab } from "@nextui-org/tabs";
 import GhepLop from "./_gheplop/gheplop";
-import LopMonHoc from "./_lopmonhoc/lopmonhoc";
+// import LopMonHoc from "./_lopmonhoc/lopmonhoc";
 import TKB from "./_tkb/tkb";
-import { useQuery } from "@tanstack/react-query";
+// import { useQuery } from "@tanstack/react-query";
 import DuyetDangKy from "./_duyetdangky/duyetdangky";
 
 const Content = ({ role }) => {

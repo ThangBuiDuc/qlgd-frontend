@@ -66,8 +66,8 @@ const CheckModal = ({ modalIsOpen, setModalIsOpen, item }) => {
                     <Table
                       aria-label="danh sach lich trung"
                       classNames={{
-                        th: ["!bg-green-200", "text-black"],
-                        tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
+                        th: ["!bg-[#006FEE]", "text-white"],
+                        //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
                       }}
                     >
                       <TableHeader>
@@ -99,8 +99,8 @@ const CheckModal = ({ modalIsOpen, setModalIsOpen, item }) => {
                     <Table
                       aria-label="danh sach sinh viên trung"
                       classNames={{
-                        th: ["!bg-green-200", "text-black"],
-                        tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
+                        th: ["!bg-[#006FEE]", "text-white"],
+                        //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
                       }}
                     >
                       <TableHeader>
@@ -265,8 +265,8 @@ const LichDangKy = ({ data }) => {
       <Table
         aria-label="danh sach lich dang ky"
         classNames={{
-          th: ["!bg-green-200", "text-black"],
-          tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
+          th: ["!bg-[#006FEE]", "text-white"],
+          //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
         }}
       >
         <TableHeader>

@@ -10,8 +10,10 @@ import TableLopMonHoc from "./tablelopmonhoc";
 import Swal from "sweetalert2";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@clerk/nextjs";
+import { useSearchParams } from "next/navigation";
 
 const GhepLop = () => {
+  const searchParams = useSearchParams();
   const { getToken } = useAuth();
   const queryClient = useQueryClient();
   const [selectedLopHanhChinh, setSelectedLopHanhChinh] = useState(null);
@@ -30,18 +32,23 @@ const GhepLop = () => {
                   .getQueryData([
                     "sinh_vien_lop_hanh_chinh",
                     selectedLopHanhChinh?.value,
+                    searchParams.get("hocky"),
+                    searchParams.get("namhoc"),
                   ])
                   .map((item) => item.id)
               : Array.from(selectedKeys).map((item) => parseInt(item)),
         },
         await getToken({
           template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
-        })
+        }),
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
       ),
     onSuccess: () => {
       queryClient.invalidateQueries([
         "sinh_vien_lop_mon_hoc",
         selectedLopMonHoc?.value,
+        searchParams.get("hocky"),
+        searchParams.get("namhoc"),
       ]);
       setSelectedKeys(new Set([]));
       // queryClient.setQueryData(
@@ -75,6 +82,8 @@ const GhepLop = () => {
           loadOptions={timLopHanhChinh}
           additional={{
             page: 1, // Initial page
+            hocky: searchParams.get("hocky"),
+            namhoc: searchParams.get("namhoc"),
           }}
           placeholder="Tìm lớp hành chính"
           noOptionsMessage={() => "Không tìm thấy kết quả"}
@@ -84,6 +93,7 @@ const GhepLop = () => {
             selectedLopHanhChinh={selectedLopHanhChinh}
             selectedKeys={selectedKeys}
             setSelectedKeys={setSelectedKeys}
+            searchParams={searchParams}
           />
         )}
       </div>
@@ -127,12 +137,17 @@ const GhepLop = () => {
           loadOptions={timLopMonHoc}
           additional={{
             page: 1, // Initial page
+            hocky: searchParams.get("hocky"),
+            namhoc: searchParams.get("namhoc"),
           }}
           placeholder="Tìm lớp môn học"
           noOptionsMessage={() => "Không tìm thấy kết quả"}
         />
         {selectedLopMonHoc && (
-          <TableLopMonHoc selectedLopMonHoc={selectedLopMonHoc} />
+          <TableLopMonHoc
+            selectedLopMonHoc={selectedLopMonHoc}
+            searchParams={searchParams}
+          />
         )}
       </div>
     </div>

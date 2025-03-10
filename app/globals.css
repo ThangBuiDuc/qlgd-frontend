@@ -42,6 +42,10 @@ a {
   @apply hover:underline text-[#0083C2] cursor-pointer;
 }
 
+td {
+  @apply text-black !font-[500];
+}
+
 .progresspercent {
   display: none !important;
 }

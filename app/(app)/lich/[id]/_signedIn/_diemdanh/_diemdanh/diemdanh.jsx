@@ -34,7 +34,7 @@ const DisableTable = ({ data }) => {
     <Table
       aria-label="Thong tin buoi hoc"
       classNames={{
-        th: ["!bg-green-200", "text-black"],
+        th: ["!bg-[#006FEE]", "text-white"],
         tr: ["even:bg-[#f2dede]"],
       }}
     >
@@ -245,7 +245,7 @@ const Editable = ({ data, so_tiet }) => {
     <Table
       aria-label="Thong tin buoi hoc"
       classNames={{
-        th: ["!bg-green-200", "text-black"],
+        th: ["!bg-[#006FEE]", "text-white"],
         tr: ["even:bg-[#f2dede]"],
       }}
     >

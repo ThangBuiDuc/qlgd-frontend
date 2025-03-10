@@ -2,12 +2,13 @@ import { daoTaoRole } from "@/ultis/daotao";
 import { auth } from "@clerk/nextjs/server";
 import Content from "./content";
 
-const Page = async () => {
+const Page = async ({ searchParams }) => {
   const { getToken } = await auth();
   const role = await daoTaoRole(
     await getToken({
       template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
-    })
+    }),
+    searchParams
   );
 
   if (role.status !== 200) {

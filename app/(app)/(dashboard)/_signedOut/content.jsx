@@ -10,7 +10,8 @@ import {
 import { Pagination } from "@nextui-org/pagination";
 import moment from "moment";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { use, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 // import { useAsyncList } from "@react-stately/data";
 // import { Spinner } from "@nextui-org/spinner";
 
@@ -37,6 +38,7 @@ function flattenObjectNoParentKeys(obj, result = {}) {
 }
 
 const NotSignedIn = ({ calendar }) => {
+  const searchParams = useSearchParams();
   // const [isLoading, setIsLoading] = useState(true);
   const [sortDescriptor, setSortDescriptor] = useState(null);
 
@@ -116,9 +118,12 @@ const NotSignedIn = ({ calendar }) => {
         className="max-h-full"
         sortDescriptor={sortDescriptor}
         onSortChange={setSortDescriptor}
+        isStriped
         classNames={{
-          th: ["!bg-green-200", "text-black"],
-          tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
+          th: ["!bg-[#006FEE]", "text-white"],
+          // //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
+          // tr: ["font-semibold"],
+          // td: ["font-[500]"],
         }}
         bottomContent={
           <div className="flex w-full justify-center">
@@ -150,7 +155,13 @@ const NotSignedIn = ({ calendar }) => {
             <TableRow key={item.id}>
               <TableCell>
                 <Link
-                  href={`lich/${item.id}`}
+                  href={`lich/${item.id}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `?hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`}
                   // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {`${moment(item.thoi_gian).format("HH:mm DD/MM/yyyy")} ${
@@ -161,7 +172,13 @@ const NotSignedIn = ({ calendar }) => {
               <TableCell>{item.so_tiet}</TableCell>
               <TableCell className="whitespace-nowrap">
                 <Link
-                  href={`/search?type=3&q=${item.phong}`}
+                  href={`/search?type=3&q=${item.phong}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `?hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`}
                   // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {`${item.phong ? item.phong : ""}${
@@ -174,7 +191,13 @@ const NotSignedIn = ({ calendar }) => {
               <TableCell className="whitespace-nowrap">{`${item.giang_vien.ho} ${item.giang_vien.dem} ${item.giang_vien.ten}`}</TableCell>
               <TableCell>
                 <Link
-                  href={`/lop/${item.lop_mon_hoc.id}`}
+                  href={`/lop/${item.lop_mon_hoc.id}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `?hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`}
                   // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {item.lop_mon_hoc.ma_lop}

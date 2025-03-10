@@ -76,8 +76,8 @@ const Student = () => {
         aria-label="Tim kiem sinh vien"
         classNames={{
           emptyWrapper: ["!text-black"],
-          th: ["!bg-green-200", "text-black"],
-          tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
+          th: ["!bg-[#006FEE]", "text-white"],
+          //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
         }}
         bottomContent={
           <div className="flex w-full justify-center">
@@ -122,7 +122,7 @@ const Student = () => {
               </TableCell>
               <TableCell>{`${item.ho} ${item.dem} ${item.ten}`}</TableCell>
               <TableCell>
-                <Link href={"#"}>{item.code}</Link>
+                <Link href={`/sinh_vien/${item.id}`}>{item.code}</Link>
               </TableCell>
               <TableCell>{item.ma_lop_hanh_chinh}</TableCell>
               <TableCell>{item.so_lop_mon}</TableCell>

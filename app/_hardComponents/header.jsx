@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 // import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSearchParams } from "next/navigation";
 const navMenu = [
   {
     path: "/",
@@ -30,6 +31,7 @@ const navMenu = [
 ];
 
 const Header = () => {
+  const searchParams = useSearchParams();
   const [toggle, setToggle] = useState(false);
   const clerk = useClerk();
   const { isSignedIn } = useUser();
@@ -62,7 +64,13 @@ const Header = () => {
               {navMenu.map((item, index) => (
                 <Link
                   key={index}
-                  href={item.path}
+                  href={`${item.path}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `?hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`}
                   className="text-lg font-semibold hover:text-[#0083C2] self-start md:self-center"
                 >
                   {item.title}
@@ -71,7 +79,7 @@ const Header = () => {
             </div>
             {isSignedIn ? (
               <button
-                className="md:self-center self-start font-semibold"
+                className="md:self-center self-start font-semibold text-black"
                 onClick={() => {
                   clerk.signOut();
                   // router.refresh();
@@ -81,7 +89,7 @@ const Header = () => {
               </button>
             ) : (
               <button
-                className="md:self-center self-start font-semibold"
+                className="md:self-center self-start font-semibold text-black"
                 onClick={() => {
                   clerk.redirectToSignIn();
                 }}

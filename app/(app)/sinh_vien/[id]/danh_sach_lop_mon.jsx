@@ -16,8 +16,8 @@ const DanhSachLopMon = ({ data }) => {
       <Table
         aria-label="Danh sach lop mon"
         classNames={{
-          th: ["!bg-green-200", "text-black"],
-          tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
+          th: ["!bg-[#006FEE]", "text-white"],
+          //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
         }}
       >
         <TableHeader>

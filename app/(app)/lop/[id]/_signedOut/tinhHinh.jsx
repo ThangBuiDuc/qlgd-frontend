@@ -102,8 +102,8 @@ const TinhHinh = ({ tinh_hinh_hoc_tap }) => {
         onSortChange={setSortDescriptor}
         aria-label="Tinh hinh hoc tap"
         classNames={{
-          th: ["!bg-green-200", "text-black"],
-          tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
+          th: ["!bg-[#006FEE]", "text-white"],
+          //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
         }}
       >
         <TableHeader>
