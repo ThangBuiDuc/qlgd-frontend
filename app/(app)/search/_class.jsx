@@ -73,6 +73,7 @@ const Class = () => {
   return (
     <>
       <Table
+        isStriped
         aria-label="Tim kiem lop mon hoc"
         classNames={{
           emptyWrapper: ["!text-black"],

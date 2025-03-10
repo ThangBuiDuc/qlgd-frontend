@@ -32,6 +32,7 @@ const DisableTable = ({ data }) => {
   // console.log(data);
   return (
     <Table
+      isStriped
       aria-label="Thong tin buoi hoc"
       classNames={{
         th: ["!bg-[#006FEE]", "text-white"],
@@ -243,6 +244,7 @@ const Editable = ({ data, so_tiet }) => {
   };
   return (
     <Table
+      isStriped
       aria-label="Thong tin buoi hoc"
       classNames={{
         th: ["!bg-[#006FEE]", "text-white"],

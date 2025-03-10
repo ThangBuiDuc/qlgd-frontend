@@ -261,8 +261,8 @@ const Diem = ({ params }) => {
         </Button>
       </div>
       <Table
-        aria-label="Danh sach lop"
         isStriped
+        aria-label="Danh sach lop"
         classNames={{
           th: ["!bg-[#006FEE]", "text-white"],
           // //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],

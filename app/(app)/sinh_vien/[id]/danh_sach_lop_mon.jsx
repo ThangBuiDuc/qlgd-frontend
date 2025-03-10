@@ -14,6 +14,7 @@ const DanhSachLopMon = ({ data }) => {
     <div className="flex flex-col gap-2">
       <h5>Danh sách lớp môn</h5>
       <Table
+        isStriped
         aria-label="Danh sach lop mon"
         classNames={{
           th: ["!bg-[#006FEE]", "text-white"],

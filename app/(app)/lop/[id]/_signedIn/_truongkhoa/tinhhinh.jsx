@@ -71,6 +71,7 @@ const TinhHinhTruongKhoa = ({
         </>
       )}
       <Table
+        isStriped
         aria-label="Thong tin lich trinh lop truong khoa"
         classNames={{
           th: ["!bg-green-200"],

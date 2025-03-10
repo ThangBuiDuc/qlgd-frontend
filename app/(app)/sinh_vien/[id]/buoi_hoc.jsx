@@ -54,6 +54,7 @@ const BuoiHoc = ({ data }) => {
     <div className="flex flex-col gap-2">
       <h5>Các buổi đã học/vắng</h5>
       <Table
+        isStriped
         aria-label="Cac buoi da hoc/vang"
         isHeaderSticky
         className="max-h-full"

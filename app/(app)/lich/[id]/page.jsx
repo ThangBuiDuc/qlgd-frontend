@@ -4,7 +4,7 @@ import { getCalendar } from "@/ultis/lich";
 import NotSignedIn from "./_signedOut/content";
 import NotSignedOut from "./_signedIn/content";
 
-const page = async ({ params }) => {
+const page = async ({ params, searchParams }) => {
   const { getToken } = await auth();
   var token;
   var calendar;
@@ -15,7 +15,7 @@ const page = async ({ params }) => {
   } catch (_) {
     token = null;
   }
-  calendar = await getCalendar(token, params.id);
+  calendar = await getCalendar(token, params.id, searchParams);
 
   if (calendar.status !== 200) {
     throw new Error();

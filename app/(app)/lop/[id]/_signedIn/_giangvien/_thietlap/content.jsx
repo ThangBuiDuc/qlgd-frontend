@@ -147,8 +147,8 @@ const ThietLap = ({ lop }) => {
         </>
       )}
       <Table
-        aria-label="Thong so lop"
         isStriped
+        aria-label="Thong so lop"
         classNames={{
           th: ["!bg-[#006FEE]", "text-white"],
           // //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],

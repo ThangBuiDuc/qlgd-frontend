@@ -25,6 +25,7 @@ const NotSignedIn = ({ lop }) => {
       <div className="flex flex-col gap-2">
         <h5>Thông tin lớp học</h5>
         <Table
+          isStriped
           aria-label="Thong tin lop hoc"
           classNames={{
             th: ["!bg-[#006FEE]", "text-white"],

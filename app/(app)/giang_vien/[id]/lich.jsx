@@ -54,6 +54,7 @@ const Lich = ({ data }) => {
     <div className="flex flex-col gap-2">
       <h5>Các buổi giảng dạy</h5>
       <Table
+        isStriped
         aria-label="Cac buoi giang day"
         isHeaderSticky
         className="max-h-full"

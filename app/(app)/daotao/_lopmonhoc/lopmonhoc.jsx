@@ -14,6 +14,7 @@ const LopMonHoc = () => {
       <div className="flex flex-col gap-2">
         <h6>Thêm môn học</h6>
         <Table
+          isStriped
           aria-label="Them mon hoc"
           classNames={{
             th: ["!bg-[#006FEE]", "text-white"],
@@ -37,6 +38,7 @@ const LopMonHoc = () => {
       <div className="flex flex-col gap-2">
         <h6>Tạo lớp</h6>
         <Table
+          isStriped
           aria-label="Tao lop"
           classNames={{
             th: ["!bg-[#006FEE]", "text-white"],

@@ -13,6 +13,7 @@ const ThongTin = ({ lop }) => {
   return (
     <div className="flex flex-col gap-3">
       <Table
+        isStriped
         aria-label="Thong tin lop truong khoa"
         classNames={{
           //   tr: ["!bg-green-200"],

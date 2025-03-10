@@ -45,18 +45,12 @@ const TableLopMonHoc = ({ selectedLopMonHoc, searchParams }) => {
         {
           lop_id: selectedLopMonHoc?.value,
           enrollment_id: data.id,
-        },
-        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
+        }
       ),
     onSuccess: (data) => {
       // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
       queryClient.setQueryData(
-        [
-          "sinh_vien_lop_mon_hoc",
-          selectedLopMonHoc?.value,
-          searchParams.get("hocky"),
-          searchParams.get("namhoc"),
-        ],
+        ["sinh_vien_lop_mon_hoc", selectedLopMonHoc?.value],
         data
       );
       Swal.fire({
@@ -105,27 +99,31 @@ const TableLopMonHoc = ({ selectedLopMonHoc, searchParams }) => {
             <TableCell>{item.name}</TableCell>
             <TableCell>{item.tinchi_status}</TableCell>
             <TableCell>
-              <Tooltip content="Xoá" color="warning" closeDelay={0}>
-                <CircleX
-                  className="cursor-pointer"
-                  onClick={() => {
-                    Swal.fire({
-                      title:
-                        "Thầy/Cô có chắc chắn xoá sinh viên khỏi lớp môn học?",
-                      icon: "warning",
-                      confirmButtonColor: "#006FEE",
-                      showConfirmButton: true,
-                      showCancelButton: true,
-                      confirmButtonText: "Xác nhận",
-                      cancelButtonText: "Huỷ",
-                      showLoaderOnConfirm: true,
-                      allowOutsideClick: () => !Swal.isLoading(),
-                      preConfirm: async () =>
-                        await removeMutation.mutateAsync({ id: item.id }),
-                    });
-                  }}
-                />
-              </Tooltip>
+              {searchParams.get("hocky") && searchParams.get("namhoc") ? (
+                <></>
+              ) : (
+                <Tooltip content="Xoá" color="warning" closeDelay={0}>
+                  <CircleX
+                    className="cursor-pointer"
+                    onClick={() => {
+                      Swal.fire({
+                        title:
+                          "Thầy/Cô có chắc chắn xoá sinh viên khỏi lớp môn học?",
+                        icon: "warning",
+                        confirmButtonColor: "#006FEE",
+                        showConfirmButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: "Xác nhận",
+                        cancelButtonText: "Huỷ",
+                        showLoaderOnConfirm: true,
+                        allowOutsideClick: () => !Swal.isLoading(),
+                        preConfirm: async () =>
+                          await removeMutation.mutateAsync({ id: item.id }),
+                      });
+                    }}
+                  />
+                </Tooltip>
+              )}
             </TableCell>
           </TableRow>
         ))}

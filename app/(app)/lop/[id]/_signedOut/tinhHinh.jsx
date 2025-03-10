@@ -85,6 +85,7 @@ const TinhHinh = ({ tinh_hinh_hoc_tap }) => {
     <div className="flex flex-col gap-2">
       <h5>Tình hình học tập</h5>
       <Table
+        isStriped
         bottomContent={
           <div className="flex w-full justify-center">
             <Pagination

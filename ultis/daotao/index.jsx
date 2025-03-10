@@ -101,7 +101,7 @@ export const getSinhVienLopHanhChinh = async (data, tenant) => {
   return res.data;
 };
 
-//Get sinh vien lop hanh chinh
+//Get sinh vien lop mon hoc
 export const getSinhVienLopMonHoc = async (data, token, tenant) => {
   const link = new URL(`${process.env.NEXT_PUBLIC_API_DAO_TAO}/lop_mon_hocs`);
   const res = await axios({
@@ -122,14 +122,9 @@ export const getSinhVienLopMonHoc = async (data, token, tenant) => {
 };
 
 //Ghep sinh vien vao lop
-export const ghepLop = async (data, token, tenant) => {
-  const link = new URL(`${process.env.NEXT_PUBLIC_API_DAO_TAO}/move`);
+export const ghepLop = async (data, token) => {
   const res = await axios({
-    url: `${link.origin}${
-      tenant.hocky && tenant.namhoc
-        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
-        : ""
-    }${link.pathname}`,
+    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}/move`,
     method: "POST",
     data,
     headers: {
@@ -142,15 +137,9 @@ export const ghepLop = async (data, token, tenant) => {
 };
 
 //Xoa sinh vien khoi lop
-export const xoaSinhVien = async (token, data, tenant) => {
-  const link = new URL(`${process.env.NEXT_PUBLIC_API_DAO_TAO}/lop_mon_hocs`);
-
+export const xoaSinhVien = async (token, data) => {
   const res = await axios({
-    url: `${link.origin}${
-      tenant.hocky && tenant.namhoc
-        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
-        : ""
-    }${link.pathname}`,
+    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lop_mon_hocs`,
     method: "DELETE",
     data,
     headers: {
@@ -163,9 +152,14 @@ export const xoaSinhVien = async (token, data, tenant) => {
 };
 
 //Lay danh sach lop mon hoc
-export const getLopMonHoc = async () => {
+export const getLopMonHoc = async (tenant) => {
+  const link = new URL(`${process.env.NEXT_PUBLIC_API_DAO_TAO}/lops`);
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lops`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "GET",
     headers: {
       "content-type": "Application/json",
@@ -176,9 +170,14 @@ export const getLopMonHoc = async () => {
 };
 
 //Lay lich lop mon hoc
-export const getDaoTaoLichLopMonHoc = async (id) => {
+export const getDaoTaoLichLopMonHoc = async (id, tenant) => {
+  const link = new URL(`${process.env.NEXT_PUBLIC_API_DAO_TAO}`);
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lop_mon_hocs/${id}/calendars`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}/lop_mon_hocs/${id}/calendars`,
     method: "GET",
     headers: {
       "content-type": "Application/json",
@@ -264,9 +263,16 @@ export const xoaVinhVienThoiKhoaBieu = async (id, data, token) => {
 };
 
 //Lay lich trinh giang day
-export const getDaoTaoLichTrinhGiangDay = async () => {
+export const getDaoTaoLichTrinhGiangDay = async (tenant) => {
+  const link = new URL(
+    `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lich_trinh_giang_days`
+  );
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lich_trinh_giang_days`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "GET",
     headers: {
       "content-type": "Application/json",
@@ -307,9 +313,17 @@ export const khongChapNhanLichDangKy = async (data, token) => {
 };
 
 //Lay danh sach lich da duyet
-export const getDaoTaoLichTrinhGiangDayDaDuyet = async () => {
+export const getDaoTaoLichTrinhGiangDayDaDuyet = async (tenant) => {
+  const link = new URL(
+    `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lich_trinh_giang_days/daduyet`
+  );
+
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lich_trinh_giang_days/daduyet`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "GET",
     headers: {
       "content-type": "Application/json",

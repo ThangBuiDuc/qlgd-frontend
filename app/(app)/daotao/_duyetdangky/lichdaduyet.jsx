@@ -14,6 +14,7 @@ const LichDaDuyet = ({ data, isLoading }) => {
     <div className="flex flex-col gap-2">
       <h5>Danh sách lịch đã duyệt</h5>
       <Table
+        isStriped
         aria-label="danh sach lich da duyet"
         className="max-h-[500px]"
         classNames={{

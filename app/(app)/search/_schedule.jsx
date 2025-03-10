@@ -74,6 +74,7 @@ const Schedule = () => {
   return (
     <>
       <Table
+        isStriped
         aria-label="Tim kiem lich trinh"
         classNames={{
           emptyWrapper: ["!text-black"],

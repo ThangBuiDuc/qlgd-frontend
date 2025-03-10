@@ -113,12 +113,12 @@ const NotSignedIn = ({ calendar }) => {
     <div className="flex flex-col gap-2">
       <h5>Lịch học trong ngày</h5>
       <Table
+        isStriped
         aria-label="Lich hoc trong ngay"
         isHeaderSticky
         className="max-h-full"
         sortDescriptor={sortDescriptor}
         onSortChange={setSortDescriptor}
-        isStriped
         classNames={{
           th: ["!bg-[#006FEE]", "text-white"],
           // //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],

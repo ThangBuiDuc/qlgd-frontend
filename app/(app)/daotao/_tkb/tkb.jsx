@@ -5,12 +5,22 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import Select from "react-select";
 import Content from "./content";
+import { useSearchParams } from "next/navigation";
 // import AsyncSelect from "react-select/async";
 
 const TKB = () => {
+  const searchParams = new useSearchParams();
   const { data: lops, isLoading } = useQuery({
-    queryKey: ["danh_sach_lop"],
-    queryFn: async () => getLopMonHoc(),
+    queryKey: [
+      "danh_sach_lop",
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
+    queryFn: async () =>
+      getLopMonHoc({
+        hocky: searchParams.get("hocky"),
+        namhoc: searchParams.get("namhoc"),
+      }),
   });
   const [value, setValue] = useState(null);
 
@@ -29,7 +39,15 @@ const TKB = () => {
         placeholder="Tìm lớp hành chính"
         noOptionsMessage={() => "Không tìm thấy kết quả"}
       />
-      {value && <Content value={value} />}
+      {value && (
+        <Content
+          value={value}
+          tenant={{
+            hocky: searchParams.get("hocky"),
+            namhoc: searchParams.get("namhoc"),
+          }}
+        />
+      )}
     </div>
   );
 };

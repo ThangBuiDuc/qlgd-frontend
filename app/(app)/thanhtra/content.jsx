@@ -46,6 +46,7 @@ import {
   ModalFooter,
 } from "@nextui-org/modal";
 import { toast } from "sonner";
+import { useSearchParams } from "next/navigation";
 
 const EditModal = ({ editModal, setEditModal, data, date }) => {
   const queryClient = useQueryClient();
@@ -141,7 +142,13 @@ const EditModal = ({ editModal, setEditModal, data, date }) => {
   );
 };
 
-const RenderCell = ({ item, date, isMutating, setIsMutating }) => {
+const RenderCell = ({
+  item,
+  date,
+  isMutating,
+  setIsMutating,
+  isActionable,
+}) => {
   const [editModal, setEditModal] = useState(false);
   const { getToken } = useAuth();
   const queryClient = useQueryClient();
@@ -291,154 +298,159 @@ const RenderCell = ({ item, date, isMutating, setIsMutating }) => {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex gap-2">
-        {item.can_thanh_tra_edit && (
-          <div>
-            <Tooltip content="Sửa" color="success" closeDelay={0}>
-              <Settings
+      {isActionable ? (
+        <div className="flex gap-2">
+          {item.can_thanh_tra_edit && (
+            <div>
+              <Tooltip content="Sửa" color="success" closeDelay={0}>
+                <Settings
+                  className="cursor-pointer"
+                  onClick={() => setEditModal(true)}
+                />
+              </Tooltip>
+              <EditModal
+                data={item}
+                date={date}
+                setEditModal={setEditModal}
+                editModal={editModal}
+              />
+            </div>
+          )}
+          {item.can_report && (
+            <Tooltip content="Báo cáo" color="danger" closeDelay={0}>
+              <MessageCircleWarning
                 className="cursor-pointer"
-                onClick={() => setEditModal(true)}
+                onClick={() => {
+                  Swal.fire({
+                    title: "Thầy/Cô có chắc chắn muốn báo cáo cho lịch học?",
+                    icon: "warning",
+                    confirmButtonColor: "#006FEE",
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Huỷ",
+                    showLoaderOnConfirm: true,
+                    allowOutsideClick: () => !Swal.isLoading(),
+                    preConfirm: async () =>
+                      await reportMutation.mutateAsync({
+                        id: item.id,
+                        date: date.toString().split("-").reverse().join("/"),
+                      }),
+                  });
+                }}
               />
             </Tooltip>
-            <EditModal
-              data={item}
-              date={date}
-              setEditModal={setEditModal}
-              editModal={editModal}
-            />
-          </div>
-        )}
-        {item.can_report && (
-          <Tooltip content="Báo cáo" color="danger" closeDelay={0}>
-            <MessageCircleWarning
-              className="cursor-pointer"
-              onClick={() => {
-                Swal.fire({
-                  title: "Thầy/Cô có chắc chắn muốn báo cáo cho lịch học?",
-                  icon: "warning",
-                  confirmButtonColor: "#006FEE",
-                  showConfirmButton: true,
-                  showCancelButton: true,
-                  confirmButtonText: "Xác nhận",
-                  cancelButtonText: "Huỷ",
-                  showLoaderOnConfirm: true,
-                  allowOutsideClick: () => !Swal.isLoading(),
-                  preConfirm: async () =>
-                    await reportMutation.mutateAsync({
-                      id: item.id,
-                      date: date.toString().split("-").reverse().join("/"),
-                    }),
-                });
-              }}
-            />
-          </Tooltip>
-        )}
-        {item.can_unreport && (
-          <Tooltip content="Huỷ báo cáo" color="danger" closeDelay={0}>
-            <Undo2
-              className="cursor-pointer"
-              onClick={() => {
-                Swal.fire({
-                  title: "Thầy/Cô có chắc chắn muốn huỷ báo cáo cho lịch học?",
-                  icon: "warning",
-                  confirmButtonColor: "#006FEE",
-                  showConfirmButton: true,
-                  showCancelButton: true,
-                  confirmButtonText: "Xác nhận",
-                  cancelButtonText: "Huỷ",
-                  showLoaderOnConfirm: true,
-                  allowOutsideClick: () => !Swal.isLoading(),
-                  preConfirm: async () =>
-                    await unreportMutation.mutateAsync({
-                      id: item.id,
-                      date: date.toString().split("-").reverse().join("/"),
-                    }),
-                });
-              }}
-            />
-          </Tooltip>
-        )}
-        {item.can_remove && (
-          <Tooltip content="Xoá" color="warning" closeDelay={0}>
-            <CircleX
-              className="cursor-pointer"
-              onClick={() => {
-                Swal.fire({
-                  title: "Thầy/Cô có chắc chắn xoá lịch học?",
-                  icon: "warning",
-                  confirmButtonColor: "#006FEE",
-                  showConfirmButton: true,
-                  showCancelButton: true,
-                  confirmButtonText: "Xác nhận",
-                  cancelButtonText: "Huỷ",
-                  showLoaderOnConfirm: true,
-                  allowOutsideClick: () => !Swal.isLoading(),
-                  preConfirm: async () =>
-                    await removeMutation.mutateAsync({
-                      id: item.id,
-                      date: date.toString().split("-").reverse().join("/"),
-                    }),
-                });
-              }}
-            />
-          </Tooltip>
-        )}
-        {item.can_restore && (
-          <Tooltip content="Phục hồi" color="warning" closeDelay={0}>
-            <ArchiveRestore
-              className="cursor-pointer"
-              onClick={() => {
-                Swal.fire({
-                  title: "Thầy/Cô có chắc chắn muốn phục hồi cho lịch học?",
-                  icon: "warning",
-                  confirmButtonColor: "#006FEE",
-                  showConfirmButton: true,
-                  showCancelButton: true,
-                  confirmButtonText: "Xác nhận",
-                  cancelButtonText: "Huỷ",
-                  showLoaderOnConfirm: true,
-                  allowOutsideClick: () => !Swal.isLoading(),
-                  preConfirm: async () =>
-                    await restoreMutation.mutateAsync({
-                      id: item.id,
-                      date: date.toString().split("-").reverse().join("/"),
-                    }),
-                });
-              }}
-            />
-          </Tooltip>
-        )}
-        {item.can_confirm && (
-          <Tooltip content="Xác nhận" color="primary" closeDelay={0}>
-            <CircleCheckBig
-              className="cursor-pointer"
-              onClick={() => {
-                Swal.fire({
-                  title: "Thầy/Cô có chắc chắn xác nhận cho lịch học?",
-                  icon: "warning",
-                  confirmButtonColor: "#006FEE",
-                  showConfirmButton: true,
-                  showCancelButton: true,
-                  confirmButtonText: "Xác nhận",
-                  cancelButtonText: "Huỷ",
-                  showLoaderOnConfirm: true,
-                  allowOutsideClick: () => !Swal.isLoading(),
-                  preConfirm: async () =>
-                    await confirmMutation.mutateAsync({
-                      id: item.id,
-                      date: date.toString().split("-").reverse().join("/"),
-                    }),
-                });
-              }}
-            />
-          </Tooltip>
-        )}
-      </div>
+          )}
+          {item.can_unreport && (
+            <Tooltip content="Huỷ báo cáo" color="danger" closeDelay={0}>
+              <Undo2
+                className="cursor-pointer"
+                onClick={() => {
+                  Swal.fire({
+                    title:
+                      "Thầy/Cô có chắc chắn muốn huỷ báo cáo cho lịch học?",
+                    icon: "warning",
+                    confirmButtonColor: "#006FEE",
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Huỷ",
+                    showLoaderOnConfirm: true,
+                    allowOutsideClick: () => !Swal.isLoading(),
+                    preConfirm: async () =>
+                      await unreportMutation.mutateAsync({
+                        id: item.id,
+                        date: date.toString().split("-").reverse().join("/"),
+                      }),
+                  });
+                }}
+              />
+            </Tooltip>
+          )}
+          {item.can_remove && (
+            <Tooltip content="Xoá" color="warning" closeDelay={0}>
+              <CircleX
+                className="cursor-pointer"
+                onClick={() => {
+                  Swal.fire({
+                    title: "Thầy/Cô có chắc chắn xoá lịch học?",
+                    icon: "warning",
+                    confirmButtonColor: "#006FEE",
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Huỷ",
+                    showLoaderOnConfirm: true,
+                    allowOutsideClick: () => !Swal.isLoading(),
+                    preConfirm: async () =>
+                      await removeMutation.mutateAsync({
+                        id: item.id,
+                        date: date.toString().split("-").reverse().join("/"),
+                      }),
+                  });
+                }}
+              />
+            </Tooltip>
+          )}
+          {item.can_restore && (
+            <Tooltip content="Phục hồi" color="warning" closeDelay={0}>
+              <ArchiveRestore
+                className="cursor-pointer"
+                onClick={() => {
+                  Swal.fire({
+                    title: "Thầy/Cô có chắc chắn muốn phục hồi cho lịch học?",
+                    icon: "warning",
+                    confirmButtonColor: "#006FEE",
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Huỷ",
+                    showLoaderOnConfirm: true,
+                    allowOutsideClick: () => !Swal.isLoading(),
+                    preConfirm: async () =>
+                      await restoreMutation.mutateAsync({
+                        id: item.id,
+                        date: date.toString().split("-").reverse().join("/"),
+                      }),
+                  });
+                }}
+              />
+            </Tooltip>
+          )}
+          {item.can_confirm && (
+            <Tooltip content="Xác nhận" color="primary" closeDelay={0}>
+              <CircleCheckBig
+                className="cursor-pointer"
+                onClick={() => {
+                  Swal.fire({
+                    title: "Thầy/Cô có chắc chắn xác nhận cho lịch học?",
+                    icon: "warning",
+                    confirmButtonColor: "#006FEE",
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Huỷ",
+                    showLoaderOnConfirm: true,
+                    allowOutsideClick: () => !Swal.isLoading(),
+                    preConfirm: async () =>
+                      await confirmMutation.mutateAsync({
+                        id: item.id,
+                        date: date.toString().split("-").reverse().join("/"),
+                      }),
+                  });
+                }}
+              />
+            </Tooltip>
+          )}
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
 
-const TableContent = ({ data, isLoading, date }) => {
+const TableContent = ({ data, isLoading, date, isActionable }) => {
   const [isMutating, setIsMutating] = useState(false);
   const { getToken } = useAuth();
   const queryClient = useQueryClient();
@@ -523,8 +535,8 @@ const TableContent = ({ data, isLoading, date }) => {
 
   return (
     <Table
-      aria-label="Danh sach lich day"
       isStriped
+      aria-label="Danh sach lich day"
       classNames={{
         th: ["!bg-[#006FEE]", "text-white"],
         //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
@@ -579,6 +591,7 @@ const TableContent = ({ data, isLoading, date }) => {
             <TableCell>
               <div className="flex flex-col gap-2">
                 <Button
+                  isDisabled={!isActionable}
                   color={`${item.di_muon_color.split("-")[2]}`}
                   className="w-fit"
                   onClick={() => {
@@ -604,6 +617,7 @@ const TableContent = ({ data, isLoading, date }) => {
                   {item.di_muon_alias}
                 </Button>
                 <Button
+                  isDisabled={!isActionable}
                   color={`${item.ve_som_color.split("-")[2]}`}
                   className="w-fit"
                   onClick={() => {
@@ -629,6 +643,7 @@ const TableContent = ({ data, isLoading, date }) => {
                   {item.ve_som_alias}
                 </Button>
                 <Button
+                  isDisabled={!isActionable}
                   color={`${item.bo_tiet_color.split("-")[2]}`}
                   className="w-fit"
                   onClick={() => {
@@ -714,6 +729,7 @@ const TableContent = ({ data, isLoading, date }) => {
                 date={date}
                 isMutating={isMutating}
                 setIsMutating={setIsMutating}
+                isActionable={isActionable}
               />
             </TableCell>
           </TableRow>
@@ -724,13 +740,22 @@ const TableContent = ({ data, isLoading, date }) => {
 };
 
 const Content = () => {
+  const searchParams = useSearchParams();
   const [date, setDate] = useState(today(getLocalTimeZone()));
   const { data, isLoading } = useQuery({
-    queryKey: ["thanh_tra_lich_trinh", date],
+    queryKey: [
+      "thanh_tra_lich_trinh",
+      date,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: () =>
-      getLichTrinhGiangDay({
-        date: date?.toString().split("-").reverse().join("/"),
-      }),
+      getLichTrinhGiangDay(
+        {
+          date: date?.toString().split("-").reverse().join("/"),
+        },
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
+      ),
     enabled: !!date,
   });
 
@@ -748,7 +773,14 @@ const Content = () => {
         // popoverProps={{ triggerScaleOnOpen: true }}
         classNames={{ calendar: "w-fit", calendarContent: "w-fit" }}
       />
-      <TableContent data={data} isLoading={isLoading} date={date} />
+      <TableContent
+        data={data}
+        isLoading={isLoading}
+        date={date}
+        isActionable={
+          searchParams.get("hocky") && searchParams.get("namhoc") ? false : true
+        }
+      />
     </div>
   );
 };

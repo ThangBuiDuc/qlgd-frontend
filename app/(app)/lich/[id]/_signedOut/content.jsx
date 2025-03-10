@@ -10,16 +10,18 @@ import {
 // import { Pagination } from "@nextui-org/pagination";
 // import moment from "moment";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 // import { useMemo, useState } from "react";
-import { Progress } from "react-sweet-progress";
 
 const NotSignedIn = ({ calendar }) => {
+  const searchParams = useSearchParams();
   // console.log(calendar);
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-2">
         <h5>Thông tin lớp học</h5>
         <Table
+          isStriped
           aria-label="Thong tin lop hoc"
           classNames={{
             th: ["!bg-[#006FEE]", "text-white"],
@@ -38,7 +40,13 @@ const NotSignedIn = ({ calendar }) => {
             <TableRow>
               <TableCell>
                 <Link
-                  href={`/lop/${calendar.lop_mon_hoc.id}`}
+                  href={`/lop/${calendar.lop_mon_hoc.id}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `?hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`}
                   // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {calendar.lop_mon_hoc.ma_lop}
@@ -56,6 +64,7 @@ const NotSignedIn = ({ calendar }) => {
       <div className="flex flex-col gap-2">
         <h5>Thông tin giờ học</h5>
         <Table
+          isStriped
           aria-label="Thong tin gio hoc"
           classNames={{
             th: ["!bg-[#006FEE]", "text-white"],
@@ -76,7 +85,13 @@ const NotSignedIn = ({ calendar }) => {
             <TableRow>
               <TableCell>
                 <Link
-                  href={`/giang_vien/${calendar.gio_hoc.giang_vien_id}`}
+                  href={`/giang_vien/${calendar.gio_hoc.giang_vien_id}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `?hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`}
                   // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {calendar.gio_hoc.ho_ten}
@@ -96,6 +111,7 @@ const NotSignedIn = ({ calendar }) => {
       <div className="flex flex-col gap-2">
         <h5>Sinh viên vắng mặt</h5>
         <Table
+          isStriped
           aria-label="Sinh vien vang mat"
           classNames={{
             th: ["!bg-[#006FEE]", "text-white"],
@@ -120,7 +136,17 @@ const NotSignedIn = ({ calendar }) => {
                 <TableCell>{++index}</TableCell>
                 <TableCell>{item.ho_ten}</TableCell>
                 <TableCell>
-                  <Link href={`/sinh_vien/${item.id}`}>{item.code}</Link>
+                  <Link
+                    href={`/sinh_vien/${item.id}${
+                      searchParams.get("hocky") && searchParams.get("namhoc")
+                        ? `?hocky=${searchParams.get(
+                            "hocky"
+                          )}&namhoc=${searchParams.get("namhoc")}`
+                        : ""
+                    }`}
+                  >
+                    {item.code}
+                  </Link>
                 </TableCell>
                 <TableCell>{item.ma_lop_hanh_chinh}</TableCell>
                 <TableCell>

@@ -51,6 +51,7 @@ const ThongTin = ({ data, lop_id }) => {
       <div className="flex flex-col gap-2">
         <p>Thông tin buổi học:</p>
         <Table
+          isStriped
           aria-label="Thong tin buoi hoc"
           classNames={{
             th: ["!bg-[#006FEE]", "text-white"],

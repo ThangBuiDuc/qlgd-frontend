@@ -8,7 +8,7 @@ const Tenant = () => {
       {searchParams.has("hocky") && searchParams.has("namhoc") ? (
         <p className="font-semibold">
           Học kỳ {searchParams.get("hocky")} - Năm học{" "}
-          {searchParams.get("namhoc")}
+          {searchParams.get("namhoc")} - Read Only
         </p>
       ) : (
         <></>

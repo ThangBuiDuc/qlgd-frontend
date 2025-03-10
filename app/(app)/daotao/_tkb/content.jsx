@@ -54,12 +54,14 @@ const tietOptions = [
   { value: "16", label: "16 (20h30)" },
 ];
 
-const Content = ({ value }) => {
+const Content = ({ value, tenant }) => {
+  const isActionable = tenant.hocky && tenant.namhoc ? false : true;
+  // console.log("isActionable", isActionable);
   const queryClient = useQueryClient();
   const { getToken } = useAuth();
   const { data, isLoading } = useQuery({
-    queryKey: ["dao_tao_lop_mon_hoc", value.value],
-    queryFn: async () => getDaoTaoLichLopMonHoc(value.value),
+    queryKey: ["dao_tao_lop_mon_hoc", value.value, tenant],
+    queryFn: async () => getDaoTaoLichLopMonHoc(value.value, tenant),
   });
   const [tuanBatDau, setTuanBatDau] = useState({
     value: data?.headers[0],
@@ -243,6 +245,7 @@ const Content = ({ value }) => {
             <Button
               className="w-fit"
               color="success"
+              isDisabled={!isActionable}
               onClick={() => {
                 Swal.fire({
                   title: "Thầy/Cô có chắc chắn muốn tạo thời khoá biểu?",
@@ -323,6 +326,7 @@ const Content = ({ value }) => {
         <div className="flex flex-col gap-2">
           <h5>Thời khoá biểu</h5>
           <Table
+            isStriped
             aria-label="Thoi khoa bieu"
             classNames={{
               th: ["!bg-[#006FEE]", "text-white"],
@@ -353,18 +357,104 @@ const Content = ({ value }) => {
                   <TableCell>{item.state}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
-                      {item.can_generate && (
+                      {item.can_generate &&
+                        (isActionable ? (
+                          <Tooltip
+                            content="Duyệt thực hiện"
+                            color="primary"
+                            closeDelay={0}
+                          >
+                            <CircleCheckBig
+                              className="cursor-pointer"
+                              onClick={() => {
+                                Swal.fire({
+                                  title:
+                                    "Thầy/Cô có chắc chắn muốn duyệt thực hiện?",
+                                  icon: "warning",
+                                  confirmButtonColor: "#006FEE",
+                                  showConfirmButton: true,
+                                  showCancelButton: true,
+                                  confirmButtonText: "Xác nhận",
+                                  cancelButtonText: "Huỷ",
+                                  showLoaderOnConfirm: true,
+                                  allowOutsideClick: () => !Swal.isLoading(),
+                                  preConfirm: async () =>
+                                    await generateMutation.mutateAsync(item),
+                                });
+                              }}
+                            />
+                          </Tooltip>
+                        ) : (
+                          <></>
+                        ))}
+                      {item.can_remove &&
+                        (isActionable ? (
+                          <Tooltip content="Xoá" color="warning" closeDelay={0}>
+                            <CircleX
+                              className="cursor-pointer"
+                              onClick={() => {
+                                Swal.fire({
+                                  title:
+                                    "Thầy/Cô có chắc chắn muốn xoá thời khoá biểu?",
+                                  icon: "warning",
+                                  confirmButtonColor: "#006FEE",
+                                  showConfirmButton: true,
+                                  showCancelButton: true,
+                                  confirmButtonText: "Xác nhận",
+                                  cancelButtonText: "Huỷ",
+                                  showLoaderOnConfirm: true,
+                                  allowOutsideClick: () => !Swal.isLoading(),
+                                  preConfirm: async () =>
+                                    await deleteMutation.mutateAsync(item),
+                                });
+                              }}
+                            />
+                          </Tooltip>
+                        ) : (
+                          <></>
+                        ))}
+                      {item.can_restore &&
+                        (isActionable ? (
+                          <Tooltip
+                            content="Phục hồi"
+                            color="success"
+                            closeDelay={0}
+                          >
+                            <ArchiveRestore
+                              className="cursor-pointer"
+                              onClick={() => {
+                                Swal.fire({
+                                  title:
+                                    "Thầy/Cô có chắc chắn muốn phục hồi thời khoá biểu?",
+                                  icon: "warning",
+                                  confirmButtonColor: "#006FEE",
+                                  showConfirmButton: true,
+                                  showCancelButton: true,
+                                  confirmButtonText: "Xác nhận",
+                                  cancelButtonText: "Huỷ",
+                                  showLoaderOnConfirm: true,
+                                  allowOutsideClick: () => !Swal.isLoading(),
+                                  preConfirm: async () =>
+                                    await restoreMutation.mutateAsync(item),
+                                });
+                              }}
+                            />
+                          </Tooltip>
+                        ) : (
+                          <></>
+                        ))}
+                      {isActionable ? (
                         <Tooltip
-                          content="Duyệt thực hiện"
-                          color="primary"
+                          content="Xoá vĩnh viễn"
+                          color="danger"
                           closeDelay={0}
                         >
-                          <CircleCheckBig
+                          <Trash2
                             className="cursor-pointer"
                             onClick={() => {
                               Swal.fire({
                                 title:
-                                  "Thầy/Cô có chắc chắn muốn duyệt thực hiện?",
+                                  "Thầy/Cô có chắc chắn muốn xoá vĩnh viễn thời khoá biểu?",
                                 icon: "warning",
                                 confirmButtonColor: "#006FEE",
                                 showConfirmButton: true,
@@ -374,87 +464,14 @@ const Content = ({ value }) => {
                                 showLoaderOnConfirm: true,
                                 allowOutsideClick: () => !Swal.isLoading(),
                                 preConfirm: async () =>
-                                  await generateMutation.mutateAsync(item),
+                                  await destroyMutation.mutateAsync(item),
                               });
                             }}
                           />
                         </Tooltip>
+                      ) : (
+                        <></>
                       )}
-                      {item.can_remove && (
-                        <Tooltip content="Xoá" color="warning" closeDelay={0}>
-                          <CircleX
-                            className="cursor-pointer"
-                            onClick={() => {
-                              Swal.fire({
-                                title:
-                                  "Thầy/Cô có chắc chắn muốn xoá thời khoá biểu?",
-                                icon: "warning",
-                                confirmButtonColor: "#006FEE",
-                                showConfirmButton: true,
-                                showCancelButton: true,
-                                confirmButtonText: "Xác nhận",
-                                cancelButtonText: "Huỷ",
-                                showLoaderOnConfirm: true,
-                                allowOutsideClick: () => !Swal.isLoading(),
-                                preConfirm: async () =>
-                                  await deleteMutation.mutateAsync(item),
-                              });
-                            }}
-                          />
-                        </Tooltip>
-                      )}
-                      {item.can_restore && (
-                        <Tooltip
-                          content="Phục hồi"
-                          color="success"
-                          closeDelay={0}
-                        >
-                          <ArchiveRestore
-                            className="cursor-pointer"
-                            onClick={() => {
-                              Swal.fire({
-                                title:
-                                  "Thầy/Cô có chắc chắn muốn phục hồi thời khoá biểu?",
-                                icon: "warning",
-                                confirmButtonColor: "#006FEE",
-                                showConfirmButton: true,
-                                showCancelButton: true,
-                                confirmButtonText: "Xác nhận",
-                                cancelButtonText: "Huỷ",
-                                showLoaderOnConfirm: true,
-                                allowOutsideClick: () => !Swal.isLoading(),
-                                preConfirm: async () =>
-                                  await restoreMutation.mutateAsync(item),
-                              });
-                            }}
-                          />
-                        </Tooltip>
-                      )}
-                      <Tooltip
-                        content="Xoá vĩnh viễn"
-                        color="danger"
-                        closeDelay={0}
-                      >
-                        <Trash2
-                          className="cursor-pointer"
-                          onClick={() => {
-                            Swal.fire({
-                              title:
-                                "Thầy/Cô có chắc chắn muốn xoá vĩnh viễn thời khoá biểu?",
-                              icon: "warning",
-                              confirmButtonColor: "#006FEE",
-                              showConfirmButton: true,
-                              showCancelButton: true,
-                              confirmButtonText: "Xác nhận",
-                              cancelButtonText: "Huỷ",
-                              showLoaderOnConfirm: true,
-                              allowOutsideClick: () => !Swal.isLoading(),
-                              preConfirm: async () =>
-                                await destroyMutation.mutateAsync(item),
-                            });
-                          }}
-                        />
-                      </Tooltip>
                     </div>
                   </TableCell>
                 </TableRow>

@@ -82,6 +82,7 @@ const BuoiHoc = ({ cac_buoi_hoc }) => {
     <div className="flex flex-col gap-2">
       <h5>Các buổi học đã hoàn thành</h5>
       <Table
+        isStriped
         bottomContent={
           <div className="flex w-full justify-center">
             <Pagination

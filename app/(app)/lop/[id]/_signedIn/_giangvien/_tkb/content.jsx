@@ -160,8 +160,8 @@ const TKB = ({ params }) => {
 
   return (
     <Table
-      aria-label="Danh sach lich trinh lop"
       isStriped
+      aria-label="Danh sach lich trinh lop"
       classNames={{
         th: ["!bg-[#006FEE]", "text-white"],
         // //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],

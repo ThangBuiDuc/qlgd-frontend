@@ -73,6 +73,7 @@ const Student = () => {
   return (
     <>
       <Table
+        isStriped
         aria-label="Tim kiem sinh vien"
         classNames={{
           emptyWrapper: ["!text-black"],

@@ -64,6 +64,7 @@ const CheckModal = ({ modalIsOpen, setModalIsOpen, item }) => {
                   <div className="flex flex-col gap-2">
                     <h6>Danh sách lịch trùng</h6>
                     <Table
+                      isStriped
                       aria-label="danh sach lich trung"
                       classNames={{
                         th: ["!bg-[#006FEE]", "text-white"],
@@ -97,6 +98,7 @@ const CheckModal = ({ modalIsOpen, setModalIsOpen, item }) => {
                   <div className="flex flex-col gap-2">
                     <h6>Danh sách sinh viên trùng</h6>
                     <Table
+                      isStriped
                       aria-label="danh sach sinh viên trung"
                       classNames={{
                         th: ["!bg-[#006FEE]", "text-white"],
@@ -138,9 +140,9 @@ const CheckModal = ({ modalIsOpen, setModalIsOpen, item }) => {
   );
 };
 
-const RenderCell = ({ item, acceptMutation, denyMutation }) => {
+const RenderCell = ({ item, acceptMutation, denyMutation, isActionable }) => {
   const [modalIsOpen, setModalIsOpen] = useState();
-  return (
+  return isActionable ? (
     <div className="flex gap-2">
       {item.alias_state === "Bổ sung" && (
         <>
@@ -196,10 +198,13 @@ const RenderCell = ({ item, acceptMutation, denyMutation }) => {
         />
       </Tooltip>
     </div>
+  ) : (
+    <></>
   );
 };
 
-const LichDangKy = ({ data }) => {
+const LichDangKy = ({ data, tenant }) => {
+  const isActionable = tenant.hocky && tenant.namhoc ? false : true;
   const { getToken } = useAuth();
   const queryClient = useQueryClient();
   const [rawData, setRawData] = useState(data);
@@ -263,6 +268,7 @@ const LichDangKy = ({ data }) => {
     <div className="flex flex-col gap-2">
       <h5>Danh sách lịch đăng ký</h5>
       <Table
+        isStriped
         aria-label="danh sach lich dang ky"
         classNames={{
           th: ["!bg-[#006FEE]", "text-white"],
@@ -319,6 +325,7 @@ const LichDangKy = ({ data }) => {
                   item={item}
                   acceptMutation={acceptMutation}
                   denyMutation={denyMutation}
+                  isActionable={isActionable}
                 />
               </TableCell>
             </TableRow>

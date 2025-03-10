@@ -32,23 +32,18 @@ const GhepLop = () => {
                   .getQueryData([
                     "sinh_vien_lop_hanh_chinh",
                     selectedLopHanhChinh?.value,
-                    searchParams.get("hocky"),
-                    searchParams.get("namhoc"),
                   ])
                   .map((item) => item.id)
               : Array.from(selectedKeys).map((item) => parseInt(item)),
         },
         await getToken({
           template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
-        }),
-        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
+        })
       ),
     onSuccess: () => {
       queryClient.invalidateQueries([
         "sinh_vien_lop_mon_hoc",
         selectedLopMonHoc?.value,
-        searchParams.get("hocky"),
-        searchParams.get("namhoc"),
       ]);
       setSelectedKeys(new Set([]));
       // queryClient.setQueryData(
@@ -105,9 +100,12 @@ const GhepLop = () => {
           color="primary"
           className="w-fit"
           isDisabled={
-            !selectedLopHanhChinh ||
-            !selectedLopMonHoc ||
-            selectedKeys.size === 0
+            searchParams.get("hocky") && searchParams.get("namhoc")
+              ? true
+              : false ||
+                !selectedLopHanhChinh ||
+                !selectedLopMonHoc ||
+                selectedKeys.size === 0
           }
           onClick={() => {
             Swal.fire({

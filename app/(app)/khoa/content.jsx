@@ -40,6 +40,7 @@ const Content = ({ khoa_id }) => {
             title={`${index + 1}: ${item.ten_giang_vien}`}
           >
             <Table
+              isStriped
               aria-label="Danh sach lop"
               classNames={{
                 th: ["!bg-[#006FEE]", "text-white"],

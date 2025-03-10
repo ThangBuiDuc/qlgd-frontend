@@ -1,9 +1,16 @@
 import axios from "axios";
 
 //Get lich trinh giang day
-export const getLichTrinhGiangDay = async (data) => {
+export const getLichTrinhGiangDay = async (data, tenant) => {
+  const link = new URL(
+    `${process.env.NEXT_PUBLIC_API_THANH_TRA}/lich_trinh_giang_days`
+  );
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_THANH_TRA}/lich_trinh_giang_days`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "POST",
     data,
     headers: {
