@@ -109,7 +109,7 @@ const AddModal = ({ isOpen, onChange, params }) => {
   );
 };
 
-const ThietLapNhomDiem = ({ params }) => {
+const ThietLapNhomDiem = ({ params, isActionable }) => {
   const [addModal, setAddModal] = useState(false);
 
   // const params = useParams();
@@ -123,6 +123,7 @@ const ThietLapNhomDiem = ({ params }) => {
   return (
     <div className="flex flex-col gap-4">
       <Button
+        isDisabled={!isActionable}
         color="primary"
         className="w-fit"
         onClick={() => setAddModal(true)}
@@ -136,11 +137,11 @@ const ThietLapNhomDiem = ({ params }) => {
             key={item.assignment_group_id}
             className="pt-1 flex flex-col gap-3"
           >
-            <NhomDiem data={item} params={params} />
+            <NhomDiem data={item} params={params} isActionable={isActionable} />
             <div className="flex flex-col gap-1">
               {item.assignments.map((el) => (
                 <Fragment key={el.assignment_id}>
-                  <Diem data={el} params={params} />
+                  <Diem data={el} params={params} isActionable={isActionable} />
                 </Fragment>
               ))}
             </div>

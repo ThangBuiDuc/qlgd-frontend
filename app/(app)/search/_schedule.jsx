@@ -10,7 +10,7 @@ import {
 import { Pagination } from "@nextui-org/pagination";
 import Link from "next/link";
 import { useState } from "react";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+// import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { search } from "@/ultis/search";
 import { Spinner } from "@nextui-org/spinner";
@@ -53,13 +53,18 @@ const Schedule = () => {
     [
       `search_class`,
       { page: page ? page : 1, query: querySearchParam, type: typeSearchParam },
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
     ],
     () =>
-      search({
-        type: typeSearchParam,
-        query: querySearchParam,
-        page: page ? page : 1,
-      }),
+      search(
+        {
+          type: typeSearchParam,
+          query: querySearchParam,
+          page: page ? page : 1,
+        },
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
+      ),
     {
       keepPreviousData: true,
     }
@@ -92,7 +97,13 @@ const Schedule = () => {
               total={data?.page.total_page}
               onChange={(page) => {
                 router.push(
-                  `/search?type=${typeSearchParam}&page=${page}&q=${querySearchParam}`
+                  `/search?type=${typeSearchParam}&page=${page}&q=${querySearchParam}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `&hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`
                 );
                 setPage(page);
               }}
@@ -125,27 +136,59 @@ const Schedule = () => {
                 {index + (data?.page.current_page - 1) * 50 + 1}
               </TableCell>
               <TableCell>
-                <Link href={`/lich/${item.id}`}>
+                <Link
+                  href={`/lich/${item.id}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `?hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`}
+                >
                   {moment(item.thoi_gian).format("HH:mm DD/MM/yyyy")}
                 </Link>
               </TableCell>
               <TableCell>{item.so_tiet}</TableCell>
               <TableCell>{item.phong}</TableCell>
               <TableCell>
-                <Link href={`/lop/${item.lop_mon_hoc.id}`}>
+                <Link
+                  href={`/lop/${item.lop_mon_hoc.id}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `?hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`}
+                >
                   {item.lop_mon_hoc.ma_lop}
                 </Link>
               </TableCell>
               <TableCell>{item.lop_mon_hoc.ten_mon_hoc}</TableCell>
               <TableCell>
-                <Link href={`giang_vien/${item.giang_vien.id}`}>
+                <Link
+                  href={`giang_vien/${item.giang_vien.id}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `?hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`}
+                >
                   {item.giang_vien.hovaten}
                 </Link>
               </TableCell>
               <TableCell>
                 {item.danh_sach_vangs.map((el) => (
                   <>
-                    <Link href={`/sinh_vien/${el.id}`}>
+                    <Link
+                      href={`/sinh_vien/${el.id}${
+                        searchParams.get("hocky") && searchParams.get("namhoc")
+                          ? `?hocky=${searchParams.get(
+                              "hocky"
+                            )}&namhoc=${searchParams.get("namhoc")}`
+                          : ""
+                      }`}
+                    >
                       {el.hovaten} {`(${el.so_tiet_vang}t)`}
                     </Link>
                     <br />

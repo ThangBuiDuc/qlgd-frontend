@@ -13,11 +13,13 @@ import Link from "next/link";
 // import { useMemo, useState } from "react";
 import moment from "moment";
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 // import { useAsyncList } from "@react-stately/data";
 // import { Spinner } from "@nextui-org/spinner";
 // import { Progress } from "react-sweet-progress";
 
 const BuoiHoc = ({ cac_buoi_hoc }) => {
+  const searchParams = useSearchParams();
   const header = [
     { key: "stt", label: "STT" },
     { key: "thoi_gian", label: "Thời gian" },
@@ -114,19 +116,42 @@ const BuoiHoc = ({ cac_buoi_hoc }) => {
             <TableRow key={item.id}>
               <TableCell>{item.stt}</TableCell>
               <TableCell>
-                <Link href={`/lich/${item.id}`}>
+                <Link
+                  href={`/lich/${item.id}
+${
+  searchParams.get("hocky") && searchParams.get("namhoc")
+    ? `?hocky=${searchParams.get("hocky")}&namhoc=${searchParams.get("namhoc")}`
+    : ""
+}`}
+                >
                   {moment(item.thoi_gian).format("HH:mm DD/MM/yyyy")}
                 </Link>
               </TableCell>
               <TableCell>{item.phong}</TableCell>
               <TableCell>{item.so_tiet}</TableCell>
               <TableCell>
-                <Link href={`/lop/${item.lop.id}`}>{item.lop.ma_lop}</Link>
+                <Link
+                  href={`/lop/${item.lop.id}
+${
+  searchParams.get("hocky") && searchParams.get("namhoc")
+    ? `?hocky=${searchParams.get("hocky")}&namhoc=${searchParams.get("namhoc")}`
+    : ""
+}`}
+                >
+                  {item.lop.ma_lop}
+                </Link>
                 <br />
                 {item.lop.ten_mon_hoc}
               </TableCell>
               <TableCell>
-                <Link href={`/giang_vien/${item.giang_vien.id}`}>
+                <Link
+                  href={`/giang_vien/${item.giang_vien.id}
+${
+  searchParams.get("hocky") && searchParams.get("namhoc")
+    ? `?hocky=${searchParams.get("hocky")}&namhoc=${searchParams.get("namhoc")}`
+    : ""
+}`}
+                >
                   {item.giang_vien.hovaten}
                 </Link>
               </TableCell>
@@ -136,7 +161,14 @@ const BuoiHoc = ({ cac_buoi_hoc }) => {
               <TableCell>
                 {item.danh_sach_vang.map((el) => (
                   <div key={el.id}>
-                    <Link href={`/sinh_vien/${el.id}`}>
+                    <Link
+                      href={`/sinh_vien/${el.id}
+${
+  searchParams.get("hocky") && searchParams.get("namhoc")
+    ? `?hocky=${searchParams.get("hocky")}&namhoc=${searchParams.get("namhoc")}`
+    : ""
+}`}
+                    >
                       {el.hovaten}{" "}
                       {`(${el.so_tiet_vang}t${el.phep ? ", phép" : ""})`}
                     </Link>

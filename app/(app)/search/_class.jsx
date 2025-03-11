@@ -10,7 +10,7 @@ import {
 import { Pagination } from "@nextui-org/pagination";
 import Link from "next/link";
 import { useState } from "react";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+// import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { search } from "@/ultis/search";
 import { Spinner } from "@nextui-org/spinner";
@@ -52,13 +52,18 @@ const Class = () => {
     [
       `search_class`,
       { page: page ? page : 1, query: querySearchParam, type: typeSearchParam },
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
     ],
     () =>
-      search({
-        type: typeSearchParam,
-        query: querySearchParam,
-        page: page ? page : 1,
-      }),
+      search(
+        {
+          type: typeSearchParam,
+          query: querySearchParam,
+          page: page ? page : 1,
+        },
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
+      ),
     {
       keepPreviousData: true,
     }
@@ -91,7 +96,13 @@ const Class = () => {
               total={data?.page.total_page}
               onChange={(page) => {
                 router.push(
-                  `/search?type=${typeSearchParam}&page=${page}&q=${querySearchParam}`
+                  `/search?type=${typeSearchParam}&page=${page}&q=${querySearchParam}${querySearchParam}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `&hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`
                 );
                 setPage(page);
               }}
@@ -121,7 +132,17 @@ const Class = () => {
                 {index + (data?.page.current_page - 1) * 50 + 1}
               </TableCell>
               <TableCell>
-                <Link href={`/lop/${item.id}`}>{item.ma_lop}</Link>
+                <Link
+                  href={`/lop/${item.id}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `?hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`}
+                >
+                  {item.ma_lop}
+                </Link>
               </TableCell>
               <TableCell>{item.ten_mon_hoc}</TableCell>
               <TableCell>{item.giang_vien}</TableCell>

@@ -18,7 +18,7 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Tooltip } from "@nextui-org/tooltip";
 import {
   Modal,
@@ -33,15 +33,19 @@ import Loading from "@/app/_hardComponents/loading";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 
-const RenderCell = ({ data, params }) => {
+const RenderCell = ({ data, params, isActionable }) => {
   const [updateModal, setUpdateModal] = useState(false);
   return (
     <>
-      <Tooltip content="Sửa điểm" color="success" closeDelay={0}>
-        <p className="cursor-pointer" onClick={() => setUpdateModal(true)}>
-          {data.grade}
-        </p>
-      </Tooltip>
+      {isActionable ? (
+        <Tooltip content="Sửa điểm" color="success" closeDelay={0}>
+          <p className="cursor-pointer" onClick={() => setUpdateModal(true)}>
+            {data.grade}
+          </p>
+        </Tooltip>
+      ) : (
+        <p>{data.grade}</p>
+      )}
       <UpdateModal
         data={data}
         isOpen={updateModal}
@@ -150,18 +154,27 @@ const UpdateModal = ({ data, isOpen, onChange, params }) => {
 };
 
 const Diem = ({ params }) => {
+  const searchParams = useSearchParams();
+  const isActionable =
+    searchParams.get("hocky") && searchParams.get("namhoc") ? false : true;
   const queryClient = useQueryClient();
   const router = useRouter();
   const { getToken } = useAuth();
   // const params = useParams();
   const { data, isLoading } = useQuery({
-    queryKey: ["lop_chi_tiet_gv2", params.id],
+    queryKey: [
+      "lop_chi_tiet_gv2",
+      params.id,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () =>
       getChiTietLopGiangVien2(
         await getToken({
           template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
         }),
-        params.id
+        params.id,
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
       ),
   });
 
@@ -222,6 +235,7 @@ const Diem = ({ params }) => {
     <div className="flex flex-col gap-3">
       <div className="flex gap-2">
         <Button
+          isDisabled={!isActionable}
           color="primary"
           onClick={() => {
             Swal.fire({
@@ -241,6 +255,7 @@ const Diem = ({ params }) => {
           Tính điểm chuyên cần (cột điểm đầu tiên)
         </Button>
         <Button
+          isDisabled={!isActionable}
           color="primary"
           onClick={() => {
             Swal.fire({
@@ -312,7 +327,11 @@ const Diem = ({ params }) => {
                   </TableCell>
                 ) : (
                   <TableCell key={`${el.assignment_id}${el.code}`}>
-                    <RenderCell data={el} params={params} />
+                    <RenderCell
+                      data={el}
+                      params={params}
+                      isActionable={isActionable}
+                    />
                   </TableCell>
                 )
               )}

@@ -183,28 +183,30 @@ const NoteModal = ({
   );
 };
 
-const RenderCell = ({ data, setIsMutaion, isMutation }) => {
+const RenderCell = ({ data, setIsMutaion, isMutation, isActionable }) => {
   const [noteModal, setNoteModal] = useState(false);
   return (
-    <>
-      <Tooltip color="primary" content="Cập nhật ghi chú" closeDelay={0}>
-        <NotebookPen
-          className="cursor-pointer"
-          onClick={() => setNoteModal(true)}
+    isActionable && (
+      <>
+        <Tooltip color="primary" content="Cập nhật ghi chú" closeDelay={0}>
+          <NotebookPen
+            className="cursor-pointer"
+            onClick={() => setNoteModal(true)}
+          />
+        </Tooltip>
+        <NoteModal
+          setNoteModal={setNoteModal}
+          noteModal={noteModal}
+          data={data}
+          isMutation={isMutation}
+          setIsMutaion={setIsMutaion}
         />
-      </Tooltip>
-      <NoteModal
-        setNoteModal={setNoteModal}
-        noteModal={noteModal}
-        data={data}
-        isMutation={isMutation}
-        setIsMutaion={setIsMutaion}
-      />
-    </>
+      </>
+    )
   );
 };
 
-const Editable = ({ data, so_tiet }) => {
+const Editable = ({ data, so_tiet, isActionable }) => {
   const queryClient = useQueryClient();
   const params = useParams();
   const { getToken } = useAuth();
@@ -300,7 +302,9 @@ const Editable = ({ data, so_tiet }) => {
                 }}
                 color={`${css[item.status]}`}
                 isDisabled={
-                  item.idle_status === "Không" || item.status === "Trễ"
+                  !isActionable ||
+                  item.idle_status === "Không" ||
+                  item.status === "Trễ"
                     ? true
                     : false
                 }
@@ -313,45 +317,49 @@ const Editable = ({ data, so_tiet }) => {
                 <Loading size={"sm"} />
               ) : (
                 <>
-                  <CirclePlus
-                    onClick={
-                      item.so_tiet_vang < so_tiet
-                        ? () => {
-                            setIsMutaion(true);
-                            mutation.mutate({
-                              enrollment: item,
-                              stat: "plus",
-                              lich_id: params.id,
-                            });
-                          }
-                        : undefined
-                    }
-                    className={`${
-                      item.so_tiet_vang === so_tiet
-                        ? "cursor-not-allowed"
-                        : "cursor-pointer"
-                    }`}
-                  />
+                  {isActionable && (
+                    <CirclePlus
+                      onClick={
+                        item.so_tiet_vang < so_tiet
+                          ? () => {
+                              setIsMutaion(true);
+                              mutation.mutate({
+                                enrollment: item,
+                                stat: "plus",
+                                lich_id: params.id,
+                              });
+                            }
+                          : undefined
+                      }
+                      className={`${
+                        item.so_tiet_vang === so_tiet
+                          ? "cursor-not-allowed"
+                          : "cursor-pointer"
+                      }`}
+                    />
+                  )}
                   {item.so_tiet_vang}
-                  <CircleMinus
-                    onClick={
-                      item.so_tiet_vang > 0
-                        ? () => {
-                            setIsMutaion(true);
-                            mutation.mutate({
-                              enrollment: item,
-                              stat: "minus",
-                              lich_id: params.id,
-                            });
-                          }
-                        : undefined
-                    }
-                    className={`${
-                      item.so_tiet_vang === 0
-                        ? "cursor-not-allowed"
-                        : "cursor-pointer"
-                    }`}
-                  />
+                  {isActionable && (
+                    <CircleMinus
+                      onClick={
+                        item.so_tiet_vang > 0
+                          ? () => {
+                              setIsMutaion(true);
+                              mutation.mutate({
+                                enrollment: item,
+                                stat: "minus",
+                                lich_id: params.id,
+                              });
+                            }
+                          : undefined
+                      }
+                      className={`${
+                        item.so_tiet_vang === 0
+                          ? "cursor-not-allowed"
+                          : "cursor-pointer"
+                      }`}
+                    />
+                  )}
                 </>
               )}
             </TableCell>
@@ -367,7 +375,9 @@ const Editable = ({ data, so_tiet }) => {
                 }}
                 color={`${phep[item.phep_status]}`}
                 isDisabled={
-                  item.idle_status === "Không" || item.so_tiet_vang === 0
+                  !isActionable ||
+                  item.idle_status === "Không" ||
+                  item.so_tiet_vang === 0
                     ? true
                     : false
                 }
@@ -377,6 +387,7 @@ const Editable = ({ data, so_tiet }) => {
             </TableCell>
             <TableCell>
               <Button
+                isDisabled={!isActionable}
                 onClick={() => {
                   setIsMutaion(true);
                   mutation.mutate({
@@ -392,6 +403,7 @@ const Editable = ({ data, so_tiet }) => {
             </TableCell>
             <TableCell>
               <RenderCell
+                isActionable={isActionable}
                 data={item}
                 isMutation={isMutation}
                 setIsMutaion={setIsMutaion}
@@ -404,13 +416,13 @@ const Editable = ({ data, so_tiet }) => {
   );
 };
 
-const DiemDanh = ({ data, state, so_tiet }) => {
+const DiemDanh = ({ data, state, so_tiet, isActionable }) => {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-2">
         <p>Thông tin điểm danh:</p>
         {state ? (
-          <Editable data={data} so_tiet={so_tiet} />
+          <Editable data={data} so_tiet={so_tiet} isActionable={isActionable} />
         ) : (
           <DisableTable data={data} />
         )}

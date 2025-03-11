@@ -460,7 +460,7 @@ const RenderCell = ({ data, params }) => {
   );
 };
 
-const BoSung = ({ params }) => {
+const BoSung = ({ params, isActionable }) => {
   const [addModal, setAddModal] = useState(false);
   const { getToken } = useAuth();
   // const params = useParams();
@@ -481,6 +481,7 @@ const BoSung = ({ params }) => {
     <div className="flex flex-col gap-4">
       <>
         <Button
+          isDisabled={!isActionable}
           color="success"
           className="w-fit "
           onClick={() => setAddModal(true)}

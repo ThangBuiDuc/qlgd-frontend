@@ -42,7 +42,7 @@ const options = [
 //   }),
 // ];
 
-const ThietLap = ({ lop }) => {
+const ThietLap = ({ lop, isActionable }) => {
   // const queryClient = useQueryClient();
   const { getToken } = useAuth();
   const [edit, setEdit] = useState(false);
@@ -65,7 +65,7 @@ const ThietLap = ({ lop }) => {
   );
 
   const [isMutating, setIsMutating] = useState(false);
-  console.log(lop);
+  // console.log(lop);
 
   const mutation = useMutation({
     mutationFn: async () =>
@@ -137,6 +137,7 @@ const ThietLap = ({ lop }) => {
             </div>
           ) : (
             <Button
+              isDisabled={!isActionable}
               color="success"
               className="w-fit"
               onClick={() => setEdit(true)}

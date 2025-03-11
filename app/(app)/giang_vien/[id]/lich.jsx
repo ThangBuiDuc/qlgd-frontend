@@ -11,8 +11,10 @@ import moment from "moment";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Pagination } from "@nextui-org/pagination";
+import { useSearchParams } from "next/navigation";
 
 const Lich = ({ data }) => {
+  const searchParams = useSearchParams();
   const [sortDescriptor, setSortDescriptor] = useState(null);
 
   const [page, setPage] = useState(1);
@@ -116,7 +118,13 @@ const Lich = ({ data }) => {
               <TableCell>{item.stt}</TableCell>
               <TableCell className="whitespace-nowrap">
                 <Link
-                  href={`/lich/${item.id}`}
+                  href={`/lich/${item.id}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `?hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`}
                   // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {`${moment(item.thoi_gian).format("HH:mm DD/MM/yyyy")} ${
@@ -128,7 +136,13 @@ const Lich = ({ data }) => {
               <TableCell>{item.so_tiet}</TableCell>
               <TableCell>
                 <Link
-                  href={`/lop/${item.lop_mon_hoc_id}`}
+                  href={`/lop/${item.lop_mon_hoc_id}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `?hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`}
                   // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {item.ma_lop}
@@ -142,7 +156,13 @@ const Lich = ({ data }) => {
                 {item.danh_sach_vangs.map((el) => (
                   <>
                     <Link
-                      href={`/sinh_vien/${el.id}`}
+                      href={`/sinh_vien/${el.id}${
+                        searchParams.get("hocky") && searchParams.get("namhoc")
+                          ? `?hocky=${searchParams.get(
+                              "hocky"
+                            )}&namhoc=${searchParams.get("namhoc")}`
+                          : ""
+                      }`}
                       // className="hover:underline text-[#0083C2] cursor-pointer"
                       className="whitespace-nowrap"
                     >

@@ -206,7 +206,7 @@ const UpdateModal = ({
   );
 };
 
-const NhomDiem = ({ data, params }) => {
+const NhomDiem = ({ data, params, isActionable }) => {
   const queryClient = useQueryClient();
   const { getToken } = useAuth();
   const [addModal, setAddModal] = useState(false);
@@ -237,58 +237,62 @@ const NhomDiem = ({ data, params }) => {
   return (
     <div className="flex justify-between">
       <h6>{`${data.name} (${data.weight}%)`} </h6>
-      <div className="flex gap-2">
-        <>
-          <Tooltip content="Thêm đầu điểm" color="primary" closeDelay={0}>
-            <CirclePlus
-              className="cursor-pointer"
-              onClick={() => setAddModal(true)}
+      {isActionable ? (
+        <div className="flex gap-2">
+          <>
+            <Tooltip content="Thêm đầu điểm" color="primary" closeDelay={0}>
+              <CirclePlus
+                className="cursor-pointer"
+                onClick={() => setAddModal(true)}
+              />
+            </Tooltip>
+            <AddModal
+              assignment_group_id={data.assignment_group_id}
+              isOpen={addModal}
+              onChange={setAddModal}
+              params={params}
             />
-          </Tooltip>
-          <AddModal
-            assignment_group_id={data.assignment_group_id}
-            isOpen={addModal}
-            onChange={setAddModal}
-            params={params}
-          />
-        </>
-        <>
-          <Tooltip content="Sửa" color="success" closeDelay={0}>
-            <Settings
-              className="cursor-pointer"
-              onClick={() => setUpdateModal(true)}
+          </>
+          <>
+            <Tooltip content="Sửa" color="success" closeDelay={0}>
+              <Settings
+                className="cursor-pointer"
+                onClick={() => setUpdateModal(true)}
+              />
+            </Tooltip>
+            <UpdateModal
+              assignment_group_id={data.assignment_group_id}
+              data={data}
+              isOpen={updateModal}
+              onChange={setUpdateModal}
+              params={params}
             />
-          </Tooltip>
-          <UpdateModal
-            assignment_group_id={data.assignment_group_id}
-            data={data}
-            isOpen={updateModal}
-            onChange={setUpdateModal}
-            params={params}
-          />
-        </>
-        {data.can_destroy && (
-          <Tooltip content="Xoá" color="danger" closeDelay={0}>
-            <CircleX
-              className="cursor-pointer"
-              onClick={() => {
-                Swal.fire({
-                  title: "Thầy/Cô có chắc chắn muốn xoá nhóm điểm?",
-                  icon: "warning",
-                  confirmButtonColor: "#F31260",
-                  showConfirmButton: true,
-                  showCancelButton: true,
-                  confirmButtonText: "Xoá",
-                  cancelButtonText: "Huỷ",
-                  showLoaderOnConfirm: true,
-                  allowOutsideClick: () => !Swal.isLoading(),
-                  preConfirm: async () => await deleteMutation.mutateAsync(),
-                });
-              }}
-            />
-          </Tooltip>
-        )}
-      </div>
+          </>
+          {data.can_destroy && (
+            <Tooltip content="Xoá" color="danger" closeDelay={0}>
+              <CircleX
+                className="cursor-pointer"
+                onClick={() => {
+                  Swal.fire({
+                    title: "Thầy/Cô có chắc chắn muốn xoá nhóm điểm?",
+                    icon: "warning",
+                    confirmButtonColor: "#F31260",
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Xoá",
+                    cancelButtonText: "Huỷ",
+                    showLoaderOnConfirm: true,
+                    allowOutsideClick: () => !Swal.isLoading(),
+                    preConfirm: async () => await deleteMutation.mutateAsync(),
+                  });
+                }}
+              />
+            </Tooltip>
+          )}
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

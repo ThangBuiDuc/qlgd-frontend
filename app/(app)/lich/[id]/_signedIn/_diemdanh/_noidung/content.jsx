@@ -16,8 +16,10 @@ import { useState } from "react";
 import { Textarea } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import { toast } from "sonner";
+import { useSearchParams } from "next/navigation";
 
-const EditableRow = ({ data, lop_id }) => {
+const EditableRow = ({ data, lop_id, isActionable }) => {
+  const searchParams = new useSearchParams();
   const [isEditable, setIsEditable] = useState(false);
   const [content, setContent] = useState("");
   const [isMutation, setIsMutaion] = useState(false);
@@ -53,16 +55,27 @@ const EditableRow = ({ data, lop_id }) => {
   return (
     <div key={data.id} className="pt-2 pb-2 flex flex-col gap-2">
       <div className="flex gap-2">
-        <Tooltip content="Sửa nội dung" color="primary" closeDelay={0}>
-          <FilePenLine
-            className="cursor-pointer"
-            onClick={() => {
-              setIsEditable(true);
-              setContent("");
-            }}
-          />
-        </Tooltip>
-        <Link href={`/lich/${data.id}`}>
+        {isActionable && (
+          <Tooltip content="Sửa nội dung" color="primary" closeDelay={0}>
+            <FilePenLine
+              className="cursor-pointer"
+              onClick={() => {
+                setIsEditable(true);
+                setContent("");
+              }}
+            />
+          </Tooltip>
+        )}
+
+        <Link
+          href={`/lich/${data.id}${
+            searchParams.get("hocky") && searchParams.get("namhoc")
+              ? `?hocky=${searchParams.get("hocky")}&namhoc=${searchParams.get(
+                  "namhoc"
+                )}`
+              : ""
+          }`}
+        >
           Tuần {data.tuan}: {data.thoi_gian}
         </Link>
       </div>
@@ -118,26 +131,41 @@ const EditableRow = ({ data, lop_id }) => {
 };
 
 const NoiDungTab = ({ params }) => {
+  const searchParams = new useSearchParams();
+  const isActionable =
+    searchParams.get("hocky") && searchParams.get("namhoc") ? false : true;
   const { getToken } = useAuth();
   const { data: thongtin, isLoadingThongTin } = useQuery({
-    queryKey: ["diem_danh_lich", params.id],
+    queryKey: [
+      "diem_danh_lich",
+      params.id,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () =>
       getDiemDanhLop(
         await getToken({
           template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
         }),
-        params.id
+        params.id,
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
       ),
   });
 
   const { data: lichtrinh, isLoadingLichTrinh } = useQuery({
-    queryKey: ["lich_trinh", thongtin.info.lop.id],
+    queryKey: [
+      "lich_trinh",
+      thongtin.info.lop.id,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () =>
       getLichTrinhThucHien(
         await getToken({
           template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
         }),
-        thongtin.info.lop.id
+        thongtin.info.lop.id,
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
       ),
     enabled: !!thongtin.info.lop.id,
   });
@@ -146,20 +174,28 @@ const NoiDungTab = ({ params }) => {
 
   return (
     <div className="flex flex-col gap-5">
-      <ThongTin data={thongtin.info.lich} />
+      <ThongTin data={thongtin.info.lich} isActionable={isActionable} />
       <h5>Lịch trình thực hiện</h5>
       {/* <div dangerouslySetInnerHTML={{ __html: data }} /> */}
       <div className="divide-y-1 pl-2">
         {lichtrinh?.map((item) =>
           item.updated ? (
             <EditableRow
+              isActionable={isActionable}
               data={item}
               lop_id={thongtin.info.lop.id}
               key={item.id}
             />
           ) : (
             <div key={item.id} className="pt-2 pb-2">
-              <Link href={`/lich/${item.id}`}>
+              <Link
+                href={`/lich/${item.id}
+${
+  searchParams.get("hocky") && searchParams.get("namhoc")
+    ? `?hocky=${searchParams.get("hocky")}&namhoc=${searchParams.get("namhoc")}`
+    : ""
+}`}
+              >
                 Tuần {item.tuan}: {item.thoi_gian}
               </Link>
               <div

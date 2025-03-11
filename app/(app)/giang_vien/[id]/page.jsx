@@ -1,8 +1,8 @@
 import { getGiangVien } from "@/ultis/giang_vien";
 import Content from "./content";
 
-const page = async ({ params }) => {
-  const giang_vien = await getGiangVien(params.id);
+const page = async ({ params, searchParams }) => {
+  const giang_vien = await getGiangVien(params.id, searchParams);
 
   if (giang_vien.status !== 200) {
     throw new Error();

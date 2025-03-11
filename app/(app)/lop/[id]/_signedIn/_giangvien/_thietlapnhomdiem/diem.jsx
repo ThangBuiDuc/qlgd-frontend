@@ -109,7 +109,7 @@ const UpdateModal = ({ data, isOpen, onChange, params }) => {
   );
 };
 
-const Diem = ({ data, params }) => {
+const Diem = ({ data, params, isActionable }) => {
   const queryClient = useQueryClient();
   const { getToken } = useAuth();
   const [updateModal, setUpdateModal] = useState(false);
@@ -142,43 +142,47 @@ const Diem = ({ data, params }) => {
         {`${data.name}, điểm tối đa: `}{" "}
         <span className="font-semibold">{data.points}</span>
       </p>
-      <div className="flex gap-2">
-        <>
-          <Tooltip content="Sửa" color="success" closeDelay={0}>
-            <Settings
-              className="cursor-pointer"
-              onClick={() => setUpdateModal(true)}
+      {isActionable ? (
+        <div className="flex gap-2">
+          <>
+            <Tooltip content="Sửa" color="success" closeDelay={0}>
+              <Settings
+                className="cursor-pointer"
+                onClick={() => setUpdateModal(true)}
+              />
+            </Tooltip>
+            <UpdateModal
+              data={data}
+              isOpen={updateModal}
+              onChange={setUpdateModal}
+              params={params}
             />
-          </Tooltip>
-          <UpdateModal
-            data={data}
-            isOpen={updateModal}
-            onChange={setUpdateModal}
-            params={params}
-          />
-        </>
-        {data.can_destroy && (
-          <Tooltip content="Xoá" color="danger" closeDelay={0}>
-            <CircleX
-              className="cursor-pointer"
-              onClick={() => {
-                Swal.fire({
-                  title: "Thầy/Cô có chắc chắn muốn xoá đầu điểm?",
-                  icon: "warning",
-                  confirmButtonColor: "#F31260",
-                  showConfirmButton: true,
-                  showCancelButton: true,
-                  confirmButtonText: "Xoá",
-                  cancelButtonText: "Huỷ",
-                  showLoaderOnConfirm: true,
-                  allowOutsideClick: () => !Swal.isLoading(),
-                  preConfirm: async () => await deleteMutation.mutateAsync(),
-                });
-              }}
-            />
-          </Tooltip>
-        )}
-      </div>
+          </>
+          {data.can_destroy && (
+            <Tooltip content="Xoá" color="danger" closeDelay={0}>
+              <CircleX
+                className="cursor-pointer"
+                onClick={() => {
+                  Swal.fire({
+                    title: "Thầy/Cô có chắc chắn muốn xoá đầu điểm?",
+                    icon: "warning",
+                    confirmButtonColor: "#F31260",
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Xoá",
+                    cancelButtonText: "Huỷ",
+                    showLoaderOnConfirm: true,
+                    allowOutsideClick: () => !Swal.isLoading(),
+                    preConfirm: async () => await deleteMutation.mutateAsync(),
+                  });
+                }}
+              />
+            </Tooltip>
+          )}
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

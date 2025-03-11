@@ -6,7 +6,6 @@ import ThongTinLop from "@/app/(app)/lop/[id]/_signedIn/_giangvien/_thongtin/tho
 
 const Diem = ({ lop }) => {
   //   const params = useParams();
-  console.log(lop.id);
   return (
     <Tabs
       aria-label="Options"

@@ -8,7 +8,7 @@ import {
 } from "@/ultis/giang_vien";
 import { useAuth } from "@clerk/nextjs";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import {
   Table,
   TableHeader,
@@ -25,7 +25,7 @@ import RowNghiDay from "./rowNghiDay";
 import RowBoSung from "./rowBoSung";
 import Swal from "sweetalert2";
 
-const RenderCell = ({ data, params }) => {
+const RenderCell = ({ data, params, isActionable }) => {
   const { getToken } = useAuth();
   const queryClient = useQueryClient();
 
@@ -110,47 +110,60 @@ const RenderCell = ({ data, params }) => {
 
   if (data.alias_state === "Bổ sung")
     return (
-      <RowBoSung
+      isActionable && (
+        <RowBoSung
+          data={data}
+          params={params}
+          uncompleteMutation={uncompleteMutation}
+          removeMutation={removeMutation}
+          restoreMutation={restoreMutation}
+        />
+      )
+    );
+
+  if (data.alias_state === "Nghỉ dạy")
+    return (
+      isActionable && (
+        <RowNghiDay
+          data={data}
+          params={params}
+          removeMutation={removeMutation}
+          restoreMutation={restoreMutation}
+        />
+      )
+    );
+
+  return (
+    isActionable && (
+      <Row
         data={data}
         params={params}
         uncompleteMutation={uncompleteMutation}
         removeMutation={removeMutation}
         restoreMutation={restoreMutation}
       />
-    );
-
-  if (data.alias_state === "Nghỉ dạy")
-    return (
-      <RowNghiDay
-        data={data}
-        params={params}
-        removeMutation={removeMutation}
-        restoreMutation={restoreMutation}
-      />
-    );
-
-  return (
-    <Row
-      data={data}
-      params={params}
-      uncompleteMutation={uncompleteMutation}
-      removeMutation={removeMutation}
-      restoreMutation={restoreMutation}
-    />
+    )
   );
 };
 
-const TKB = ({ params }) => {
+const TKB = ({ params, isActionable }) => {
+  const searchParams = useSearchParams();
   const { getToken } = useAuth();
   // const params = useParams();
   const { data, isLoading } = useQuery({
-    queryKey: ["lich_trinh_lop", params.id],
+    queryKey: [
+      "lich_trinh_lop",
+      params.id,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () =>
       getLichTrinhLop(
         await getToken({
           template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
         }),
-        params.id
+        params.id,
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
       ),
   });
 
@@ -184,7 +197,16 @@ const TKB = ({ params }) => {
           <TableRow key={item.id}>
             <TableCell>{item.tuan}</TableCell>
             <TableCell>
-              <Link href={`/lich/${item.id}`}>{item.thoi_gian}</Link>
+              <Link
+                href={`/lich/${item.id}
+${
+  searchParams.get("hocky") && searchParams.get("namhoc")
+    ? `?hocky=${searchParams.get("hocky")}&namhoc=${searchParams.get("namhoc")}`
+    : ""
+}`}
+              >
+                {item.thoi_gian}
+              </Link>
             </TableCell>
             <TableCell>{item.tiet_bat_dau}</TableCell>
             <TableCell>{item.phong}</TableCell>
@@ -198,7 +220,11 @@ const TKB = ({ params }) => {
             </TableCell>
             <TableCell>{item.note}</TableCell>
             <TableCell>
-              <RenderCell data={item} params={params} />
+              <RenderCell
+                data={item}
+                params={params}
+                isActionable={isActionable}
+              />
             </TableCell>
           </TableRow>
         ))}

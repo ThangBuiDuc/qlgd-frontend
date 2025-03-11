@@ -13,11 +13,12 @@ import Link from "next/link";
 // import { useMemo, useState } from "react";
 // import moment from "moment";
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 // import { useAsyncList } from "@react-stately/data";
 // import { Spinner } from "@nextui-org/spinner";
-import { Progress } from "react-sweet-progress";
 
 const TinhHinh = ({ tinh_hinh_hoc_tap }) => {
+  const searchParams = useSearchParams();
   const header = [
     { key: "stt", label: "STT" },
     { key: "ho_ten", label: "Họ và tên" },
@@ -120,7 +121,14 @@ const TinhHinh = ({ tinh_hinh_hoc_tap }) => {
               <TableCell>{item.stt}</TableCell>
               <TableCell className="whitespace-nowrap">{item.ho_ten}</TableCell>
               <TableCell>
-                <Link href={`/sinh_vien/${item.sinh_vien_id}`}>
+                <Link
+                  href={`/sinh_vien/${item.sinh_vien_id}
+${
+  searchParams.get("hocky") && searchParams.get("namhoc")
+    ? `?hocky=${searchParams.get("hocky")}&namhoc=${searchParams.get("namhoc")}`
+    : ""
+}`}
+                >
                   {item.code}
                 </Link>
               </TableCell>

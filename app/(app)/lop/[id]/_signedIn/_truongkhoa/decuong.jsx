@@ -8,6 +8,7 @@ const DeCuongTruongKhoa = ({
   isMutating,
   setIsMutating,
   updateMutation,
+  isActionable,
 }) => {
   return (
     <div className="flex flex-col gap-2">
@@ -19,6 +20,7 @@ const DeCuongTruongKhoa = ({
         <>
           {lop.can_approve_thong_so && (
             <Button
+              isDisabled={!isActionable}
               color="success"
               className="w-fit"
               onClick={() => {
@@ -31,6 +33,7 @@ const DeCuongTruongKhoa = ({
           )}
           {lop.can_reject_thong_so && (
             <Button
+              isDisabled={!isActionable}
               color="warning"
               className="w-fit"
               onClick={() => {

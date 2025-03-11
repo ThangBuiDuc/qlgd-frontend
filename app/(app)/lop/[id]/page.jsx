@@ -5,7 +5,7 @@ import { getLop } from "@/ultis/lop";
 import NotSignedOut from "./_signedIn/content";
 import { getChiTietLopGiangVien } from "@/ultis/giang_vien";
 
-const page = async ({ params }) => {
+const page = async ({ params, searchParams }) => {
   const { getToken } = await auth();
   var token;
   try {
@@ -23,8 +23,8 @@ const page = async ({ params }) => {
   //     ),
 
   const [lop, chi_tiet_lop] = await Promise.all([
-    getLop(token, params.id),
-    getChiTietLopGiangVien(token, params.id),
+    getLop(token, params.id, searchParams),
+    getChiTietLopGiangVien(token, params.id, searchParams),
   ]);
 
   if (lop.status !== 200) {

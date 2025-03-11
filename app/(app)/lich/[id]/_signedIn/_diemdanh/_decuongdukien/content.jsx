@@ -1,19 +1,28 @@
 "use client";
 
 import Loading from "@/app/(app)/loading";
+import { getDiemDanhLop } from "@/ultis/giang_vien";
 import { useAuth } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 
 const DeCuongDuKien = ({ params }) => {
+  const searchParams = useSearchParams();
   const { getToken } = useAuth();
   const { data, isLoading } = useQuery({
-    queryKey: ["diem_danh_lich", params.id],
+    queryKey: [
+      "diem_danh_lich",
+      params.id,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () =>
       getDiemDanhLop(
         await getToken({
           template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
         }),
-        params.id
+        params.id,
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
       ),
   });
 

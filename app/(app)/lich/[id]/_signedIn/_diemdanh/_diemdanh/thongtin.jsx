@@ -17,7 +17,7 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const ThongTin = ({ data, lop_id }) => {
+const ThongTin = ({ data, lop_id, isActionable }) => {
   const params = useParams();
   const [isMutation, setIsMutaion] = useState(false);
   const { getToken } = useAuth();
@@ -80,7 +80,7 @@ const ThongTin = ({ data, lop_id }) => {
               <TableCell>
                 {isMutation ? (
                   <Loading size={"sm"} />
-                ) : (
+                ) : isActionable ? (
                   data.updated && (
                     <Tooltip
                       content="Hoàn thành buổi học"
@@ -96,6 +96,8 @@ const ThongTin = ({ data, lop_id }) => {
                       />
                     </Tooltip>
                   )
+                ) : (
+                  <></>
                 )}
               </TableCell>
             </TableRow>

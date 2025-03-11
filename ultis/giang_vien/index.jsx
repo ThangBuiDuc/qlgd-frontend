@@ -1,9 +1,14 @@
 import axios from "axios";
 
 //Get lich hoc trong ngay
-export const getGiangVien = async (id) => {
+export const getGiangVien = async (id, tenant) => {
+  const link = new URL(`${process.env.NEXT_PUBLIC_API_GET_GIANG_VIEN}/${id}`);
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_GET_GIANG_VIEN}/${id}`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "get",
     headers: {
       "content-type": "Application/json",
@@ -145,9 +150,16 @@ export const xoaDauDiemNhomDiemGiangVien = async (token, data, id) => {
 };
 
 //Get chi tiet lop giang vien
-export const getChiTietLopGiangVien = async (token, lop_id) => {
+export const getChiTietLopGiangVien = async (token, lop_id, tenant) => {
+  const link = new URL(
+    `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/group_submissions`
+  );
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/group_submissions`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "get",
     headers: {
       "content-type": "Application/json",
@@ -160,8 +172,15 @@ export const getChiTietLopGiangVien = async (token, lop_id) => {
 
 //Get chi tiet lop giang vien 2
 export const getChiTietLopGiangVien2 = async (token, lop_id) => {
+  const link = new URL(
+    `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/submissions2`
+  );
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/submissions2`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "get",
     headers: {
       "content-type": "Application/json",
@@ -290,9 +309,16 @@ export const phucHoiLichBoSung = async (token, lop_id, data) => {
 };
 
 //Lay chi tiet lich trinh giang day cua lop
-export const getLichTrinhLop = async (token, lop_id) => {
+export const getLichTrinhLop = async (token, lop_id, tenant) => {
+  const link = new URL(
+    `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days`
+  );
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "get",
     headers: {
       "content-type": "Application/json",
@@ -304,9 +330,16 @@ export const getLichTrinhLop = async (token, lop_id) => {
 };
 
 //Lay thong tin diem danh cho lich
-export const getDiemDanhLop = async (token, lich_id) => {
+export const getDiemDanhLop = async (token, lich_id, tenant) => {
+  const link = new URL(
+    `${process.env.NEXT_PUBLIC_API_LICH_GIANG_VIEN}/${lich_id}/attendances`
+  );
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_LICH_GIANG_VIEN}/${lich_id}/attendances`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "get",
     headers: {
       "content-type": "Application/json",
@@ -318,10 +351,16 @@ export const getDiemDanhLop = async (token, lich_id) => {
 };
 
 //Lay lich trinh thuc hien cho lich
-export const getLichTrinhThucHien = async (token, lop_id) => {
+export const getLichTrinhThucHien = async (token, lop_id, tenant) => {
+  const link = new URL(
+    `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days/content`
+  );
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/lich_trinh_giang_days/content`,
-    method: "get",
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     headers: {
       "content-type": "Application/json",
       jwt: `Bearer ${token}`,

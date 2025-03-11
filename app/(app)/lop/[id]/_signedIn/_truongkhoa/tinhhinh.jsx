@@ -13,6 +13,7 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import { Button } from "@nextui-org/button";
+import { useSearchParams } from "next/navigation";
 
 const TinhHinhTruongKhoa = ({
   lop,
@@ -20,16 +21,24 @@ const TinhHinhTruongKhoa = ({
   isMutating,
   setIsMutating,
   updateMutation,
+  isActionable,
 }) => {
+  const searchParams = useSearchParams();
   const { getToken } = useAuth();
   const { data, isLoading } = useQuery({
-    queryKey: ["truong_khoa_lop_tinh_hinh", params.id],
+    queryKey: [
+      "truong_khoa_lop_tinh_hinh",
+      params.id,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () =>
       getTinhHinhLopTruongKhoa(
         await getToken({
           template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
         }),
-        params.id
+        params.id,
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
       ),
   });
 
@@ -46,6 +55,7 @@ const TinhHinhTruongKhoa = ({
         <>
           {lop.can_approve_tinh_hinh && (
             <Button
+              isDisabled={!isActionable}
               color="success"
               className="w-fit"
               onClick={() => {
@@ -58,6 +68,7 @@ const TinhHinhTruongKhoa = ({
           )}
           {lop.can_reject_tinh_hinh && (
             <Button
+              isDisabled={!isActionable}
               color="warning"
               className="w-fit"
               onClick={() => {
@@ -74,7 +85,7 @@ const TinhHinhTruongKhoa = ({
         isStriped
         aria-label="Thong tin lich trinh lop truong khoa"
         classNames={{
-          th: ["!bg-green-200"],
+          th: ["!bg-[#006FEE]", "text-white"],
           //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
         }}
       >

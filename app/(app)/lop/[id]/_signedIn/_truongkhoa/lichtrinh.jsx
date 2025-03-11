@@ -13,6 +13,7 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import { Button } from "@nextui-org/button";
+import { useSearchParams } from "next/navigation";
 
 const LichTrinhTruongKhoa = ({
   lop,
@@ -20,16 +21,24 @@ const LichTrinhTruongKhoa = ({
   isMutating,
   setIsMutating,
   updateMutation,
+  isActionable,
 }) => {
+  const searchParams = useSearchParams();
   const { getToken } = useAuth();
   const { data, isLoading } = useQuery({
-    queryKey: ["truong_khoa_lop_lich_trinh", params.id],
+    queryKey: [
+      "truong_khoa_lop_lich_trinh",
+      params.id,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () =>
       getLichTrinhLopTruongKhoa(
         await getToken({
           template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
         }),
-        params.id
+        params.id,
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
       ),
   });
   return isLoading ? (
@@ -44,6 +53,7 @@ const LichTrinhTruongKhoa = ({
         <>
           {lop.can_approve_lich_trinh && (
             <Button
+              isDisabled={!isActionable}
               color="success"
               className="w-fit"
               onClick={() => {
@@ -56,6 +66,7 @@ const LichTrinhTruongKhoa = ({
           )}
           {lop.can_reject_lich_trinh && (
             <Button
+              isDisabled={!isActionable}
               color="warning"
               className="w-fit"
               onClick={() => {
@@ -72,7 +83,7 @@ const LichTrinhTruongKhoa = ({
         isStriped
         aria-label="Thong tin lich trinh lop truong khoa"
         classNames={{
-          th: ["!bg-green-200"],
+          th: ["!bg-[#006FEE]", "text-white"],
           //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
         }}
       >

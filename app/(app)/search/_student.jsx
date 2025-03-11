@@ -52,13 +52,18 @@ const Student = () => {
     [
       `search_sv`,
       { page: page ? page : 1, query: querySearchParam, type: typeSearchParam },
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
     ],
     () =>
-      search({
-        type: typeSearchParam,
-        query: querySearchParam,
-        page: page ? page : 1,
-      }),
+      search(
+        {
+          type: typeSearchParam,
+          query: querySearchParam,
+          page: page ? page : 1,
+        },
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
+      ),
     {
       keepPreviousData: true,
     }
@@ -91,7 +96,13 @@ const Student = () => {
               total={data?.page.total_page}
               onChange={(page) => {
                 router.push(
-                  `/search?type=${typeSearchParam}&page=${page}&q=${querySearchParam}`
+                  `/search?type=${typeSearchParam}&page=${page}&q=${querySearchParam}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `&hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`
                 );
                 setPage(page);
               }}
@@ -123,7 +134,17 @@ const Student = () => {
               </TableCell>
               <TableCell>{`${item.ho} ${item.dem} ${item.ten}`}</TableCell>
               <TableCell>
-                <Link href={`/sinh_vien/${item.id}`}>{item.code}</Link>
+                <Link
+                  href={`/sinh_vien/${item.id}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `?hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`}
+                >
+                  {item.code}
+                </Link>
               </TableCell>
               <TableCell>{item.ma_lop_hanh_chinh}</TableCell>
               <TableCell>{item.so_lop_mon}</TableCell>

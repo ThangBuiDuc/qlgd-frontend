@@ -8,8 +8,10 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 const DanhSachLopMon = ({ data }) => {
+  const searchParams = useSearchParams();
   return (
     <div className="flex flex-col gap-2">
       <h5>Danh sách lớp môn</h5>
@@ -35,7 +37,17 @@ const DanhSachLopMon = ({ data }) => {
             <TableRow key={item.id}>
               <TableCell>{++index}</TableCell>
               <TableCell>
-                <Link href={`/lop/${item.id}`}>{item.ma_lop}</Link>
+                <Link
+                  href={`/lop/${item.id}${
+                    searchParams.get("hocky") && searchParams.get("namhoc")
+                      ? `?hocky=${searchParams.get(
+                          "hocky"
+                        )}&namhoc=${searchParams.get("namhoc")}`
+                      : ""
+                  }`}
+                >
+                  {item.ma_lop}
+                </Link>
               </TableCell>
               <TableCell>{item.ten_mon_hoc}</TableCell>
               <TableCell>{item.giang_vien}</TableCell>

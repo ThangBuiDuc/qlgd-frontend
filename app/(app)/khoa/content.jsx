@@ -14,17 +14,25 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 const Content = ({ khoa_id }) => {
+  const searchParams = useSearchParams();
   const { getToken } = useAuth();
   const { data, isLoading } = useQuery({
-    queryKey: ["giang_vien_truong_khoa", khoa_id],
+    queryKey: [
+      "giang_vien_truong_khoa",
+      khoa_id,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () =>
       getThongTinGiangVienKhoa(
         await getToken({
           template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV,
         }),
-        khoa_id
+        khoa_id,
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
       ),
   });
 
@@ -62,7 +70,16 @@ const Content = ({ khoa_id }) => {
                       {i + 1}
                     </TableCell>
                     <TableCell>
-                      <Link href={`/lop/${el.lop_mon_hoc_id}`}>
+                      <Link
+                        href={`/lop/${el.lop_mon_hoc_id}${
+                          searchParams.get("hocky") &&
+                          searchParams.get("namhoc")
+                            ? `?hocky=${searchParams.get(
+                                "hocky"
+                              )}&namhoc=${searchParams.get("namhoc")}`
+                            : ""
+                        }`}
+                      >
                         {el.ma_lop}
                       </Link>
                     </TableCell>

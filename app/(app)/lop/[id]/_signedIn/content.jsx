@@ -7,7 +7,7 @@ import ThongTinLop from "./_giangvien/_thongtin/thongtinlop";
 import Diem from "./_giangvien/_diem/diem";
 import BoSung from "./_giangvien/_bosung/content";
 import TKB from "./_giangvien/_tkb/content";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import ThietLap from "./_giangvien/_thietlap/content";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { duyetTruongKhoa, getLopTruongKhoa } from "@/ultis/truongkhoa";
@@ -21,16 +21,25 @@ import TinhHinhTruongKhoa from "./_truongkhoa/tinhhinh";
 import { useState } from "react";
 import { toast } from "sonner";
 const NotSignedOut = ({ lop, chi_tiet_lop, lich, truongkhoa }) => {
+  const searchParams = useSearchParams();
+  const isActionable =
+    searchParams.get("hocky") && searchParams.get("namhoc") ? false : true;
   const queryClient = useQueryClient();
   const { getToken } = useAuth();
   const params = useParams();
   const [isMutating, setIsMutating] = useState(false);
   const { data, isLoading } = useQuery({
-    queryKey: ["truong_khoa_lop", params.id],
+    queryKey: [
+      "truong_khoa_lop",
+      params.id,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () =>
       getLopTruongKhoa(
         await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
-        params.id
+        params.id,
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
       ),
     enabled: !!truongkhoa,
   });
@@ -66,6 +75,7 @@ const NotSignedOut = ({ lop, chi_tiet_lop, lich, truongkhoa }) => {
         <Accordion variant="bordered">
           <AccordionItem aria-label="De cuong" title={`Đề cương chi tiết`}>
             <DeCuongTruongKhoa
+              isActionable={isActionable}
               lop={data}
               isMutating={isMutating}
               setIsMutating={setIsMutating}
@@ -77,6 +87,7 @@ const NotSignedOut = ({ lop, chi_tiet_lop, lich, truongkhoa }) => {
             title={`Lịch trình thực hiện`}
           >
             <LichTrinhTruongKhoa
+              isActionable={isActionable}
               lop={data}
               params={params}
               isMutating={isMutating}
@@ -89,6 +100,7 @@ const NotSignedOut = ({ lop, chi_tiet_lop, lich, truongkhoa }) => {
             title={`Tình hình học tập`}
           >
             <TinhHinhTruongKhoa
+              isActionable={isActionable}
               lop={data}
               params={params}
               isMutating={isMutating}
@@ -130,10 +142,13 @@ const NotSignedOut = ({ lop, chi_tiet_lop, lich, truongkhoa }) => {
           </div>
         </Tab>
         <Tab key="setting" title="Thiết lập thông số">
-          <ThietLap lop={lop} params={params} />
+          <ThietLap lop={lop} params={params} isActionable={isActionable} />
         </Tab>
         <Tab key="scoresetting" title="Thiết lập nhóm điểm">
-          <ThietLapNhomDiem params={{ id: lop.id }} />
+          <ThietLapNhomDiem
+            params={{ id: lop.id }}
+            isActionable={isActionable}
+          />
         </Tab>
         {!lich && (
           <Tab key="score" title="Điểm">
@@ -141,10 +156,10 @@ const NotSignedOut = ({ lop, chi_tiet_lop, lich, truongkhoa }) => {
           </Tab>
         )}
         <Tab key="signmore" title="Đăng ký bổ sung">
-          <BoSung params={{ id: lop.id }} />
+          <BoSung params={{ id: lop.id }} isActionable={isActionable} />
         </Tab>
         <Tab key="tkb" title="Thời khoá biểu">
-          <TKB params={{ id: lop.id }} />
+          <TKB params={{ id: lop.id }} isActionable={isActionable} />
         </Tab>
       </Tabs>
     </div>

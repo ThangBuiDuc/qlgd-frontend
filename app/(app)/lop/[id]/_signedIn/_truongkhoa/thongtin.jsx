@@ -17,7 +17,7 @@ const ThongTin = ({ lop }) => {
         aria-label="Thong tin lop truong khoa"
         classNames={{
           //   tr: ["!bg-green-200"],
-          th: ["!bg-green-200"],
+          th: ["!bg-[#006FEE]", "text-white"],
           // //tr: ["odd:bg-[#fcf8e3]", "even:bg-[#f2dede]"],
         }}
       >

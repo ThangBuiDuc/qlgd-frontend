@@ -54,6 +54,12 @@ const Search = () => {
           selected.size && query
             ? `&q=${query.replace(" ", "+")}`
             : `&q=${query.replace(" ", "+")}`
+        }${
+          searchParams.get("hocky") && searchParams.get("namhoc")
+            ? `&hocky=${searchParams.get("hocky")}&namhoc=${searchParams.get(
+                "namhoc"
+              )}`
+            : ""
         }`}
       >
         <Button

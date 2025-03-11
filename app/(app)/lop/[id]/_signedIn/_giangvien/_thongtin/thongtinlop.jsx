@@ -11,17 +11,25 @@ import {
   TableCell,
 } from "@nextui-org/table";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 // import { useParams } from "next/navigation";
 
 const ThongTinLop = ({ chi_tiet_lop, is_lich, params }) => {
+  const searchParams = useSearchParams();
   const { getToken } = useAuth();
   // const params = useParams();
   const { data, isLoading } = useQuery({
-    queryKey: ["lop_chi_tiet_gv", params.id],
+    queryKey: [
+      "lop_chi_tiet_gv",
+      params.id,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () =>
       getChiTietLopGiangVien(
         await getToken({ template: process.env.NEXT_PUBLIC_CLERK_TEMPLATE_GV }),
-        params.id
+        params.id,
+        { hocky: searchParams.get("hocky"), namhoc: searchParams.get("namhoc") }
       ),
     ...(is_lich ? {} : { initialData: chi_tiet_lop }),
   });

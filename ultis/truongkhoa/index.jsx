@@ -2,9 +2,14 @@ import axios from "axios";
 import FormData from "form-data";
 
 //Get thong tin lop
-export const getLopTruongKhoa = async (token, id) => {
+export const getLopTruongKhoa = async (token, id, tenant) => {
+  const link = new URL(`${process.env.NEXT_PUBLIC_API_TRUONG_KHOA}/lop/${id}`);
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_TRUONG_KHOA}/lop/${id}`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "GET",
     headers: {
       "content-type": "Application/json",
@@ -16,9 +21,16 @@ export const getLopTruongKhoa = async (token, id) => {
 };
 
 //Get lich trinh lop
-export const getLichTrinhLopTruongKhoa = async (token, id) => {
+export const getLichTrinhLopTruongKhoa = async (token, id, tenant) => {
+  const link = new URL(
+    `${process.env.NEXT_PUBLIC_API_TRUONG_KHOA}/lop/${id}/lichtrinh`
+  );
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_TRUONG_KHOA}/lop/${id}/lichtrinh`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "GET",
     headers: {
       "content-type": "Application/json",
@@ -30,9 +42,16 @@ export const getLichTrinhLopTruongKhoa = async (token, id) => {
 };
 
 //Get lich hinh lop
-export const getTinhHinhLopTruongKhoa = async (token, id) => {
+export const getTinhHinhLopTruongKhoa = async (token, id, tenant) => {
+  const link = new URL(
+    `${process.env.NEXT_PUBLIC_API_TRUONG_KHOA}/lop/${id}/tinhhinh`
+  );
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_TRUONG_KHOA}/lop/${id}/tinhhinh`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "GET",
     headers: {
       "content-type": "Application/json",
@@ -63,9 +82,14 @@ export const duyetTruongKhoa = async (token, data) => {
 };
 
 //get role truong khoa
-export const truongKhoaRole = async (token) => {
+export const truongKhoaRole = async (token, tenant) => {
+  const link = new URL(`${process.env.NEXT_PUBLIC_API_ROLE_TRUONG_KHOA}`);
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_ROLE_TRUONG_KHOA}`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "GET",
     headers: {
       "content-type": "Application/json",
@@ -77,9 +101,14 @@ export const truongKhoaRole = async (token) => {
 };
 
 //get thong tin giang vien khoa
-export const getThongTinGiangVienKhoa = async (token, id) => {
+export const getThongTinGiangVienKhoa = async (token, id, tenant) => {
+  const link = new URL(`${process.env.NEXT_PUBLIC_API_TRUONG_KHOA}/${id}`);
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_TRUONG_KHOA}/${id}`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "GET",
     headers: {
       "content-type": "Application/json",

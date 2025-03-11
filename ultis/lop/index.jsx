@@ -1,9 +1,14 @@
 import axios from "axios";
 
 //Get lop
-export const getLop = async (token, id) => {
+export const getLop = async (token, id, tenant) => {
+  const link = new URL(`${process.env.NEXT_PUBLIC_API_GET_LOP}/${id}`);
   const res = await axios({
-    url: `${process.env.NEXT_PUBLIC_API_GET_LOP}/${id}`,
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
     method: "get",
     headers: {
       "content-type": "Application/json",
