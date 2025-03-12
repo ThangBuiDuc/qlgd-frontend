@@ -37,6 +37,7 @@ import { Settings, CircleX, ArchiveRestore } from "lucide-react";
 import Swal from "sweetalert2";
 import { parseDate } from "@internationalized/date";
 import { DatePicker } from "@nextui-org/date-picker";
+import { useSearchParams } from "next/navigation";
 
 const starts = [
   { key: "1", label: "1 (7h00)" },
@@ -65,6 +66,7 @@ const types = [
 ];
 
 const AddModal = ({ isOpen, onChange, params }) => {
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const [date, setDate] = useState();
   const [start, setStart] = useState(new Set(["1"]));
@@ -98,7 +100,12 @@ const AddModal = ({ isOpen, onChange, params }) => {
       setRoom("");
       onChange(false);
       setIsMutating(false);
-      queryClient.invalidateQueries(["lich_bo_sung", params.id]);
+      queryClient.invalidateQueries([
+        "lich_bo_sung",
+        params.id,
+        searchParams.get("hocky"),
+        searchParams.get("namhoc"),
+      ]);
       // queryClient.invalidateQueries(["lop_chi_tiet_gv", params.id]);
       toast.success("Đăng ký bổ sung thành công!", {
         position: "top-center",
@@ -207,6 +214,7 @@ const AddModal = ({ isOpen, onChange, params }) => {
 };
 
 const UpdateModal = ({ isOpen, onChange, params, data }) => {
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const [date, setDate] = useState(
     parseDate(data.thoi_gian.split("/").reverse().join("-"))
@@ -235,7 +243,12 @@ const UpdateModal = ({ isOpen, onChange, params, data }) => {
     onSuccess: () => {
       onChange(false);
       setIsMutating(false);
-      queryClient.invalidateQueries(["lich_bo_sung", params.id]);
+      queryClient.invalidateQueries([
+        "lich_bo_sung",
+        params.id,
+        searchParams.get("hocky"),
+        searchParams.get("namhoc"),
+      ]);
       // queryClient.invalidateQueries(["lop_chi_tiet_gv", params.id]);
       toast.success("Cập nhật lịch bổ sung thành công!", {
         position: "top-center",
@@ -344,6 +357,7 @@ const UpdateModal = ({ isOpen, onChange, params, data }) => {
 };
 
 const RenderCell = ({ data, params }) => {
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const { getToken } = useAuth();
   const [updateModal, setUpdateModal] = useState(false);
@@ -355,7 +369,12 @@ const RenderCell = ({ data, params }) => {
         { id: data.id }
       ),
     onSuccess: () => {
-      queryClient.invalidateQueries(["lich_bo_sung", params.id]);
+      queryClient.invalidateQueries([
+        "lich_bo_sung",
+        params.id,
+        searchParams.get("hocky"),
+        searchParams.get("namhoc"),
+      ]);
       Swal.fire({
         title: "Xoá lịch bổ sung thành công!",
         icon: "success",
@@ -379,7 +398,12 @@ const RenderCell = ({ data, params }) => {
         { id: data.id }
       ),
     onSuccess: () => {
-      queryClient.invalidateQueries(["lich_bo_sung", params.id]);
+      queryClient.invalidateQueries([
+        "lich_bo_sung",
+        params.id,
+        searchParams.get("hocky"),
+        searchParams.get("namhoc"),
+      ]);
       Swal.fire({
         title: "Phục hồi lịch bổ sung thành công!",
         icon: "success",
@@ -461,11 +485,17 @@ const RenderCell = ({ data, params }) => {
 };
 
 const BoSung = ({ params, isActionable }) => {
+  const searchParams = useSearchParams();
   const [addModal, setAddModal] = useState(false);
   const { getToken } = useAuth();
   // const params = useParams();
   const { data, isLoading } = useQuery({
-    queryKey: ["lich_bo_sung", params.id],
+    queryKey: [
+      "lich_bo_sung",
+      params.id,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () =>
       getLichBoSungLop(
         await getToken({

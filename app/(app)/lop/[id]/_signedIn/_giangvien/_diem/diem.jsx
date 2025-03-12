@@ -57,6 +57,7 @@ const RenderCell = ({ data, params, isActionable }) => {
 };
 
 const UpdateModal = ({ data, isOpen, onChange, params }) => {
+  const searchParams = useSearchParams();
   const [score, setScore] = useState(data.grade);
   const queryClient = useQueryClient();
   const { getToken } = useAuth();
@@ -76,7 +77,12 @@ const UpdateModal = ({ data, isOpen, onChange, params }) => {
     onSuccess: () => {
       onChange(false);
       setIsMutating(false);
-      queryClient.invalidateQueries(["lop_chi_tiet_gv2", params.id]);
+      queryClient.invalidateQueries([
+        "lop_chi_tiet_gv2",
+        params.id,
+        searchParams.get("hocky"),
+        searchParams.get("namhoc"),
+      ]);
       // queryClient.invalidateQueries(["lop_chi_tiet_gv", params.id]);
       toast.success("Cập nhật đầu điểm thành công!", {
         position: "top-center",
@@ -187,7 +193,12 @@ const Diem = ({ params }) => {
         params.id
       ),
     onSuccess: () => {
-      queryClient.invalidateQueries(["lop_chi_tiet_gv2", params.id]);
+      queryClient.invalidateQueries([
+        "lop_chi_tiet_gv2",
+        params.id,
+        searchParams.get("hocky"),
+        searchParams.get("namhoc"),
+      ]);
       Swal.fire({
         title: "Tính điểm chuyên cần thành công!",
         icon: "success",

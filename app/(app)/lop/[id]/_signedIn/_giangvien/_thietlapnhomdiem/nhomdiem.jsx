@@ -21,6 +21,7 @@ import { Input } from "@nextui-org/input";
 import { toast } from "sonner";
 import { Button } from "@nextui-org/button";
 import Loading from "@/app/_hardComponents/loading";
+import { useSearchParams } from "next/navigation";
 
 const AddModal = ({ isOpen, onChange, params, assignment_group_id }) => {
   const queryClient = useQueryClient();
@@ -28,6 +29,7 @@ const AddModal = ({ isOpen, onChange, params, assignment_group_id }) => {
   const [isMutating, setIsMutating] = useState(false);
   const [name, setName] = useState("");
   const [score, setScore] = useState("");
+  const searchParams = useSearchParams();
 
   const mutation = useMutation({
     mutationFn: async () =>
@@ -45,7 +47,12 @@ const AddModal = ({ isOpen, onChange, params, assignment_group_id }) => {
       setScore("");
       onChange(false);
       setIsMutating(false);
-      queryClient.invalidateQueries(["nhom_diem_lop", params.id]);
+      queryClient.invalidateQueries([
+        "nhom_diem_lop",
+        params.id,
+        searchParams.get("hocky"),
+        searchParams.get("namhoc"),
+      ]);
       toast.success("Thêm mới đầu điểm thành công!", {
         position: "top-center",
       });
@@ -119,6 +126,7 @@ const UpdateModal = ({
   params,
   assignment_group_id,
 }) => {
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const { getToken } = useAuth();
   const [isMutating, setIsMutating] = useState(false);
@@ -139,7 +147,12 @@ const UpdateModal = ({
     onSuccess: () => {
       onChange(false);
       setIsMutating(false);
-      queryClient.invalidateQueries(["nhom_diem_lop", params.id]);
+      queryClient.invalidateQueries([
+        "nhom_diem_lop",
+        params.id,
+        searchParams.get("hocky"),
+        searchParams.get("namhoc"),
+      ]);
       toast.success("Cập nhật nhóm điểm thành công!", {
         position: "top-center",
       });
@@ -207,6 +220,7 @@ const UpdateModal = ({
 };
 
 const NhomDiem = ({ data, params, isActionable }) => {
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const { getToken } = useAuth();
   const [addModal, setAddModal] = useState(false);
@@ -219,7 +233,12 @@ const NhomDiem = ({ data, params, isActionable }) => {
         params.id
       ),
     onSuccess: () => {
-      queryClient.invalidateQueries(["nhom_diem_lop", params.id]);
+      queryClient.invalidateQueries([
+        "nhom_diem_lop",
+        params.id,
+        searchParams.get("hocky"),
+        searchParams.get("namhoc"),
+      ]);
       Swal.fire({
         title: "Xoá nhóm điểm thành công!",
         icon: "success",

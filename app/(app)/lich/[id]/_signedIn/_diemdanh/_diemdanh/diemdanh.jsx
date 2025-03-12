@@ -13,7 +13,7 @@ import {
 } from "@nextui-org/table";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { CirclePlus } from "lucide-react";
 import { CircleMinus } from "lucide-react";
@@ -105,6 +105,7 @@ const NoteModal = ({
   isMutation,
   setNoteModal,
 }) => {
+  const searchParams = useSearchParams();
   const { getToken } = useAuth();
   const queryClient = useQueryClient();
   const params = useParams();
@@ -125,7 +126,15 @@ const NoteModal = ({
         position: "top-center",
       });
       // queryClient.invalidateQueries(["diem_danh_lich", params.id]);
-      queryClient.setQueryData(["diem_danh_lich", params.id], data);
+      queryClient.setQueryData(
+        [
+          "diem_danh_lich",
+          params.id,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
     },
     onError: () => {
       setIsMutaion(false);
@@ -207,6 +216,7 @@ const RenderCell = ({ data, setIsMutaion, isMutation, isActionable }) => {
 };
 
 const Editable = ({ data, so_tiet, isActionable }) => {
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const params = useParams();
   const { getToken } = useAuth();
@@ -223,7 +233,15 @@ const Editable = ({ data, so_tiet, isActionable }) => {
     onSuccess: (data) => {
       setIsMutaion(false);
       // queryClient.invalidateQueries(["diem_danh_lich", params.id]);
-      queryClient.setQueryData(["diem_danh_lich", params.id], data);
+      queryClient.setQueryData(
+        [
+          "diem_danh_lich",
+          params.id,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
     },
     onError: () => {
       setIsMutaion(false);

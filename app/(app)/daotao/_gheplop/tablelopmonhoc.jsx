@@ -50,7 +50,12 @@ const TableLopMonHoc = ({ selectedLopMonHoc, searchParams }) => {
     onSuccess: (data) => {
       // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
       queryClient.setQueryData(
-        ["sinh_vien_lop_mon_hoc", selectedLopMonHoc?.value],
+        [
+          "sinh_vien_lop_mon_hoc",
+          selectedLopMonHoc?.value,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
         data
       );
       Swal.fire({

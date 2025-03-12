@@ -28,6 +28,7 @@ import Swal from "sweetalert2";
 const RenderCell = ({ data, params, isActionable }) => {
   const { getToken } = useAuth();
   const queryClient = useQueryClient();
+  const searchParams = useSearchParams();
 
   const uncompleteMutation = useMutation({
     mutationFn: async (data) =>
@@ -38,7 +39,15 @@ const RenderCell = ({ data, params, isActionable }) => {
       ),
     onSuccess: (data) => {
       // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
-      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
+      queryClient.setQueryData(
+        [
+          "lich_trinh_lop",
+          params.id,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       Swal.fire({
         title: "Huỷ hoàn thành lịch dạy thành công!",
         icon: "success",
@@ -65,7 +74,15 @@ const RenderCell = ({ data, params, isActionable }) => {
       ),
     onSuccess: (data) => {
       // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
-      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
+      queryClient.setQueryData(
+        [
+          "lich_trinh_lop",
+          params.id,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       Swal.fire({
         title: "Xoá lịch dạy thành công!",
         icon: "success",
@@ -92,7 +109,15 @@ const RenderCell = ({ data, params, isActionable }) => {
       ),
     onSuccess: (data) => {
       // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
-      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
+      queryClient.setQueryData(
+        [
+          "lich_trinh_lop",
+          params.id,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       Swal.fire({
         title: "Phục hồi lịch dạy thành công!",
         icon: "success",

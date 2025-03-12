@@ -28,11 +28,18 @@ import {
 } from "@nextui-org/modal";
 import Loading from "@/app/_hardComponents/loading";
 import { Button } from "@nextui-org/button";
+import { useSearchParams } from "next/navigation";
 
 const CheckModal = ({ modalIsOpen, setModalIsOpen, item }) => {
+  const searchParams = useSearchParams();
   const { getToken } = useAuth();
   const { data, isLoading } = useQuery({
-    queryKey: ["kiem_tra_trung_lich", item.id],
+    queryKey: [
+      "kiem_tra_trung_lich",
+      item.id,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () =>
       getKiemTraLichDangKyTrung(
         { id: item.id },
@@ -222,8 +229,15 @@ const LichDangKy = ({ data, tenant }) => {
         })
       ),
     onSuccess: (data) => {
-      queryClient.setQueryData(["dao_tao_lich_trinh_giang_day"], data);
-      queryClient.invalidateQueries(["dao_tao_lich_trinh_giang_day_da_duyet"]);
+      queryClient.setQueryData(
+        ["dao_tao_lich_trinh_giang_day", tenant.hocky, tenant.namhoc],
+        data
+      );
+      queryClient.invalidateQueries([
+        "dao_tao_lich_trinh_giang_day_da_duyet",
+        tenant.hocky,
+        tenant.namhoc,
+      ]);
       Swal.fire({
         title: "Chấp nhận lịch đăng ký thành công!",
         icon: "success",
@@ -248,7 +262,10 @@ const LichDangKy = ({ data, tenant }) => {
         })
       ),
     onSuccess: (data) => {
-      queryClient.setQueryData(["dao_tao_lich_trinh_giang_day"], data);
+      queryClient.setQueryData(
+        ["dao_tao_lich_trinh_giang_day", tenant.hocky, tenant.namhoc],
+        data
+      );
       Swal.fire({
         title: "Không chấp nhận lịch đăng ký thành công!",
         icon: "success",

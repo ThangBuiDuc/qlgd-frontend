@@ -13,11 +13,12 @@ import {
 import { Tooltip } from "@nextui-org/tooltip";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CircleCheckBig } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
 const ThongTin = ({ data, lop_id, isActionable }) => {
+  const searchParams = useSearchParams();
   const params = useParams();
   const [isMutation, setIsMutaion] = useState(false);
   const { getToken } = useAuth();
@@ -37,7 +38,15 @@ const ThongTin = ({ data, lop_id, isActionable }) => {
       });
       setIsMutaion(false);
       // queryClient.invalidateQueries(["diem_danh_lich", params.id]);
-      queryClient.setQueryData(["diem_danh_lich", params.id], data);
+      queryClient.setQueryData(
+        [
+          "diem_danh_lich",
+          params.id,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
     },
     onError: () => {
       setIsMutaion(false);

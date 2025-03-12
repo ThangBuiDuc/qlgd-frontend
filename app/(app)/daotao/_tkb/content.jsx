@@ -60,7 +60,7 @@ const Content = ({ value, tenant }) => {
   const queryClient = useQueryClient();
   const { getToken } = useAuth();
   const { data, isLoading } = useQuery({
-    queryKey: ["dao_tao_lop_mon_hoc", value.value, tenant],
+    queryKey: ["dao_tao_lop_mon_hoc", value.value, tenant.hocky, tenant.namhoc],
     queryFn: async () => getDaoTaoLichLopMonHoc(value.value, tenant),
   });
   const [tuanBatDau, setTuanBatDau] = useState({
@@ -106,7 +106,10 @@ const Content = ({ value, tenant }) => {
         })
       ),
     onSuccess: (data) => {
-      queryClient.setQueryData(["dao_tao_lop_mon_hoc", value.value], data);
+      queryClient.setQueryData(
+        ["dao_tao_lop_mon_hoc", value.value, tenant.hocky, tenant.namhoc],
+        data
+      );
       Swal.fire({
         title: "Tạo thời khoá biểu thành công!",
         icon: "success",
@@ -132,7 +135,10 @@ const Content = ({ value, tenant }) => {
         })
       ),
     onSuccess: (data) => {
-      queryClient.setQueryData(["dao_tao_lop_mon_hoc", value.value], data);
+      queryClient.setQueryData(
+        ["dao_tao_lop_mon_hoc", value.value, tenant.hocky, tenant.namhoc],
+        data
+      );
       Swal.fire({
         title: "Duyệt thực hiện thành công!",
         icon: "success",
@@ -158,7 +164,10 @@ const Content = ({ value, tenant }) => {
         })
       ),
     onSuccess: (data) => {
-      queryClient.setQueryData(["dao_tao_lop_mon_hoc", value.value], data);
+      queryClient.setQueryData(
+        ["dao_tao_lop_mon_hoc", value.value, tenant.hocky, tenant.namhoc],
+        data
+      );
       Swal.fire({
         title: "Xoá thời khoá biểu thành công!",
         icon: "success",
@@ -184,7 +193,10 @@ const Content = ({ value, tenant }) => {
         })
       ),
     onSuccess: (data) => {
-      queryClient.setQueryData(["dao_tao_lop_mon_hoc", value.value], data);
+      queryClient.setQueryData(
+        ["dao_tao_lop_mon_hoc", value.value, tenant.hocky, tenant.namhoc],
+        data
+      );
       Swal.fire({
         title: "Phục hồi thời khoá biểu thành công!",
         icon: "success",
@@ -210,7 +222,10 @@ const Content = ({ value, tenant }) => {
         })
       ),
     onSuccess: (data) => {
-      queryClient.setQueryData(["dao_tao_lop_mon_hoc", value.value], data);
+      queryClient.setQueryData(
+        ["dao_tao_lop_mon_hoc", value.value, tenant.hocky, tenant.namhoc],
+        data
+      );
       Swal.fire({
         title: "Xoá vĩnh viễn thời khoá biểu thành công!",
         icon: "success",

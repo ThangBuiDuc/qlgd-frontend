@@ -9,7 +9,7 @@ import { useSearchParams } from "next/navigation";
 // import AsyncSelect from "react-select/async";
 
 const TKB = () => {
-  const searchParams = new useSearchParams();
+  const searchParams = useSearchParams();
   const { data: lops, isLoading } = useQuery({
     queryKey: [
       "danh_sach_lop",

@@ -33,6 +33,7 @@ import {
 } from "@/ultis/giang_vien";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
+import { useSearchParams } from "next/navigation";
 
 const starts = [
   { key: "1", label: "1 (7h00)" },
@@ -61,6 +62,7 @@ const types = [
 ];
 
 const UpdateModal = ({ updateModal, setUpdateModal, data, params }) => {
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const [date, setDate] = useState(
     parseDate(data.thoi_gian.split("/").reverse().join("-"))
@@ -92,7 +94,15 @@ const UpdateModal = ({ updateModal, setUpdateModal, data, params }) => {
       setUpdateModal(false);
       setIsMutating(false);
       // queryClient.invalidateQueries(["lich_trinh_lop", params.id]);
-      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
+      queryClient.setQueryData(
+        [
+          "lich_trinh_lop",
+          params.id,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       // queryClient.invalidateQueries(["lop_chi_tiet_gv", params.id]);
       toast.success("Cập nhật lịch thành công!", {
         position: "top-center",
@@ -216,6 +226,7 @@ const UpdateModal = ({ updateModal, setUpdateModal, data, params }) => {
 };
 
 const NghiDayModal = ({ nghiDayModal, setNghiDayModal, data, params }) => {
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const [note, setNote] = useState(data.note);
   const [isMutating, setIsMutating] = useState(false);
@@ -238,7 +249,15 @@ const NghiDayModal = ({ nghiDayModal, setNghiDayModal, data, params }) => {
       setNghiDayModal(false);
       setIsMutating(false);
       // queryClient.invalidateQueries(["lich_trinh_lop", params.id]);
-      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
+      queryClient.setQueryData(
+        [
+          "lich_trinh_lop",
+          params.id,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       // queryClient.invalidateQueries(["lop_chi_tiet_gv", params.id]);
       toast.success("Đăng ký nghỉ lịch dạy thành công!", {
         position: "top-center",

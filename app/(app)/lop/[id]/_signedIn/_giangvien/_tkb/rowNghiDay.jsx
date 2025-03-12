@@ -4,9 +4,11 @@ import { useAuth } from "@clerk/clerk-react";
 import { Tooltip } from "@nextui-org/tooltip";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CircleX, ArchiveRestore, PenOff } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import Swal from "sweetalert2";
 
 const RowNghiDay = ({ data, params, removeMutation, restoreMutation }) => {
+  const searchParams = useSearchParams();
   const { getToken } = useAuth();
   const queryClient = useQueryClient();
   const unNghiDayMutation = useMutation({
@@ -20,7 +22,15 @@ const RowNghiDay = ({ data, params, removeMutation, restoreMutation }) => {
       ),
     onSuccess: (data) => {
       // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
-      queryClient.setQueryData(["lich_trinh_lop", params.id], data);
+      queryClient.setQueryData(
+        [
+          "lich_trinh_lop",
+          params.id,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       Swal.fire({
         title: "Huỷ đăng ký nghỉ lịch dạy thành công!",
         icon: "success",

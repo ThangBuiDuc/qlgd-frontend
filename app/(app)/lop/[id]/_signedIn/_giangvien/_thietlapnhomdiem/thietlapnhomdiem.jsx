@@ -4,7 +4,7 @@ import Loading from "@/app/_hardComponents/loading";
 import { getNhomDiemLop } from "@/ultis/lop";
 import { Button } from "@nextui-org/button";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { Fragment, useState } from "react";
 import Diem from "./diem";
 import {
@@ -25,6 +25,7 @@ const AddModal = ({ isOpen, onChange, params }) => {
   const { getToken } = useAuth();
   const [isMutating, setIsMutating] = useState(false);
   const [name, setName] = useState("");
+  const searchParams = useSearchParams();
   const [score, setScore] = useState("");
 
   const mutation = useMutation({
@@ -42,7 +43,12 @@ const AddModal = ({ isOpen, onChange, params }) => {
       setScore("");
       onChange(false);
       setIsMutating(false);
-      queryClient.invalidateQueries(["nhom_diem_lop", params.id]);
+      queryClient.invalidateQueries([
+        "nhom_diem_lop",
+        params.id,
+        searchParams.get("hocky"),
+        searchParams.get("namhoc"),
+      ]);
       toast.success("Thêm mới nhóm điểm thành công!", {
         position: "top-center",
       });
@@ -111,10 +117,16 @@ const AddModal = ({ isOpen, onChange, params }) => {
 
 const ThietLapNhomDiem = ({ params, isActionable }) => {
   const [addModal, setAddModal] = useState(false);
+  const searchParams = useSearchParams();
 
   // const params = useParams();
   const { data, isLoading } = useQuery({
-    queryKey: ["nhom_diem_lop", params.id],
+    queryKey: [
+      "nhom_diem_lop",
+      params.id,
+      searchParams.get("hocky"),
+      searchParams.get("namhoc"),
+    ],
     queryFn: async () => getNhomDiemLop(params.id),
   });
 

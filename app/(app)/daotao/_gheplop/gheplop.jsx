@@ -44,6 +44,8 @@ const GhepLop = () => {
       queryClient.invalidateQueries([
         "sinh_vien_lop_mon_hoc",
         selectedLopMonHoc?.value,
+        searchParams.get("hocky"),
+        searchParams.get("namhoc"),
       ]);
       setSelectedKeys(new Set([]));
       // queryClient.setQueryData(

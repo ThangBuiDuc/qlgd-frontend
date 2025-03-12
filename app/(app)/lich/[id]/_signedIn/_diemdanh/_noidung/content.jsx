@@ -19,7 +19,7 @@ import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
 
 const EditableRow = ({ data, lop_id, isActionable }) => {
-  const searchParams = new useSearchParams();
+  const searchParams = useSearchParams();
   const [isEditable, setIsEditable] = useState(false);
   const [content, setContent] = useState("");
   const [isMutation, setIsMutaion] = useState(false);
@@ -39,7 +39,15 @@ const EditableRow = ({ data, lop_id, isActionable }) => {
       toast.success("Sửa nội dung thành công!", {
         position: "top-center",
       });
-      queryClient.setQueryData(["lich_trinh", lop_id], data);
+      queryClient.setQueryData(
+        [
+          "lich_trinh",
+          lop_id,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       setIsEditable(false);
       setIsMutaion(false);
       setContent("");
@@ -131,7 +139,7 @@ const EditableRow = ({ data, lop_id, isActionable }) => {
 };
 
 const NoiDungTab = ({ params }) => {
-  const searchParams = new useSearchParams();
+  const searchParams = useSearchParams();
   const isActionable =
     searchParams.get("hocky") && searchParams.get("namhoc") ? false : true;
   const { getToken } = useAuth();

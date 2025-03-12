@@ -20,8 +20,10 @@ import {
   capNhatDauDiemNhomDiemGiangVien,
   xoaDauDiemNhomDiemGiangVien,
 } from "@/ultis/giang_vien";
+import { useSearchParams } from "next/navigation";
 
 const UpdateModal = ({ data, isOpen, onChange, params }) => {
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const { getToken } = useAuth();
   const [isMutating, setIsMutating] = useState(false);
@@ -42,7 +44,12 @@ const UpdateModal = ({ data, isOpen, onChange, params }) => {
     onSuccess: () => {
       onChange(false);
       setIsMutating(false);
-      queryClient.invalidateQueries(["nhom_diem_lop", params.id]);
+      queryClient.invalidateQueries([
+        "nhom_diem_lop",
+        params.id,
+        searchParams.get("hocky"),
+        searchParams.get("namhoc"),
+      ]);
       toast.success("Cập nhật đầu điểm thành công!", {
         position: "top-center",
       });
@@ -110,6 +117,7 @@ const UpdateModal = ({ data, isOpen, onChange, params }) => {
 };
 
 const Diem = ({ data, params, isActionable }) => {
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const { getToken } = useAuth();
   const [updateModal, setUpdateModal] = useState(false);
@@ -121,7 +129,12 @@ const Diem = ({ data, params, isActionable }) => {
         params.id
       ),
     onSuccess: () => {
-      queryClient.invalidateQueries(["nhom_diem_lop", params.id]);
+      queryClient.invalidateQueries([
+        "nhom_diem_lop",
+        params.id,
+        searchParams.get("hocky"),
+        searchParams.get("namhoc"),
+      ]);
       Swal.fire({
         title: "Xoá nhóm điểm thành công!",
         icon: "success",

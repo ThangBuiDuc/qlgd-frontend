@@ -48,7 +48,7 @@ import {
 import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
 
-const EditModal = ({ editModal, setEditModal, data, date }) => {
+const EditModal = ({ editModal, setEditModal, data, date, searchParams }) => {
   const queryClient = useQueryClient();
   const [isMutating, setIsMutating] = useState(false);
   const { getToken } = useAuth();
@@ -71,7 +71,15 @@ const EditModal = ({ editModal, setEditModal, data, date }) => {
       setEditModal(false);
       setIsMutating(false);
       // queryClient.invalidateQueries(["lich_trinh_lop", params.id]);
-      queryClient.setQueryData(["thanh_tra_lich_trinh", date], data);
+      queryClient.setQueryData(
+        [
+          "thanh_tra_lich_trinh",
+          date,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       // queryClient.invalidateQueries(["lop_chi_tiet_gv", params.id]);
       toast.success("Cập nhật ghi chú lịch thành công!", {
         position: "top-center",
@@ -145,9 +153,10 @@ const EditModal = ({ editModal, setEditModal, data, date }) => {
 const RenderCell = ({
   item,
   date,
-  isMutating,
-  setIsMutating,
+  // isMutating,
+  // setIsMutating,
   isActionable,
+  searchParams,
 }) => {
   const [editModal, setEditModal] = useState(false);
   const { getToken } = useAuth();
@@ -165,7 +174,15 @@ const RenderCell = ({
       ),
     onSuccess: (data) => {
       // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
-      queryClient.setQueryData(["thanh_tra_lich_trinh", date], data);
+      queryClient.setQueryData(
+        [
+          "thanh_tra_lich_trinh",
+          date,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       Swal.fire({
         title: "Báo cáo thành công!",
         icon: "success",
@@ -194,7 +211,15 @@ const RenderCell = ({
       ),
     onSuccess: (data) => {
       // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
-      queryClient.setQueryData(["thanh_tra_lich_trinh", date], data);
+      queryClient.setQueryData(
+        [
+          "thanh_tra_lich_trinh",
+          date,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       Swal.fire({
         title: "Huỷ báo cáo thành công!",
         icon: "success",
@@ -222,7 +247,15 @@ const RenderCell = ({
       ),
     onSuccess: (data) => {
       // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
-      queryClient.setQueryData(["thanh_tra_lich_trinh", date], data);
+      queryClient.setQueryData(
+        [
+          "thanh_tra_lich_trinh",
+          date,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       Swal.fire({
         title: "Xoá lịch học thành công!",
         icon: "success",
@@ -251,7 +284,15 @@ const RenderCell = ({
       ),
     onSuccess: (data) => {
       // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
-      queryClient.setQueryData(["thanh_tra_lich_trinh", date], data);
+      queryClient.setQueryData(
+        [
+          "thanh_tra_lich_trinh",
+          date,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       Swal.fire({
         title: "Phục hồi lịch học thành công!",
         icon: "success",
@@ -280,7 +321,15 @@ const RenderCell = ({
       ),
     onSuccess: (data) => {
       // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
-      queryClient.setQueryData(["thanh_tra_lich_trinh", date], data);
+      queryClient.setQueryData(
+        [
+          "thanh_tra_lich_trinh",
+          date,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       Swal.fire({
         title: "Xác nhận lịch học thành công!",
         icon: "success",
@@ -313,6 +362,7 @@ const RenderCell = ({
                 date={date}
                 setEditModal={setEditModal}
                 editModal={editModal}
+                searchParams={searchParams}
               />
             </div>
           )}
@@ -450,7 +500,13 @@ const RenderCell = ({
   );
 };
 
-const TableContent = ({ data, isLoading, date, isActionable }) => {
+const TableContent = ({
+  data,
+  isLoading,
+  date,
+  isActionable,
+  searchParams,
+}) => {
   const [isMutating, setIsMutating] = useState(false);
   const { getToken } = useAuth();
   const queryClient = useQueryClient();
@@ -465,7 +521,15 @@ const TableContent = ({ data, isLoading, date, isActionable }) => {
       ),
     onSuccess: (data) => {
       // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
-      queryClient.setQueryData(["thanh_tra_lich_trinh", date], data);
+      queryClient.setQueryData(
+        [
+          "thanh_tra_lich_trinh",
+          date,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       Swal.fire({
         title: "Đánh dấu Muộn/Không Muộn thành công!",
         icon: "success",
@@ -491,7 +555,15 @@ const TableContent = ({ data, isLoading, date, isActionable }) => {
       ),
     onSuccess: (data) => {
       // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
-      queryClient.setQueryData(["thanh_tra_lich_trinh", date], data);
+      queryClient.setQueryData(
+        [
+          "thanh_tra_lich_trinh",
+          date,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       Swal.fire({
         title: "Đánh dấu Về Sớm/Không Về Sớm thành công!",
         icon: "success",
@@ -517,7 +589,15 @@ const TableContent = ({ data, isLoading, date, isActionable }) => {
       ),
     onSuccess: (data) => {
       // queryClient.invalidateQueries(["lich_bo_sung", params.id]);
-      queryClient.setQueryData(["thanh_tra_lich_trinh", date], data);
+      queryClient.setQueryData(
+        [
+          "thanh_tra_lich_trinh",
+          date,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       Swal.fire({
         title: "Đánh dấu Bỏ Tiết/Không Bỏ Tiết thành công!",
         icon: "success",
@@ -730,6 +810,7 @@ const TableContent = ({ data, isLoading, date, isActionable }) => {
                 isMutating={isMutating}
                 setIsMutating={setIsMutating}
                 isActionable={isActionable}
+                searchParams={searchParams}
               />
             </TableCell>
           </TableRow>
@@ -780,6 +861,7 @@ const Content = () => {
         isActionable={
           searchParams.get("hocky") && searchParams.get("namhoc") ? false : true
         }
+        searchParams={searchParams}
       />
     </div>
   );

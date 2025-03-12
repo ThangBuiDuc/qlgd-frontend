@@ -52,7 +52,15 @@ const NotSignedOut = ({ lop, chi_tiet_lop, lich, truongkhoa }) => {
       ),
     onSuccess: (data) => {
       setIsMutating(false);
-      queryClient.setQueryData(["truong_khoa_lop", params.id], data);
+      queryClient.setQueryData(
+        [
+          "truong_khoa_lop",
+          params.id,
+          searchParams.get("hocky"),
+          searchParams.get("namhoc"),
+        ],
+        data
+      );
       // queryClient.invalidateQueries(["lop_chi_tiet_gv", params.id]);
       toast.success("Thao tác thành công!", {
         position: "top-center",
