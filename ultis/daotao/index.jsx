@@ -347,3 +347,74 @@ export const getKiemTraLichDangKyTrung = async (data, token) => {
 
   return res.data;
 };
+
+//Lay danh sach giang vien
+export const getDanhSachGiangVien = async (tenant) => {
+  const link = new URL(`${process.env.NEXT_PUBLIC_API_DAO_TAO}/giang_viens`);
+
+  const res = await axios({
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
+    method: "GET",
+    headers: {
+      "content-type": "Application/json",
+    },
+  });
+
+  return res.data;
+};
+
+//Lay thong tin giang vien va tro giang cua lop mon hoc
+export const getThongTinTroGiang = async (lop_id, token, tenant) => {
+  const link = new URL(
+    `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lop_mon_hocs/${lop_id}/assistants`
+  );
+
+  const res = await axios({
+    url: `${link.origin}${
+      tenant.hocky && tenant.namhoc
+        ? `/hocky/${tenant.hocky}/namhoc/${tenant.namhoc}`
+        : ""
+    }${link.pathname}`,
+    method: "GET",
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+//Them giang vien lop mon hoc
+export const themGiangVienLopMonHoc = async (lop_id, data, token) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lop_mon_hocs/${lop_id}/assistants/create`,
+    data,
+    method: "POST",
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+//Xoa giang vien lop mon hoc
+export const capNhatGiangVienLopMonHoc = async (lop_id, data, token) => {
+  const res = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_DAO_TAO}/lop_mon_hocs/${lop_id}/assistants/update`,
+    data,
+    method: "POST",
+    headers: {
+      "content-type": "Application/json",
+      jwt: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};

@@ -5,6 +5,7 @@ import GhepLop from "./_gheplop/gheplop";
 import TKB from "./_tkb/tkb";
 // import { useQuery } from "@tanstack/react-query";
 import DuyetDangKy from "./_duyetdangky/duyetdangky";
+import TroGiang from "./_trogiang/trogiang";
 
 const Content = ({ role }) => {
   // console.log(role.is_dao_tao);
@@ -24,11 +25,11 @@ const Content = ({ role }) => {
             <GhepLop />
           </Tab>
         )}
-        {/* {role.is_dao_tao && (
-          <Tab key="lopmonhoc" title="Lớp môn học">
-            <LopMonHoc />
+        {role.is_dao_tao && (
+          <Tab key="trogiang" title="Trợ giảng">
+            <TroGiang />
           </Tab>
-        )} */}
+        )}
         {role.is_dao_tao && (
           <Tab key="tkb" title="Thời khoá biểu">
             <TKB />
