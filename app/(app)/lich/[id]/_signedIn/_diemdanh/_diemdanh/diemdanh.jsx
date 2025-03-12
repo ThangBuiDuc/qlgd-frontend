@@ -36,7 +36,7 @@ const DisableTable = ({ data }) => {
       aria-label="Thong tin buoi hoc"
       classNames={{
         th: ["!bg-[#006FEE]", "text-white"],
-        tr: ["even:bg-[#f2dede]"],
+        //tr: ["even:bg-[#f2dede]"],
       }}
     >
       <TableHeader>
@@ -268,7 +268,7 @@ const Editable = ({ data, so_tiet, isActionable }) => {
       aria-label="Thong tin buoi hoc"
       classNames={{
         th: ["!bg-[#006FEE]", "text-white"],
-        tr: ["even:bg-[#f2dede]"],
+        //tr: ["even:bg-[#f2dede]"],
       }}
     >
       <TableHeader>
