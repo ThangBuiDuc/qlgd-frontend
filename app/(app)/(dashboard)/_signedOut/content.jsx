@@ -205,7 +205,7 @@ const NotSignedIn = ({ calendar }) => {
               </TableCell>
               <TableCell>
                 <Link
-                  href={"#"}
+                  href={`https://decuong.hpu.edu.vn/show/#${item.lop_mon_hoc.ma_mon_hoc}`}
                   // className="hover:underline text-[#0083C2] cursor-pointer"
                 >
                   {item.lop_mon_hoc.ten_mon_hoc}
