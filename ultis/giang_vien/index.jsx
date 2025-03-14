@@ -171,7 +171,7 @@ export const getChiTietLopGiangVien = async (token, lop_id, tenant) => {
 };
 
 //Get chi tiet lop giang vien 2
-export const getChiTietLopGiangVien2 = async (token, lop_id) => {
+export const getChiTietLopGiangVien2 = async (token, lop_id, tenant) => {
   const link = new URL(
     `${process.env.NEXT_PUBLIC_API_LOP_GIANG_VIEN}/${lop_id}/submissions2`
   );
